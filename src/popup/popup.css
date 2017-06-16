@@ -1,0 +1,114 @@
+/*
+ * Copyright (C) 2017 ExE Boss
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#main {
+}
+
+#main-menu {
+}
+
+#sub-menu {
+	background:	rgba(0, 0, 0, 0.09);
+	min-width:	300px;
+	flex-grow:	1;
+	background-clip: padding-box;
+	margin-left:	1px;
+}
+
+#sub-menu > div {
+	display:	none;
+}
+
+#sub-menu > .active {
+	display:	flex;
+}
+
+.eb-icon-placeholder,
+.eb-icon {
+	width:	16px;
+	min-width:	16px;
+	max-width:	16px;
+	vertical-align: middle;
+}
+
+.panel-list-item.text > .eb-icon-placeholder,
+.panel-list-item.text > .eb-icon,
+.eb-icon-placeholder:not(:last-child),
+.eb-icon:not(:last-child) {
+	margin-right:	8px;
+}
+
+.panel-list-item .text {
+	white-space:	nowrap;
+}
+
+.panel-list-item.text {
+	background-color:	transparent !important;
+	border-bottom:	none !important;
+	border-top:	none !important;
+	flex-grow:	10;
+}
+
+.panel-list-item.icon {
+	flex-grow:	0;
+	flex-shrink:	0;
+	text-align:	center;
+}
+
+.panel-list-item.icon:not(:first-child) {
+	padding-left:	0;
+}
+
+.panel-list-item.icon:not(:first-child):not(.disabled):hover {
+	border-left:	1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-list-item.icon:not(:last-child) {
+	padding-right:	0;
+}
+
+.panel-list-item.icon:not(:last-child):not(.disabled):hover {
+	border-right:	1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-list-item.icon:not(:first-child):not(:last-child) {
+	width:	24px;
+}
+
+.panel-list-item.icon:not(:first-child) > .eb-icon-placeholder,
+.panel-list-item.icon:not(:first-child) > .eb-icon {
+	margin-left:	4px;
+}
+
+.panel-list-item.icon:not(:first-child):not(.disabled):hover > .eb-icon-placeholder,
+.panel-list-item.icon:not(:first-child):not(.disabled):hover > .eb-icon {
+	margin-left:	3px;
+}
+
+.panel-list-item.icon:not(:last-child) > .eb-icon-placeholder,
+.panel-list-item.icon:not(:last-child) > .eb-icon {
+	margin-right:	4px;
+}
+
+.panel-list-item.icon:not(:last-child):not(.disabled):hover > .eb-icon-placeholder,
+.panel-list-item.icon:not(:last-child):not(.disabled):hover > .eb-icon {
+	margin-right:	3px;
+}
+
+.text-shortcut:not(:first-child) {
+	margin-left:	4px;
+}

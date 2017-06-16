@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<!--
+Copyright (C) 2017 ExE Boss
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Application Menu</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link rel="stylesheet" type="text/css" href="popup.css"/>
+		<script src="popup.js"></script>
+	</head>
+	<body>
+		<main id="main" class="panel-section">
+			<div id="main-menu" class="panel-section panel-section-list">
+				<div class="panel-list-item" data-ipc-message="newTab" data-sub-menu="new-tab">
+					<i class="eb-icon-placeholder" data-icon="tab-add"></i>
+					<div class="text" data-i18n="popup_newTab">
+						New Tab
+					</div>
+					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+				</div>
+				<div class="panel-list-item" data-ipc-message="newPrivateWindow">
+					<i class="eb-icon-placeholder" data-icon="private-mode"></i>
+					<div class="text" data-i18n="popup_newPrivateWindow">
+						New Private Window
+					</div>
+					<div class="text-shortcut">
+						Ctrl+Shift+P
+					</div>
+				</div>
+				<div class="panel-section-separator"></div>
+				<div class="panel-section">
+					<i class="eb-icon-placeholder"></i>
+					<i class="panel-list-item text" data-i18n="popup_edit">Edit</i>
+					<div class="panel-list-item icon" data-ipc-message="editCut">
+						<i class="eb-icon-placeholder" data-icon="clipboard-cut"></i>
+					</div>
+					<div class="panel-list-item icon" data-ipc-message="editCopy">
+						<i class="eb-icon-placeholder" data-icon="clipboard-copy"></i>
+					</div>
+					<div class="panel-list-item icon" data-ipc-message="editPaste">
+						<i class="eb-icon-placeholder" data-icon="clipboard-paste"></i>
+					</div>
+					<div class="panel-list-item icon" data-sub-menu="edit">
+						<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="find">
+					<i class="eb-icon-placeholder" data-icon="search"></i>
+					<div class="text" data-i18n="popup_findInPage">
+						Find in This Page...
+					</div>
+					<div class="text-shortcut">
+						Ctrl+F
+					</div>
+				</div>
+				<div class="panel-section-separator"></div>
+				<div class="panel-list-item" data-ipc-message="saveAs">
+					<i class="eb-icon-placeholder" data-icon="save-as"></i>
+					<div class="text" data-i18n="popup_savePageAs">
+						Save Page As...
+					</div>
+					<div class="text-shortcut">
+						Ctrl+S
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="emailLink">
+					<i class="eb-icon-placeholder" data-icon="email-send"></i>
+					<div class="text" data-i18n="popup_emailLink">
+						Email Link...
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="print" data-sub-menu="print">
+					<i class="eb-icon-placeholder" data-icon="print"></i>
+					<div class="text" data-i18n="popup_print">
+						Print...
+					</div>
+					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+				</div>
+				<div class="panel-section-separator"></div>
+				<div class="panel-list-item" data-ipc-message="devTools" data-sub-menu="dev">
+					<i class="eb-icon-placeholder" data-icon="wrench"></i>
+					<div class="text" data-i18n="popup_webDev">
+						Web Developer
+					</div>
+					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+				</div>
+				<div class="panel-section-separator"></div>
+				<div class="panel-list-item" data-ipc-message="fullscreen">
+					<i class="eb-icon-placeholder" data-icon="full-screen"></i>
+					<div class="text" data-i18n="popup_fullScreen">
+						Full Screen
+					</div>
+					<div class="text-shortcut">
+						F11
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="sync">
+					<i class="eb-icon-placeholder" data-icon="sync"></i>
+					<div class="text" data-i18n="popup_sync">
+						Sync
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="restart">
+					<i class="eb-icon-placeholder" data-icon="restart"></i>
+					<div class="text" data-i18n="popup_restart">
+						Restart
+					</div>
+				</div>
+				<div class="panel-list-item" data-ipc-message="exit">
+					<i class="eb-icon-placeholder" data-icon="exit"></i>
+					<div class="text" data-i18n="popup_exit">
+						Exit
+					</div>
+					<div class="text-shortcut">
+						Ctrl+Alt+F4
+					</div>
+				</div>
+			</div>
+			<div id="sub-menu">
+				<div class="panel-section panel-section-list active">
+					<div class="panel-list-item" data-ipc-message="openBookmarks">
+						<i class="eb-icon-placeholder" data-icon="bookmarks"></i>
+						<div class="text" data-i18n="popup_bookmarks">
+							Bookmarks
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+B
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="openHistory">
+						<i class="eb-icon-placeholder" data-icon="history"></i>
+						<div class="text" data-i18n="popup_history">
+							History
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+H
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="openDownloads">
+						<i class="eb-icon-placeholder" data-icon="downloads"></i>
+						<div class="text" data-i18n="popup_downloads">
+							Downloads
+						</div>
+						<div class="text-shortcut">
+							Ctrl+J
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="openAddons">
+						<i class="eb-icon-placeholder" data-icon="add-ons"></i>
+						<div class="text" data-i18n="popup_addons">
+							Add-ons
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+A
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="openOptions">
+						<i class="eb-icon-placeholder" data-icon="options"></i>
+						<div class="text" data-i18n="popup_options">
+							Options
+						</div>
+						<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+					</div>
+					<div class="panel-list-item" data-ipc-message="openHelp">
+						<i class="eb-icon-placeholder" data-icon="help"></i>
+						<div class="text" data-i18n="popup_help">
+							Help
+						</div>
+						<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
+					</div>
+				</div>
+				<div id="sm-new-tab" class="panel-section panel-section-list">
+					<div class="panel-list-item" data-ipc-message="newTab">
+						<i class="eb-icon-placeholder" data-icon="tab-add"></i>
+						<div class="text" data-i18n="popup_newTab">
+							New Tab
+						</div>
+						<div class="text-shortcut">
+							Ctrl+T
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="newWindow">
+						<i class="eb-icon-placeholder" data-icon="window-add"></i>
+						<div class="text" data-i18n="popup_newWindow">
+							New Window
+						</div>
+						<div class="text-shortcut">
+							Ctrl+N
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="openFile">
+						<i class="eb-icon-placeholder" data-icon="folder-open"></i>
+						<div class="text" data-i18n="popup_openFile">
+							Open File
+						</div>
+						<div class="text-shortcut">
+							Ctrl+O
+						</div>
+					</div>
+				</div>
+				<div id="sm-edit" class="panel-section panel-section-list">
+					<div class="panel-list-item" data-ipc-message="editCut">
+						<i class="eb-icon-placeholder" data-icon="clipboard-cut"></i>
+						<div class="text" data-i18n="popup_editCut">
+							Cut
+						</div>
+						<div class="text-shortcut">
+							Ctrl+X
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="editCopy">
+						<i class="eb-icon-placeholder" data-icon="clipboard-copy"></i>
+						<div class="text" data-i18n="popup_editCopy">
+							Copy
+						</div>
+						<div class="text-shortcut">
+							Ctrl+C
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="editPaste">
+						<i class="eb-icon-placeholder" data-icon="clipboard-paste"></i>
+						<div class="text" data-i18n="popup_editPaste">
+							Paste
+						</div>
+						<div class="text-shortcut">
+							Ctrl+V
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="editUndo">
+						<i class="eb-icon-placeholder" data-icon="edit-undo"></i>
+						<div class="text" data-i18n="popup_editUndo">
+							Undo
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Z
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="editRedo">
+						<i class="eb-icon-placeholder" data-icon="edit-redo"></i>
+						<div class="text" data-i18n="popup_editRedo">
+							Redo
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Y
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="editSelectAll">
+						<i class="eb-icon-placeholder" data-icon="edit-select-all"></i>
+						<div class="text" data-i18n="popup_editSelectAll">
+							Select All
+						</div>
+						<div class="text-shortcut">
+							Ctrl+A
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="editDelete">
+						<i class="eb-icon-placeholder" data-icon="edit-delete"></i>
+						<div class="text" data-i18n="popup_editDelete">
+							Delete
+						</div>
+						<div class="text-shortcut">
+							Delete
+						</div>
+					</div>
+				</div>
+				<div id="sm-print" class="panel-section panel-section-list">
+					<div class="panel-list-item" data-ipc-message="print">
+						<i class="eb-icon-placeholder" data-icon="print"></i>
+						<div class="text" data-i18n="popup_print">
+							Print...
+						</div>
+						<div class="text-shortcut">
+							Ctrl+P
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="printPreview">
+						<i class="eb-icon-placeholder" data-icon="print-preview"></i>
+						<div class="text" data-i18n="popup_printPreview">
+							Print Preview
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="printPageSetup">
+						<i class="eb-icon-placeholder" data-icon="print-setup"></i>
+						<div class="text" data-i18n="popup_pageSetup">
+							Page Setup...
+						</div>
+					</div>
+				</div>
+				<div id="sm-dev" class="panel-section panel-section-list">
+					<div class="panel-list-item" data-ipc-message="devTools">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devTools">
+							Toggle Tools
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+I
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devInspector">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devInspector">
+							Inspector
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+C
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devConsole">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devConsole">
+							Web Console
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+K
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devDebugger">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devDebugger">
+							Debugger
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+S
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devStyleEditor">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devStyleEditor">
+							Style Editor
+						</div>
+						<div class="text-shortcut">
+							Shift+F7
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devPerformance">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devPerformance">
+							Performance
+						</div>
+						<div class="text-shortcut">
+							Shift+F5
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devNetwork">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devNetwork">
+							Network
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+Q
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devStorageInspector">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devStorageInspector">
+							Storage Inspector
+						</div>
+						<div class="text-shortcut">
+							Shift+F9
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="devToolbar">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devToolbar">
+							Developer Toolbar
+						</div>
+						<div class="text-shortcut">
+							Shift+F2
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devWebIDE">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devWebIDE">
+							WebIDE
+						</div>
+						<div class="text-shortcut">
+							Shift+F8
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devBrowserToolbox">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devBrowserToolbox">
+							Browser Toolbox
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+Alt+I
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devBrowserContentToolbox">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devBrowserContentToolbox">
+							Browser Content Toolbox
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devBrowserConsole">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devBrowserConsole">
+							Browser Console
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+J
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devResponsiveDesign">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devResponsiveDesign">
+							Responsive Design Mode
+						</div>
+						<div class="text-shortcut">
+							Ctrl+Shift+M
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devEyedropper">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devEyedropper">
+							Eyedropper
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devScratchpad">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devScratchpad">
+							Scratchpad
+						</div>
+						<div class="text-shortcut">
+							Shift+F4
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devServiceWorkers">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devServiceWorkers">
+							Service Workers
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devConnect">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devConnect">
+							Connect...
+						</div>
+					</div>
+					<div class="panel-list-item" data-ipc-message="devPageSource">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devPageSource">
+							Page Source
+						</div>
+						<div class="text-shortcut">
+							Ctrl+U
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="devGetTools">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_devGetTools">
+							Get More Tools
+						</div>
+					</div>
+					<div class="panel-section-separator"></div>
+					<div class="panel-list-item" data-ipc-message="workOffline">
+						<i class="eb-icon-placeholder"></i>
+						<div class="text" data-i18n="popup_workOffline">
+							Work Offline
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>

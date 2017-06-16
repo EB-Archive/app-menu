@@ -26,5 +26,23 @@
 		"96":	"themes/pastel-svg/96/firefox.png",
 		"128":	"themes/pastel-svg/128/firefox.png",
 		"256":	"themes/pastel-svg/256/firefox.png"
+	},
+
+	"browser_action": {
+		"browser_style":	true,
+		"default_title":	"__MSG_browserAction__",
+		"default_popup":	"popup/popup.html",
+		"default_area":	"tabstrip",
+		"default_icon": {
+			"16":	"themes/pastel-svg/16/firefox.png",
+			"24":	"themes/pastel-svg/24/firefox.png",
+			"32":	"themes/pastel-svg/32/firefox.png",
+			"48":	"themes/pastel-svg/48/firefox.png",
+			"64":	"themes/pastel-svg/64/firefox.png",
+			"72":	"themes/pastel-svg/72/firefox.png",
+			"96":	"themes/pastel-svg/96/firefox.png",
+			"128":	"themes/pastel-svg/128/firefox.png",
+			"256":	"themes/pastel-svg/256/firefox.png"
+		}
 	}
 }
