@@ -1,0 +1,13 @@
+# Ignore Everything
+/*
+
+# Sources
+!/src
+
+# Git
+!.gitattributes
+!.gitignore
+!README*
+!LICENSE*
+
+# Unwanted crap
