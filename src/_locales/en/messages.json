@@ -1,0 +1,6 @@
+{
+	"extensionName":	{ "message":	"Application Menu"	},
+	"description":	{ "message":	"A WebExtension which adds the Application menu to the Firefox titlebar."	},
+
+	"browserAction":	{ "message":	"Firefox"	}
+}

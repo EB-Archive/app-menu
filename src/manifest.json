@@ -1,0 +1,30 @@
+{
+	"applications": {
+		"gecko": {
+			"id": "app-menu@exe-boss",
+			"strict_min_version": "54.0"
+		}
+	},
+
+	"manifest_version":	2,
+	"name":	"__MSG_extensionName__",
+	"version":	"0.1.0",
+	"author":	"ExE Boss",
+	"description":	"__MSG_description__",
+	"default_locale":	"en",
+
+	"permissions": [
+		"storage"
+	],
+	"icons": {
+		"16":	"themes/pastel-svg/16/firefox.png",
+		"24":	"themes/pastel-svg/24/firefox.png",
+		"32":	"themes/pastel-svg/32/firefox.png",
+		"48":	"themes/pastel-svg/48/firefox.png",
+		"64":	"themes/pastel-svg/64/firefox.png",
+		"72":	"themes/pastel-svg/72/firefox.png",
+		"96":	"themes/pastel-svg/96/firefox.png",
+		"128":	"themes/pastel-svg/128/firefox.png",
+		"256":	"themes/pastel-svg/256/firefox.png"
+	}
+}
