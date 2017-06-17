@@ -2,5 +2,62 @@
 	"extensionName":	{ "message":	"Application Menu"	},
 	"description":	{ "message":	"A WebExtension which adds the Application menu to the Firefox titlebar."	},
 
-	"browserAction":	{ "message":	"Firefox"	}
+	"browserAction":	{ "message":	"Firefox"	},
+
+	"popup_newTab":	{ "message":	"New Tab"	},
+	"popup_newWindow":	{ "message":	"New Window"	},
+	"popup_newPrivateWindow":	{ "message":	"New Private Window"	},
+	"popup_openFile":	{ "message":	"Open File"	},
+
+	"popup_edit":	{ "message":	"Edit"	},
+	"popup_editCut":	{ "message":	"Cut"	},
+	"popup_editCopy":	{ "message":	"Copy"	},
+	"popup_editPaste":	{ "message":	"Paste"	},
+	"popup_editUndo":	{ "message":	"Undo"	},
+	"popup_editRedo":	{ "message":	"Redo"	},
+	"popup_editSelectAll":	{ "message":	"Select All"	},
+	"popup_editDelete":	{ "message":	"Delete"	},
+
+	"popup_findInPage":	{ "message":	"Find in This Page…"	},
+	"popup_savePageAs":	{ "message":	"Save Page As…"	},
+	"popup_emailLink":	{ "message":	"Email Link…"	},
+
+	"popup_print":	{ "message":	"Print…"	},
+	"popup_printPreview":	{ "message":	"Print Preview"	},
+	"popup_pageSetup":	{ "message":	"Page Setup…"	},
+
+	"popup_fullScreen":	{ "message":	"Full Screen"	},
+	"popup_sync":	{ "message":	"Sync"	},
+	"popup_restart":	{ "message":	"Restart"	},
+	"popup_exit":	{ "message":	"Exit"	},
+
+	"popup_bookmarks":	{ "message":	"Bookmarks"	},
+	"popup_history":	{ "message":	"History"	},
+	"popup_downloads":	{ "message":	"Downloads"	},
+	"popup_addons":	{ "message":	"Add-ons"	},
+	"popup_options":	{ "message":	"Options"	},
+	"popup_help":	{ "message":	"Help"	},
+
+	"popup_dev":	{ "message":	"Web Developer"	},
+	"popup_devTools":	{ "message":	"Toggle Tools"	},
+	"popup_devInspector":	{ "message":	"Inspector"	},
+	"popup_devConsole":	{ "message":	"Web Console"	},
+	"popup_devDebugger":	{ "message":	"Debugger"	},
+	"popup_devStyleEditor":	{ "message":	"Style Editor"	},
+	"popup_devPerformance":	{ "message":	"Performance"	},
+	"popup_devNetwork":	{ "message":	"Network"	},
+	"popup_devStorageInspector":	{ "message":	"Storage Inspector"	},
+	"popup_devToolbar":	{ "message":	"Developer Toolbar"	},
+	"popup_devWebIDE":	{ "message":	"WebIDE"	},
+	"popup_devBrowserToolbox":	{ "message":	"Browser Toolbox"	},
+	"popup_devBrowserContentToolbox":	{ "message":	"Browser Content Toolbox"	},
+	"popup_devBrowserConsole":	{ "message":	"Browser Console"	},
+	"popup_devResponsiveDesign":	{ "message":	"Responsive Design Mode"	},
+	"popup_devEyedropper":	{ "message":	"Eyedropper"	},
+	"popup_devScratchpad":	{ "message":	"Scratchpad"	},
+	"popup_devServiceWorkers":	{ "message":	"Service Workers"	},
+	"popup_devConnect":	{ "message":	"Connect…"	},
+	"popup_devPageSource":	{ "message":	"Page Source"	},
+	"popup_devGetTools":	{ "message":	"Get More Tools"	},
+	"popup_workOffline":	{ "message":	"Work Offline"	}
 }

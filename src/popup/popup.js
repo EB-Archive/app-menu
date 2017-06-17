@@ -79,7 +79,11 @@ async function setupMouseEvents() {
 }
 
 async function i18nInit() {
-	// TODO: i18n
+	document.querySelectorAll("[data-i18n]").forEach(translatable => {
+		let text = browser.i18n.getMessage(translatable.dataset.i18n);
+		if (text.length > 0)
+			translatable.textContent = text;
+	});
 }
 
 async function setupIPCEvents() {
