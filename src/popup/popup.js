@@ -87,9 +87,49 @@ async function i18nInit() {
 }
 
 async function setupIPCEvents() {
-	// TODO: inter-process communication
+	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
+		sender.addEventListener("click", evt => {
+			console.log(evt.currentTarget)
+			if (evt.currentTarget.dataset.disabled === true) return;
+			browser.runtime.sendMessage({
+				method: sender.dataset.ipcMessage
+			});
+		});
+	});
 }
 
 async function initPopup() {
-	// TODO: popup initialization
+	let parseQuery = query => {
+		if (query === '*') {
+			return "[data-ipc-message]";
+		} if (query.startsWith('*') && query.endsWith('*')) {
+			return `[data-ipc-message^="${query.substring(1, query.length - 1)}"]`;
+		} else if (query.startsWith('*')) {
+			return`[data-ipc-message$="${query.substring(1, query.length)}"]`;
+		} else if (query.endsWith('*')) {
+			return `[data-ipc-message^="${query.substring(0, query.length - 1)}"]`;
+		} else {
+			return `[data-ipc-message="${query}"]`;
+		}
+	}
+
+	browser.runtime.sendMessage({method: "init"}).then(response => {
+		console.log(response);
+		response.disable.forEach(disabled => {
+			let query = parseQuery(disabled);
+			document.querySelectorAll(query).forEach(node => {
+				node.dataset.disabled = true;
+				if (!node.dataset.subMenu)
+					node.classList.add("disabled");
+			});
+		});
+
+		response.enable.forEach(enabled => {
+			let query = parseQuery(enabled);
+			document.querySelectorAll(query).forEach(node => {
+				delete node.dataset.disabled;
+				node.classList.remove("disabled");
+			});
+		});
+	});
 }

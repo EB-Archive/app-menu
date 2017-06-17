@@ -14,6 +14,7 @@
 	"default_locale":	"en",
 
 	"permissions": [
+		"activeTab",
 		"storage"
 	],
 	"icons": {
@@ -28,6 +29,9 @@
 		"256":	"themes/pastel-svg/256/firefox.png"
 	},
 
+	"background": {
+		"scripts": [ "background.js" ]
+	},
 	"browser_action": {
 		"browser_style":	true,
 		"default_title":	"__MSG_browserAction__",
