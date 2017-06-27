@@ -69,7 +69,8 @@ async function handlePopupMessage(message) {
 				enable: [
 					"new*",
 					"emailLink",
-					"devGetTools"
+					"devGetTools",
+					"openAddons"
 				]
 			};
 			response.disable.forEach(	str => result.disable.push(	str));

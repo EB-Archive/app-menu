@@ -60,5 +60,7 @@
 	"popup_devConnect":	{ "message":	"Connect…"	},
 	"popup_devPageSource":	{ "message":	"Page Source"	},
 	"popup_devGetTools":	{ "message":	"Get More Tools"	},
-	"popup_workOffline":	{ "message":	"Work Offline"	}
+	"popup_workOffline":	{ "message":	"Work Offline"	},
+
+	"options_theme":	{ "message":	"Theme:"	}
 }

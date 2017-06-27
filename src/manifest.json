@@ -2,7 +2,7 @@
 	"applications": {
 		"gecko": {
 			"id": "app-menu@exe-boss",
-			"strict_min_version": "54.0"
+			"strict_min_version": "55.0"
 		}
 	},
 
@@ -31,6 +31,10 @@
 
 	"background": {
 		"scripts": [ "background.js" ]
+	},
+	"options_ui": {
+		"browser_style":	true,
+		"page":	"options/options.html"
 	},
 	"browser_action": {
 		"browser_style":	true,
