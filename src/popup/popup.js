@@ -28,11 +28,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadIcons() {
-	let theme = (await browser.storage.sync.get({
-		theme: "pastel-svg"
+	let themeDir = (await browser.storage.sync.get({
+		theme: "australis"
 	})).theme;
 
-	document.querySelectorAll(".eb-icon-placeholder").forEach(i => {
+	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+	let themeCSS = `/themes/${themeDir}/theme.css`;
+	
+	fetch(themeCSS).then(r => {
+		if (r.ok) {
+			let style = document.querySelector("#theme-css");
+			if (!style) {
+				style = document.createElement("link");
+				style.setAttribute("rel", "stylesheet");
+				style.setAttribute("type", "text/css");
+			}
+			style.setAttribute("href", themeCSS);
+			document.head.appendChild(style);
+		}
+	});
+
+	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
+		let extension = theme.default_extension || "svg";
+		let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
+
 		let icon = document.createElement("img");
 		icon.classList.add("icon", "eb-icon");
 		icon.addEventListener("error", err => {
@@ -48,7 +67,7 @@ async function loadIcons() {
 					}
 				}
 			} else {
-				icon.setAttribute("src", `/themes/${theme}/256/${i.dataset.icon}.png`);
+				icon.setAttribute("src", src);
 			}
 		}
 		i.parentNode.replaceChild(icon, i);
@@ -89,8 +108,7 @@ async function i18nInit() {
 async function setupIPCEvents() {
 	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
 		sender.addEventListener("click", evt => {
-			console.log(evt.currentTarget)
-			if (evt.currentTarget.dataset.disabled === true) return;
+			if (evt.currentTarget.dataset.disabled) return;
 			browser.runtime.sendMessage({
 				method: sender.dataset.ipcMessage
 			});
@@ -114,7 +132,6 @@ async function initPopup() {
 	}
 
 	browser.runtime.sendMessage({method: "init"}).then(response => {
-		console.log(response);
 		response.disable.forEach(disabled => {
 			let query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(node => {

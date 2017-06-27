@@ -47,6 +47,7 @@
 	"popup_devPerformance":	{ "message":	"Performance"	},
 	"popup_devNetwork":	{ "message":	"Network"	},
 	"popup_devStorageInspector":	{ "message":	"Storage Inspector"	},
+	"popup_devDOM":	{ "message":	"DOM"	},
 	"popup_devToolbar":	{ "message":	"Developer Toolbar"	},
 	"popup_devWebIDE":	{ "message":	"WebIDE"	},
 	"popup_devBrowserToolbox":	{ "message":	"Browser Toolbox"	},

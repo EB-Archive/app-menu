@@ -1,0 +1,15 @@
+{
+	"name": "PastelSVG",
+	"default_extension": "png",
+	"browser_action": {
+		"16":	"firefox@16.png",
+		"24":	"firefox@24.png",
+		"32":	"firefox@32.png",
+		"48":	"firefox@48.png",
+		"64":	"firefox@64.png",
+		"72":	"firefox@72.png",
+		"96":	"firefox@96.png",
+		"128":	"firefox@128.png",
+		"256":	"firefox.png"
+	}
+}

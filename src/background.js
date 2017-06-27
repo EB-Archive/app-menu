@@ -16,8 +16,26 @@
  */
 /* global browser */
 
+(async function() {
+	let themeDir = (await browser.storage.sync.get({
+		theme: "australis"
+	})).theme;
+
+	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+
+	if (theme.browser_action) {
+		let path = {};
+		for (let k in theme.browser_action) {
+			path[k] = `/themes/${themeDir}/${theme.browser_action[k].includes('.') ?
+			theme.browser_action[k] : theme.browser_action[k] + '.' + extension}`
+		}
+		browser.browserAction.setIcon({path: path});
+	} else {
+		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${theme.default_extension || "svg"}`});
+	}
+})();
+
 browser.runtime.onMessage.addListener((message, sender, resolve) => {
-	console.log(message, sender);
 	if (/\/popup\/popup\.html$/.test(sender.url)) {
 		return handlePopupMessage(message);
 	}
@@ -28,10 +46,12 @@ browser.runtime.onMessage.addListener((message, sender, resolve) => {
  * @returns {undefined}
  */
 async function handlePopupMessage(message) {
-	let method = String(message.method)
+	let method = String(message.method);
 	switch (method) {
 		case "init": {
-			return {
+			let response;
+			if (!response) response = {disable: [], enable: []};
+			let result = {
 				disable: [
 					"*",
 					"edit*",
@@ -44,6 +64,9 @@ async function handlePopupMessage(message) {
 					"devGetTools"
 				]
 			};
+			response.disable.forEach(	str => result.disable.push(	str));
+			response.enable.forEach(	str => result.enable.push(	str));
+			return result;
 		} case "newTab": {
 			return browser.tabs.create({url: null});
 		} case "newWindow": {
@@ -52,8 +75,10 @@ async function handlePopupMessage(message) {
 			return browser.windows.create({incognito: true});
 		} case "emailLink": {
 			let tab = (await browser.tabs.query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT }))[0];
-			console.log(tab);
-			return browser.tabs.create({url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`});
+			return browser.tabs.create({
+				active: false,
+				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`
+			});
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
 		} case "devGetTools": {

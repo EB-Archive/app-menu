@@ -27,12 +27,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<main id="main" class="panel-section">
 			<div id="main-menu" class="panel-section panel-section-list">
 				<div class="panel-list-item" data-ipc-message="newTab" data-sub-menu="new-tab">
-					<i class="eb-icon-placeholder" data-icon="tab-add"></i>
+					<i class="eb-icon-placeholder" data-icon="new-tab"></i>
 					<div class="text" data-i18n="popup_newTab"></div>
 					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
 				</div>
 				<div class="panel-list-item" data-ipc-message="newPrivateWindow">
-					<i class="eb-icon-placeholder" data-icon="private-mode"></i>
+					<i class="eb-icon-placeholder" data-icon="private-browsing"></i>
 					<div class="text" data-i18n="popup_newPrivateWindow"></div>
 					<div class="text-shortcut">
 						Ctrl+Shift+P
@@ -81,13 +81,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</div>
 				<div class="panel-section-separator"></div>
 				<div class="panel-list-item" data-ipc-message="devTools" data-sub-menu="dev">
-					<i class="eb-icon-placeholder" data-icon="wrench"></i>
+					<i class="eb-icon-placeholder" data-icon="developer"></i>
 					<div class="text" data-i18n="popup_dev"></div>
 					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
 				</div>
 				<div class="panel-section-separator"></div>
 				<div class="panel-list-item" data-ipc-message="fullscreen">
-					<i class="eb-icon-placeholder" data-icon="full-screen"></i>
+					<i class="eb-icon-placeholder" data-icon="fullscreen"></i>
 					<div class="text" data-i18n="popup_fullScreen"></div>
 					<div class="text-shortcut">
 						F11
@@ -109,7 +109,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					</div>
 				</div>
 			</div>
-			<div id="sub-menu">
+			<div id="sub-menu" class="secondary">
 				<div class="panel-section panel-section-list active">
 					<div class="panel-list-item" data-ipc-message="openBookmarks">
 						<i class="eb-icon-placeholder" data-icon="bookmarks"></i>
@@ -153,14 +153,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</div>
 				<div id="sm-new-tab" class="panel-section panel-section-list">
 					<div class="panel-list-item" data-ipc-message="newTab">
-						<i class="eb-icon-placeholder" data-icon="tab-add"></i>
+						<i class="eb-icon-placeholder" data-icon="new-tab"></i>
 						<div class="text" data-i18n="popup_newTab"></div>
 						<div class="text-shortcut">
 							Ctrl+T
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="newWindow">
-						<i class="eb-icon-placeholder" data-icon="window-add"></i>
+						<i class="eb-icon-placeholder" data-icon="new-window"></i>
 						<div class="text" data-i18n="popup_newWindow"></div>
 						<div class="text-shortcut">
 							Ctrl+N
@@ -248,122 +248,129 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</div>
 				<div id="sm-dev" class="panel-section panel-section-list">
 					<div class="panel-list-item" data-ipc-message="devTools">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="developer"></i>
 						<div class="text" data-i18n="popup_devTools"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+I
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devInspector">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-inspector"></i>
 						<div class="text" data-i18n="popup_devInspector"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+C
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devConsole">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-webconsole"></i>
 						<div class="text" data-i18n="popup_devConsole"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+K
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devDebugger">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-debugger"></i>
 						<div class="text" data-i18n="popup_devDebugger"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+S
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devStyleEditor">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-styleeditor"></i>
 						<div class="text" data-i18n="popup_devStyleEditor"></div>
 						<div class="text-shortcut">
 							Shift+F7
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devPerformance">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-profiler"></i>
 						<div class="text" data-i18n="popup_devPerformance"></div>
 						<div class="text-shortcut">
 							Shift+F5
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devNetwork">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-network"></i>
 						<div class="text" data-i18n="popup_devNetwork"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+Q
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devStorageInspector">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-storage"></i>
 						<div class="text" data-i18n="popup_devStorageInspector"></div>
 						<div class="text-shortcut">
 							Shift+F9
 						</div>
 					</div>
+					<div class="panel-list-item" data-ipc-message="devDOM">
+						<i class="eb-icon-placeholder" data-icon="dev-tool-dom"></i>
+						<div class="text" data-i18n="popup_devDOM"></div>
+						<div class="text-shortcut">
+							Ctrl+Shift+W
+						</div>
+					</div>
 					<div class="panel-section-separator"></div>
 					<div class="panel-list-item" data-ipc-message="devToolbar">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-command-console"></i>
 						<div class="text" data-i18n="popup_devToolbar"></div>
 						<div class="text-shortcut">
 							Shift+F2
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devWebIDE">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-webide"></i>
 						<div class="text" data-i18n="popup_devWebIDE"></div>
 						<div class="text-shortcut">
 							Shift+F8
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devBrowserToolbox">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-"></i>
 						<div class="text" data-i18n="popup_devBrowserToolbox"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+Alt+I
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devBrowserContentToolbox">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-"></i>
 						<div class="text" data-i18n="popup_devBrowserContentToolbox"></div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devBrowserConsole">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-"></i>
 						<div class="text" data-i18n="popup_devBrowserConsole"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+J
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devResponsiveDesign">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-command-responsive-mode"></i>
 						<div class="text" data-i18n="popup_devResponsiveDesign"></div>
 						<div class="text-shortcut">
 							Ctrl+Shift+M
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devEyedropper">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-command-eyedropper"></i>
 						<div class="text" data-i18n="popup_devEyedropper"></div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devScratchpad">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-tool-scratchpad"></i>
 						<div class="text" data-i18n="popup_devScratchpad"></div>
 						<div class="text-shortcut">
 							Shift+F4
 						</div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devServiceWorkers">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-debugging-workers"></i>
 						<div class="text" data-i18n="popup_devServiceWorkers"></div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devConnect">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-"></i>
 						<div class="text" data-i18n="popup_devConnect"></div>
 					</div>
 					<div class="panel-list-item" data-ipc-message="devPageSource">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-"></i>
 						<div class="text" data-i18n="popup_devPageSource"></div>
 						<div class="text-shortcut">
 							Ctrl+U
@@ -371,12 +378,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					</div>
 					<div class="panel-section-separator"></div>
 					<div class="panel-list-item" data-ipc-message="devGetTools">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="dev-add"></i>
 						<div class="text" data-i18n="popup_devGetTools"></div>
 					</div>
 					<div class="panel-section-separator"></div>
 					<div class="panel-list-item" data-ipc-message="workOffline">
-						<i class="eb-icon-placeholder"></i>
+						<i class="eb-icon-placeholder" data-icon="forget"></i>
 						<div class="text" data-i18n="popup_workOffline"></div>
 					</div>
 				</div>

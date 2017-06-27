@@ -15,6 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+html, body {
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
 #main {
 }
 
@@ -22,11 +27,11 @@
 }
 
 #sub-menu {
-	background:	rgba(0, 0, 0, 0.09);
+	background:	rgba(0, 0, 0, 0.06);
 	min-width:	300px;
 	flex-grow:	1;
 	background-clip: padding-box;
-	margin-left:	1px;
+	border-left:	1px solid rgba(24,26,27,.2);
 }
 
 #sub-menu > div {
@@ -42,7 +47,12 @@
 	width:	16px;
 	min-width:	16px;
 	max-width:	16px;
-	vertical-align: middle;
+
+	height:	16px;
+	min-height:	16px;
+	max-height:	16px;
+
+	vertical-align:	middle;
 }
 
 .panel-list-item.text > .eb-icon-placeholder,
