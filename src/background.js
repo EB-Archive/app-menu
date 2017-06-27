@@ -47,9 +47,17 @@ browser.runtime.onMessage.addListener((message, sender, resolve) => {
  */
 async function handlePopupMessage(message) {
 	let method = String(message.method);
+	let tab = (await browser.tabs.query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT }))[0];
 	switch (method) {
 		case "init": {
 			let response;
+			try {
+				await browser.tabs.executeScript(tab.id, { file: "/content/content.js", runAt: "document_end" });
+				response = await browser.tabs.sendMessage(tab.id, {method: "init"});
+			} catch (e) {
+				if (e.message !== "Missing host permission for the tab")
+					console.warn(e);
+			}
 			if (!response) response = {disable: [], enable: []};
 			let result = {
 				disable: [
@@ -74,13 +82,15 @@ async function handlePopupMessage(message) {
 		} case "newPrivateWindow": {
 			return browser.windows.create({incognito: true});
 		} case "emailLink": {
-			let tab = (await browser.tabs.query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT }))[0];
 			return browser.tabs.create({
 				active: false,
 				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`
 			});
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
+		} case "fullscreen": case "editCut": case "editCopy": case "editPaste":
+		case "editUndo": case "editRedo": case "editSelectAll": case "editDelete": {
+			return browser.tabs.sendMessage(tab.id, message);
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
 		} default: {
