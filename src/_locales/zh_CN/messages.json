@@ -1,0 +1,66 @@
+{
+	"extensionName":	{ "message":	"Application Menu"	},
+	"description":	{ "message":	"WebExtension 扩展，添加“应用程序菜单”到 Firefox 标题栏。"	},
+
+	"browserAction":	{ "message":	"Firefox"	},
+
+	"popup_newTab":	{ "message":	"新建标签页"	},
+	"popup_newWindow":	{ "message":	"新建窗口"	},
+	"popup_newPrivateWindow":	{ "message":	"新建隐私浏览窗口"	},
+	"popup_openFile":	{ "message":	"打开文件"	},
+
+	"popup_edit":	{ "message":	"编辑"	},
+	"popup_editCut":	{ "message":	"剪切"	},
+	"popup_editCopy":	{ "message":	"复制"	},
+	"popup_editPaste":	{ "message":	"粘贴"	},
+	"popup_editUndo":	{ "message":	"撤销"	},
+	"popup_editRedo":	{ "message":	"重做"	},
+	"popup_editSelectAll":	{ "message":	"全选"	},
+	"popup_editDelete":	{ "message":	"删除"	},
+
+	"popup_findInPage":	{ "message":	"页内查找…"	},
+	"popup_savePageAs":	{ "message":	"页面另存为…"	},
+	"popup_emailLink":	{ "message":	"用邮件发送链接…"	},
+
+	"popup_print":	{ "message":	"打印…"	},
+	"popup_printPreview":	{ "message":	"打印预览"	},
+	"popup_pageSetup":	{ "message":	"页面设置…"	},
+
+	"popup_fullScreen":	{ "message":	"全屏"	},
+	"popup_sync":	{ "message":	"同步"	},
+	"popup_restart":	{ "message":	"重新启动"	},
+	"popup_exit":	{ "message":	"退出"	},
+
+	"popup_bookmarks":	{ "message":	"书签"	},
+	"popup_history":	{ "message":	"历史记录"	},
+	"popup_downloads":	{ "message":	"下载"	},
+	"popup_addons":	{ "message":	"附加组件"	},
+	"popup_options":	{ "message":	"选项"	},
+	"popup_help":	{ "message":	"帮助"	},
+
+	"popup_dev":	{ "message":	"Web 开发者"	},
+	"popup_devTools":	{ "message":	"切换工具箱"	},
+	"popup_devInspector":	{ "message":	"查看器"	},
+	"popup_devConsole":	{ "message":	"Web 控制台"	},
+	"popup_devDebugger":	{ "message":	"调试器"	},
+	"popup_devStyleEditor":	{ "message":	"样式编辑器"	},
+	"popup_devPerformance":	{ "message":	"性能"	},
+	"popup_devNetwork":	{ "message":	"网络"	},
+	"popup_devStorageInspector":	{ "message":	"存储查看器"	},
+	"popup_devDOM":	{ "message":	"DOM"	},
+	"popup_devToolbar":	{ "message":	"开发者工具"	},
+	"popup_devWebIDE":	{ "message":	"WebIDE"	},
+	"popup_devBrowserToolbox":	{ "message":	"浏览器工具箱"	},
+	"popup_devBrowserContentToolbox":	{ "message":	"浏览器内容工具箱"	},
+	"popup_devBrowserConsole":	{ "message":	"浏览器控制台"	},
+	"popup_devResponsiveDesign":	{ "message":	"响应式设计模式"	},
+	"popup_devEyedropper":	{ "message":	"取色器"	},
+	"popup_devScratchpad":	{ "message":	"代码草稿纸"	},
+	"popup_devServiceWorkers":	{ "message":	"服务 Worker"	},
+	"popup_devConnect":	{ "message":	"连接…"	},
+	"popup_devPageSource":	{ "message":	"页面源代码"	},
+	"popup_devGetTools":	{ "message":	"获取更多工具"	},
+	"popup_workOffline":	{ "message":	"脱机工作"	},
+
+	"options_theme":	{ "message":	"主题："	}
+}
