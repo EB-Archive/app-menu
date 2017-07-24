@@ -41,6 +41,51 @@ browser.runtime.onMessage.addListener((message, sender, resolve) => {
 	}
 });
 
+var tabHandler = (function() {
+	/**
+	 * @type Map<Set>
+	 */
+	let listeners = new Map();
+
+	browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+		if (listeners.has(tabId)) {
+			listeners.get(tabId).forEach(cb => cb(tabId, changeInfo, tab));
+		}
+	});
+
+	return {
+		addListener: (tabId, callback) => {
+			if (listeners.has(tabId)) {
+				listeners.get(tabId).add(callback);
+			} else {
+				let set = new Set();
+				set.add(callback);
+				listeners.set(tabId, set);
+			}
+		},
+
+		removeListener: (tabId, callback) => {
+			if (!listeners.has(tabId)) {
+				return;
+			} else {
+				listeners.get(tabId).remove(callback);
+			}
+		},
+
+		hasListener: (tabId, callback) => {
+			if (!listeners.has(tabId)) {
+				return false;
+			} else {
+				return listeners.get(tabId).has(callback);
+			}
+		},
+
+		hasListeners: (tabId) => {
+			return listeners.has(tabId);
+		}
+	};
+})();
+
 /**
  * @param {String} message
  * @returns {undefined}
@@ -86,6 +131,18 @@ async function handlePopupMessage(message) {
 			return browser.tabs.create({
 				active: false,
 				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`
+			}).then(tab => {
+				if (tab.status === "complete") {
+					browser.tabs.remove(tab.id);
+				} else {
+					tabHandler.addListener(tab.id, function(tabId, changeInfo, newTab) {
+						if (changeInfo.status === "complete") {
+							tabHandler.removeListener(this);
+							browser.tabs.remove(tabId);
+						}
+					});
+				}
+				return tab;
 			});
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
