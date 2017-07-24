@@ -17,8 +17,21 @@
 /* global browser */
 
 (async function() {
+	let getDefaultTheme = async () => {
+		let browserInfo = await browser.runtime.getBrowserInfo();
+		if (browserInfo.name === "Firefox") {
+			if (browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
+				return "australis";
+			} else {
+				return "photon";
+			}
+		} else {
+			return "pastel-svg";
+		}
+	};
+
 	let themeDir = (await browser.storage.sync.get({
-		theme: "australis"
+		theme: await getDefaultTheme()
 	})).theme;
 
 	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());

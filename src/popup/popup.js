@@ -34,12 +34,13 @@ async function loadIcons() {
 
 	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
 	let themeCSS = `/themes/${themeDir}/theme.css`;
-	
+
 	fetch(themeCSS).then(r => {
 		if (r.ok) {
 			let style = document.querySelector("#theme-css");
 			if (!style) {
 				style = document.createElement("link");
+				style.setAttribute("id", "#theme-css");
 				style.setAttribute("rel", "stylesheet");
 				style.setAttribute("type", "text/css");
 			}
@@ -48,17 +49,22 @@ async function loadIcons() {
 		}
 	});
 
+	let os = (await browser.runtime.getPlatformInfo()).os;
+
 	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
 		let extension = theme.default_extension || "svg";
+		let srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
 		let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
+
+		let hasSrcOS;
+		try {
+			hasSrcOS = (await fetch(srcOS)).ok;
+		} catch (err) {
+			hasSrcOS = false;
+		}
 
 		let icon = document.createElement("img");
 		icon.classList.add("icon", "eb-icon");
-		icon.addEventListener("error", err => {
-			let i2 = document.createElement("img");
-			i2.classList.add("icon", "eb-icon");
-			icon.parentNode.replaceChild(i2, icon);
-		});
 		if (i.dataset.icon) {
 			if (/^system-/.test(i.dataset.icon)) {
 				switch (i.dataset.icon) {
@@ -67,7 +73,12 @@ async function loadIcons() {
 					}
 				}
 			} else {
-				icon.setAttribute("src", src);
+				icon.addEventListener("error", err => {
+					let i2 = document.createElement("img");
+					i2.classList.add("icon", "eb-icon");
+					icon.parentNode.replaceChild(i2, icon);
+				});
+				icon.setAttribute("src", hasSrcOS ? srcOS : src);
 			}
 		}
 		i.parentNode.replaceChild(icon, i);
