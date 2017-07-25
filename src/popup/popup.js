@@ -52,27 +52,25 @@ async function loadIcons() {
 	let os = (await browser.runtime.getPlatformInfo()).os;
 
 	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
-		let extension = theme.default_extension || "svg";
-		let srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
-		let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
-
-		let hasSrcOS;
-		try {
-			hasSrcOS = (await fetch(srcOS)).ok;
-		} catch (err) {
-			hasSrcOS = false;
-		}
-
 		let icon = document.createElement("img");
 		icon.classList.add("icon", "eb-icon");
 		if (i.dataset.icon) {
 			if (/^system-/.test(i.dataset.icon)) {
-				switch (i.dataset.icon) {
-					case "system-arrow-expand": {
-						icon.setAttribute("src", "data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgeG1sbnM6eGh0bWw9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGh0bWwiIGNsYXNzPSJuaWNlcm1lZGlhcGFnZXMtU1ZHIj48Zm9yZWlnbk9iamVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHg9IjAiIHk9IjAiPjx4aHRtbDpib2R5Lz48L2ZvcmVpZ25PYmplY3Q+PHBhdGggZmlsbD0iIzZhNmE2YSIgZD0iTTEyIDhsLTUgNS0xLTEgNC00LTQtNCAxLTF6Ii8+PC9zdmc+");
-					}
-				}
+				icon = document.createElement("i");
+				icon.classList.add("icon", "eb-icon");
+				icon.dataset.icon = i.dataset.icon;
 			} else {
+				let extension = theme.default_extension || "svg";
+				let srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
+				let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
+
+				let hasSrcOS;
+				try {
+					hasSrcOS = (await fetch(srcOS)).ok;
+				} catch (err) {
+					hasSrcOS = false;
+				}
+
 				icon.addEventListener("error", err => {
 					let i2 = document.createElement("img");
 					i2.classList.add("icon", "eb-icon");

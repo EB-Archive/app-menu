@@ -1,20 +1,20 @@
-img.icon {
+img.icon, .eb-icon[data-icon^="system-"] {
 	filter: invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(80%);
 }
 
-.secondary img.icon,
-img.icon.secondary {
+.secondary img.icon,	.secondary .eb-icon[data-icon^="system-"],
+img.icon.secondary,	.eb-icon[data-icon^="system-"].secondary {
 	filter: invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(60%);
 }
 
-.secondary img.icon:hover,
-.secondary *:hover > img.icon,
-.secondary:hover > img.icon,
-img.icon.secondary:hover {
+.secondary img.icon:hover,	.secondary .eb-icon[data-icon^="system-"]:hover,
+.secondary *:hover > img.icon,	.secondary *:hover > .eb-icon[data-icon^="system-"],
+.secondary:hover > img.icon,	.secondary:hover > .eb-icon[data-icon^="system-"],
+img.icon.secondary:hover,	.eb-icon[data-icon^="system-"].secondary:hover {
 	filter: invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(80%);
 }
 
-.disabled img.icon,
-img.icon.disabled {
+.disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
+img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 	filter: invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(25%) !important;
 }
