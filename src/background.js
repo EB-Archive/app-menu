@@ -159,13 +159,10 @@ async function handlePopupMessage(message) {
 			});
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
-		} case "fullscreen": case "editCut": case "editCopy": case "editPaste":
-		case "editUndo": case "editRedo": case "editSelectAll": case "editDelete": {
-			return browser.tabs.sendMessage(tab.id, message);
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
 		} default: {
-			throw new Error(`Unsupported Function '${method}'`)
+			return browser.tabs.sendMessage(tab.id, message);
 		}
 	}
 }

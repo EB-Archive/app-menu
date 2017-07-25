@@ -26,7 +26,9 @@ if (!amLoaded) {
 			case "init": {
 				let result = {
 					disable: [],
-					enable: []
+					enable: [
+						"print"
+					]
 				}
 				if (document.documentElement.requestFullScreen || document.documentElement.mozRequestFullScreen) {
 					//result.enable.push("fullscreen");
@@ -38,32 +40,36 @@ if (!amLoaded) {
 			} case "fullscreen": {
 				if (window.fullScreen) {
 					if (document.exitFullscreen) {
-						document.exitFullscreen();
+						return document.exitFullscreen();
 					} else {
-						document.mozCancelFullScreen();
+						return document.mozCancelFullScreen();
 					}
 				} else {
 					if (document.documentElement.requestFullScreen) {
-						document.documentElement.requestFullScreen();
+						return document.documentElement.requestFullScreen();
 					} else {
-						document.documentElement.mozRequestFullScreen();
+						return document.documentElement.mozRequestFullScreen();
 					}
 				}
 				return;
 			} case "editCut": {
-				document.execCommand("cut");
+				return document.execCommand("cut");
 			} case "editCopy": {
-				document.execCommand("copy");
+				return document.execCommand("copy");
 			} case "editPaste": {
-				document.execCommand("paste");
+				return document.execCommand("paste");
 			} case "editUndo": {
-				document.execCommand("undo");
+				return document.execCommand("undo");
 			} case "editRedo": {
-				document.execCommand("redo");
+				return document.execCommand("redo");
 			} case "editSelectAll": {
-				document.execCommand("selectAll");
+				return document.execCommand("selectAll");
 			} case "editDelete": {
-				document.execCommand("delete");
+				return document.execCommand("delete");
+			} case "print": {
+				return window.print();
+			} default: {
+				throw new Error(`Unsupported Function '${method}'`);
 			}
 		}
 	});
