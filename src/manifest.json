@@ -32,7 +32,7 @@
 	},
 
 	"background": {
-		"scripts": [ "background.js" ]
+		"scripts": [ "shared.js", "background.js" ]
 	},
 	"options_ui": {
 		"browser_style":	true,

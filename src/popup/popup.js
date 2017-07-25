@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadIcons() {
 	let themeDir = (await browser.storage.sync.get({
-		theme: "australis"
+		theme: await getDefaultTheme()
 	})).theme;
 
 	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());

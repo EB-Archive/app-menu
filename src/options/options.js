@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function initOptions() {
 	let themes = ["photon", "australis", "classic", "pastel-svg", "aero"];
-	let currentTheme = (await browser.storage.sync.get({theme: "australis"})).theme;
+	let currentTheme = (await browser.storage.sync.get({
+		theme: await getDefaultTheme()
+	})).theme;
 	let themeSelector = document.querySelector("#theme");
 
 	for (let t of themes) {
