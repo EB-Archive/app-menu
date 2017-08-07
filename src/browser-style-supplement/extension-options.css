@@ -1,0 +1,44 @@
+html {
+	font:	message-box;
+	padding:	6px;
+	background: #FBFBFB;
+}
+
+.browser-style {
+	font-size:	1.25rem;
+}
+
+button.browser-style {
+	padding:	2px	22px	4px	21px;
+}
+
+button.browser-style + button.browser-style {
+	margin-left:	4px;
+}
+
+h1.browser-style {
+	font-size:	2rem;
+	font-weight:	normal;
+	margin:	0;
+	padding:	0px	6px 4px;
+	margin:	0px	-6px	4px;
+	border-bottom:	1px solid rgba(0, 0, 0, 0.2);
+}
+
+.browser-style.options-grid {
+	display:	grid;
+	align-items:	center;
+	grid-template-columns:	260px auto;
+	grid-row-gap:	12px;
+	margin:	9px	0px;
+	margin-right: auto;
+}
+
+.browser-style.options-grid > * {
+	margin-bottom:	6px;
+}
+
+select.browser-style,
+button.browser-style {
+	height:	30px;
+}

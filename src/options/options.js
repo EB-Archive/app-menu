@@ -70,13 +70,14 @@ async function initOptions() {
 			o.appendChild(document.createTextNode(config.name));
 			if (t === currentTheme) {
 				o.setAttribute("selected", true);
-				if (o.dataset.icon)
-					themeSelector.style.cssText = `
-	background-image:	url("${o.dataset.icon}"), url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) !important;
-	background-position:	8px, calc(100% - 4px) center;
-	padding-inline-start:	24px;
-	background-size:	16px 16px;
-`;
+//				if (o.dataset.icon) {
+//					themeSelector.style.cssText = `
+//	background-image:	url("${o.dataset.icon}"), url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) !important;
+//	background-position:	8px, calc(100% - 4px) center;
+//	padding-inline-start:	24px;
+//	background-size:	16px 16px;
+//`;
+//				}
 			}
 			themeSelector.appendChild(o);
 		} catch (err) {}
@@ -90,16 +91,16 @@ async function initOptions() {
 				browser.storage.sync.set({
 					theme: themeDir
 				});
-				if (selectedOption.dataset.icon) {
-					select.style.cssText = `
-	background-image:	url("${selectedOption.dataset.icon}"), url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) !important;
-	background-position:	8px, calc(100% - 4px) center;
-	padding-inline-start:	24px;
-	background-size:	16px 16px;
-`;
-				} else {
-					select.removeAttribute("style");
-				}
+//				if (selectedOption.dataset.icon) {
+//					select.style.cssText = `
+//	background-image:	url("${selectedOption.dataset.icon}"), url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) !important;
+//	background-position:	8px, calc(100% - 4px) center;
+//	padding-inline-start:	24px;
+//	background-size:	16px 16px;
+//`;
+//				} else {
+//					select.removeAttribute("style");
+//				}
 
 				fetch(`/themes/${themeDir}/theme.json`).then(r => r.json()).then(config => {
 					let extension = config.default_extension || "svg";
