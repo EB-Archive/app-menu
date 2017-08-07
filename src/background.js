@@ -118,6 +118,12 @@ async function handlePopupMessage(message) {
 					"openAddons"
 				]
 			};
+			if (browser.tabs.printPreview) {
+				result.enable.push("printPreview");
+			}
+			if (browser.tabs.print) {
+				result.enable.push("print");
+			}
 			response.disable.forEach(	str => result.disable.push(	str));
 			response.enable.forEach(	str => result.enable.push(	str));
 			return result;
@@ -148,6 +154,12 @@ async function handlePopupMessage(message) {
 			return browser.runtime.openOptionsPage();
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
+		} case "printPreview": {
+			return browser.tabs.printPreview();
+		} case "print": {
+			if (browser.tabs.print) {
+				return browser.tabs.print();
+			}
 		} default: {
 			return browser.tabs.sendMessage(tab.id, message);
 		}
