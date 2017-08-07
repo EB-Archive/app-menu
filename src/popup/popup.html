@@ -141,16 +141,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 							Ctrl+Shift+A
 						</div>
 					</div>
-					<div class="panel-list-item" data-ipc-message="openOptions">
+					<div class="panel-list-item" data-ipc-message="openOptions" contextmenu="openOptions_menu">
 						<i class="eb-icon-placeholder" data-icon="options"></i>
 						<div class="text" data-i18n="popup_options"></div>
 						<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
 					</div>
-					<div class="panel-list-item" data-ipc-message="openHelp">
+					<menu type="context" id="openOptions_menu">
+						<menuitem data-i18n-label="popup_options" data-ipc-message="openOptions"></menuitem>
+						<hr/>
+						<menuitem data-i18n-label="popup_optionsCustomize" data-ipc-message="openOptionsCustomizing"></menuitem>
+					</menu>
+					<div class="panel-list-item" data-ipc-message="openHelp" contextmenu="openHelp_menu">
 						<i class="eb-icon-placeholder" data-icon="help"></i>
 						<div class="text" data-i18n="popup_help"></div>
 						<i class="eb-icon-placeholder" data-icon="system-arrow-expand"></i>
 					</div>
+					<menu type="context" id="openHelp_menu">
+						<menuitem data-i18n-label="popup_helpFirefox" data-ipc-message="openHelp"></menuitem>
+						<menuitem data-i18n-label="popup_helpGettingStarted" data-ipc-message="openHelpGettingStarted"></menuitem>
+						<menuitem data-i18n-label="popup_helpTour" data-ipc-message="openHelpTour"></menuitem>
+						<menuitem data-i18n-label="popup_helpShortcuts" data-ipc-message="openHelpShortcuts"></menuitem>
+						<menuitem data-i18n-label="popup_helpHealthReport" data-ipc-message="openHelpHealthReport"></menuitem>
+						<menuitem data-i18n-label="popup_helpTroubleshootingInformation" data-ipc-message="openHelpTroubleshooting"></menuitem>
+						<menuitem data-i18n-label="popup_helpSubmitFeedback" data-ipc-message="openHelpFeedback"></menuitem>
+						<hr/>
+						<menuitem data-i18n-label="popup_restartInSafeMode" data-ipc-message="restartInSafeMode"></menuitem>
+						<hr/>
+						<menuitem data-i18n-label="popup_helpAbout" data-ipc-message="openHelpAboutFirefox"></menuitem>
+					</menu>
 				</div>
 				<div id="sm-new-tab" class="panel-section panel-section-list">
 					<div class="panel-list-item" data-ipc-message="newTab">

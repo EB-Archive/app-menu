@@ -62,5 +62,18 @@
 	"popup_devGetTools":	{ "message":	"Get More Tools"	},
 	"popup_workOffline":	{ "message":	"Work Offline"	},
 
+	"popup_optionsCustomize":	{ "message":	"Customize…"	},
+
+	"popup_helpFirefox":	{ "message":	"Firefox Help"	},
+	"popup_helpGettingStarted":	{ "message":	"Getting started"	},
+	"popup_helpTour":	{ "message":	"Firefox Tour"	},
+	"popup_helpShortcuts":	{ "message":	"Keyboard Shortcuts"	},
+	"popup_helpHealthReport":	{ "message":	"Firefox Health Report"	},
+	"popup_helpTroubleshootingInformation":	{ "message":	"Troubleshooting Information"	},
+	"popup_helpSubmitFeedback":	{ "message":	"Submit Feedback…"	},
+	"popup_restartInSafeMode":	{ "message":	"Restart with Add-ons Disabled…"	},
+	"popup_helpAbout":	{ "message":	"About Firefox"	},
+
+	"options_header":	{ "message":	"Options"	},
 	"options_theme":	{ "message":	"Theme:"	}
 }

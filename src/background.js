@@ -109,13 +109,17 @@ async function handlePopupMessage(message) {
 					"*",
 					"edit*",
 					"dev*",
-					"workOffline"
+					"workOffline",
+					"openHelpHealthReport",
+					"openHelpTroubleshooting",
+					"openHelpAboutFirefox"
 				],
 				enable: [
 					"new*",
 					"emailLink",
 					"devGetTools",
-					"openAddons"
+					"openAddons",
+					"openHelp*"
 				]
 			};
 			if (browser.tabs.printPreview) {
@@ -152,6 +156,10 @@ async function handlePopupMessage(message) {
 			});
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
+		} case "openOptions": {
+			return browser.tabs.create({url: "about:preferences"});
+		} case "openOptionsCustomizing": {
+			return browser.tabs.create({url: "about:customizing"});
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
 		} case "printPreview": {
@@ -161,6 +169,56 @@ async function handlePopupMessage(message) {
 				return browser.tabs.print();
 			}
 		} default: {
+			if (method.startsWith("openHelp")) {
+				let browserInfo;
+				let platformInfo;
+				{
+					let browserData = await Promise.all([
+						browser.runtime.getBrowserInfo(),
+						browser.runtime.getPlatformInfo()
+					]);
+					browserInfo = browserData[0];
+					platformInfo = browserData[1];
+				}
+				let lang = browser.i18n.getUILanguage().replace(/_/g, "-");
+				let os;
+				switch (platformInfo.os) {
+					case "win": default: {
+						os = "WINNT";
+						break;
+					} case "mac": {
+						os = "MACOS"; // TODO: Needs verification
+						break;
+					} case "linux": {
+						os = "LINUX"; // TODO: Needs verification
+						break;
+					} case "android": {
+						os = "ANDROID"; // TODO: Needs verification
+						break;
+					} case "openbsd": {
+						os = "OPENBSD"; // TODO: Needs verification
+						break;
+					}
+				}
+
+				switch (method) {
+					case "openHelp": {
+						return browser.tabs.create({url: `https://support.mozilla.org/1/firefox/${browserInfo.version}/${os}/${lang}/firefox-help`});
+					} case "openHelpGettingStarted": {
+						return browser.tabs.create({url: "https://www.mozilla.org/firefox/central/"});
+					} case "openHelpTour": {
+						return browser.tabs.create({url: `https://www.mozilla.org/${lang}/firefox/${browserInfo.version}/tour/`});
+					} case "openHelpShortcuts": {
+						return browser.tabs.create({url: `https://support.mozilla.org/1/firefox/${browserInfo.version}/${os}/${lang}/keyboard-shortcuts`});
+					} case "openHelpHealthReport": {
+						return browser.tabs.create({url: "about:healthreport"});
+					} case "openHelpTroubleshooting": {
+						return browser.tabs.create({url: "about:support"});
+					} case "openHelpFeedback": {
+						return browser.tabs.create({url: `https://input.mozilla.org/${lang}/feedback/firefox/${browserInfo.version}/`});
+					}
+				}
+			}
 			return browser.tabs.sendMessage(tab.id, message);
 		}
 	}

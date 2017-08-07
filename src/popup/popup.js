@@ -118,8 +118,16 @@ async function setupMouseEvents() {
 async function i18nInit() {
 	document.querySelectorAll("[data-i18n]").forEach(translatable => {
 		let text = browser.i18n.getMessage(translatable.dataset.i18n);
-		if (text.length > 0)
+		if (text.length > 0) {
 			translatable.textContent = text;
+		}
+	});
+
+	document.querySelectorAll("[data-i18n-label]").forEach(translatable => {
+		let text = browser.i18n.getMessage(translatable.dataset.i18nLabel);
+		if (text.length > 0) {
+			translatable.setAttribute("label", text);
+		}
 	});
 }
 
@@ -141,7 +149,7 @@ async function initPopup() {
 		} if (query.startsWith('*') && query.endsWith('*')) {
 			return `[data-ipc-message*="${query.substring(1, query.length - 1)}"]`;
 		} else if (query.startsWith('*')) {
-			return`[data-ipc-message$="${query.substring(1, query.length)}"]`;
+			return `[data-ipc-message$="${query.substring(1, query.length)}"]`;
 		} else if (query.endsWith('*')) {
 			return `[data-ipc-message^="${query.substring(0, query.length - 1)}"]`;
 		} else {
@@ -149,23 +157,42 @@ async function initPopup() {
 		}
 	}
 
+	let disable = node => {
+		node.dataset.disabled = true;
+		if (node instanceof HTMLMenuItemElement) {
+			node.setAttribute("disabled", true);
+		} else {
+			if (!node.dataset.subMenu) {
+				node.classList.add("disabled");
+			}
+		}
+	};
+
+	let enable = node => {
+		delete node.dataset.disabled;
+		if (node instanceof HTMLMenuItemElement) {
+			node.removeAttribute("disabled");
+		} else {
+			node.classList.remove("disabled");
+		}
+	}
+
 	browser.runtime.sendMessage({method: "init"}).then(response => {
 		response.disable.forEach(disabled => {
+			if (!disabled.includes('*')) return;
 			let query = parseQuery(disabled);
-			document.querySelectorAll(query).forEach(node => {
-				node.dataset.disabled = true;
-				if (!node.dataset.subMenu) {
-					node.classList.add("disabled");
-				}
-			});
+			document.querySelectorAll(query).forEach(disable);
 		});
 
 		response.enable.forEach(enabled => {
 			let query = parseQuery(enabled);
-			document.querySelectorAll(query).forEach(node => {
-				delete node.dataset.disabled;
-				node.classList.remove("disabled");
-			});
+			document.querySelectorAll(query).forEach(enable);
+		});
+
+		response.disable.forEach(disabled => {
+			if (disabled.includes('*')) return;
+			let query = parseQuery(disabled);
+			document.querySelectorAll(query).forEach(disable);
 		});
 	});
 }
