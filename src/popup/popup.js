@@ -20,11 +20,13 @@ var defaultSubMenu;
 
 document.addEventListener("DOMContentLoaded", () => {
 	defaultSubMenu = document.querySelector("#sub-menu > .active");
-	loadIcons();
-	i18nInit();
-	setupMouseEvents();
-	setupIPCEvents();
-	initPopup();
+	return Promise.all([
+		loadIcons(),
+		i18nInit(),
+		setupMouseEvents(),
+		setupIPCEvents(),
+		initPopup()
+	]);
 });
 
 async function loadIcons() {
@@ -64,16 +66,23 @@ async function loadIcons() {
 				let srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
 				let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
 
-				let hasSrcOS;
+				let hasSrcOS = false;
 				try {
-					hasSrcOS = (await fetch(srcOS)).ok;
-				} catch (err) {
-					hasSrcOS = false;
-				}
+					hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work in 57
+				} catch (err) {}
 
 				icon.addEventListener("error", err => {
 					let i2 = document.createElement("img");
 					i2.classList.add("icon", "eb-icon");
+					// Fix for Firefox 57:
+					if (hasSrcOS) {
+						i2.setAttribute("src", src);
+						i2.addEventListener("error", err => {
+							let i3 = document.createElement("img");
+							i3.classList.add("icon", "eb-icon");
+							i2.parentNode.replaceChild(i3, i2);
+						});
+					}
 					icon.parentNode.replaceChild(i2, icon);
 				});
 				icon.setAttribute("src", hasSrcOS ? srcOS : src);
@@ -118,7 +127,7 @@ async function setupIPCEvents() {
 	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
 		sender.addEventListener("click", evt => {
 			if (evt.currentTarget.dataset.disabled) return;
-			browser.runtime.sendMessage({
+			return browser.runtime.sendMessage({
 				method: sender.dataset.ipcMessage
 			});
 		});
@@ -130,7 +139,7 @@ async function initPopup() {
 		if (query === '*') {
 			return "[data-ipc-message]";
 		} if (query.startsWith('*') && query.endsWith('*')) {
-			return `[data-ipc-message^="${query.substring(1, query.length - 1)}"]`;
+			return `[data-ipc-message*="${query.substring(1, query.length - 1)}"]`;
 		} else if (query.startsWith('*')) {
 			return`[data-ipc-message$="${query.substring(1, query.length)}"]`;
 		} else if (query.endsWith('*')) {
@@ -145,8 +154,9 @@ async function initPopup() {
 			let query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(node => {
 				node.dataset.disabled = true;
-				if (!node.dataset.subMenu)
+				if (!node.dataset.subMenu) {
 					node.classList.add("disabled");
+				}
 			});
 		});
 
