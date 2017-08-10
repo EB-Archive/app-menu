@@ -1,0 +1,10 @@
+/* Icons */
+.disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
+img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
+	filter: opacity(0.5) !important;
+}
+
+.secondary .eb-icon[data-icon="system-arrow-expand"],
+.eb-icon[data-icon="system-arrow-expand"].secondary {
+	filter: opacity(0.5) !important;
+}

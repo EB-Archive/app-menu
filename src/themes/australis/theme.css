@@ -1,12 +1,7 @@
 :root {
-	--dark-icon:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(80%);
-
-	--dark-icon-secondary:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(60%);
-
-	--dark-icon-disabled:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(25%);
+	--dark-icon:	invert(1)	brightness(0.4275);
+	--dark-icon-secondary:	invert(1)	brightness(0.2980);
+	--dark-icon-disabled:	invert(1)	brightness(0.7725);
 }
 
 /* Icons */
@@ -19,14 +14,21 @@ img.icon.secondary,	.eb-icon[data-icon^="system-"].secondary {
 	filter: var(--dark-icon-secondary);
 }
 
-.secondary img.icon:hover,	.secondary .eb-icon[data-icon^="system-"]:hover,
-.secondary *:hover > img.icon,	.secondary *:hover > .eb-icon[data-icon^="system-"],
-.secondary:hover > img.icon,	.secondary:hover > .eb-icon[data-icon^="system-"],
-img.icon.secondary:hover,	.eb-icon[data-icon^="system-"].secondary:hover {
-	filter: var(--dark-icon);
-}
-
 .disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
 img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 	filter: var(--dark-icon-disabled) !important;
+}
+
+/* System Icons */
+.eb-icon[data-icon="system-arrow-expand"] {
+	background: url("data:image/svg+xml;charset=utf-8;base64,\
+		PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyB4bWxucz0iaHR0cDovL\
+		3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PS\
+		IxNiI+PHBhdGggZmlsbD0iIzAwMCIgZD0iTTEyIDhsLTUgNS0xLTE\
+		gNC00LTQtNCAxLTF6Ii8+PC9zdmc+");
+}
+
+.secondary .eb-icon[data-icon="system-arrow-expand"],
+.eb-icon[data-icon="system-arrow-expand"].secondary {
+	filter: var(--dark-icon-disabled);
 }

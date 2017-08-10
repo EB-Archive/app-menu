@@ -41,3 +41,8 @@ img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 		IDVhMSAxIDAgMCAxIDAgMS40MTRsLTUgNUExIDEgMCAwIDEgNiAxN\
 		HoiLz48L3N2Zz4=");
 }
+
+.secondary .eb-icon[data-icon="system-arrow-expand"],
+.eb-icon[data-icon="system-arrow-expand"].secondary {
+	filter: var(--dark-icon-disabled);
+}
