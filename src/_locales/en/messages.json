@@ -62,6 +62,9 @@
 	"popup_devGetTools":	{ "message":	"Get More Tools"	},
 	"popup_workOffline":	{ "message":	"Work Offline"	},
 
+	"popup_optionsToolbar_menu":	{ "message":	"Menu Bar"	},
+	"popup_optionsToolbar_navigation":	{ "message":	"Navigation Toolbar"	},
+	"popup_optionsToolbar_bookmarks":	{ "message":	"Bookmarks Toolbar"	},
 	"popup_optionsCustomize":	{ "message":	"Customize…"	},
 
 	"popup_helpFirefox":	{ "message":	"Firefox Help"	},

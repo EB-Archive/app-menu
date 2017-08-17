@@ -8,7 +8,7 @@
 
 	"manifest_version":	2,
 	"name":	"__MSG_extensionName__",
-	"version":	"0.1.4",
+	"version":	"0.1.5",
 	"author":	"ExE Boss",
 	"description":	"__MSG_description__",
 	"default_locale":	"en",
@@ -36,12 +36,12 @@
 	},
 	"options_ui": {
 		"browser_style":	true,
-		"page":	"options/options.html"
+		"page":	"options/options.xhtml"
 	},
 	"browser_action": {
 		"browser_style":	true,
 		"default_title":	"__MSG_browserAction__",
-		"default_popup":	"popup/popup.html",
+		"default_popup":	"popup/popup.xhtml",
 		"default_area":	"tabstrip",
 		"default_icon":	"themes/australis/firefox.svg"
 	}

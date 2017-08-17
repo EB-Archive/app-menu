@@ -36,7 +36,7 @@
 })();
 
 browser.runtime.onMessage.addListener((message, sender, resolve) => {
-	if (/\/popup\/popup\.html$/.test(sender.url)) {
+	if (/\/popup\/popup\.xhtml$/.test(sender.url)) {
 		return handlePopupMessage(message);
 	}
 });
