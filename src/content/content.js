@@ -21,7 +21,17 @@ var amLoaded = amLoaded || false;
 if (!amLoaded) {
 	amLoaded = true;
 	browser.runtime.onMessage.addListener(async (message, sender) => {
+		let focusedElement = document.activeElement;
+		let isFocusable = focusedElement && focusedElement !== document.body;
 		let method = String(message.method);
+		let execCommand = (command) => {
+			window.focus();
+			if (isFocusable) {
+				focusedElement.focus();
+			}
+			document.execCommand(command);
+		};
+
 		switch (method) {
 			case "init": {
 				let result = {
@@ -31,27 +41,41 @@ if (!amLoaded) {
 						"saveAs"
 					]
 				}
-				if (document.documentElement.requestFullScreen || document.documentElement.mozRequestFullScreen) {
-					//result.enable.push("fullscreen");
-				}
-				if (document.querySelector(":focus")) {
+
+				if (isFocusable && focusedElement.isContentEditable) {
 					result.enable.push("edit*");
+				} else if (isFocusable) {
+					result.enable.push("editCut", "editCopy", "editSelectAll");
+				} else {
+					result.enable.push("editCopy", "editSelectAll");
 				}
 				return result;
 			} case "editCut": {
-				return document.execCommand("cut");
+				return execCommand("cut");
 			} case "editCopy": {
-				return document.execCommand("copy");
+				return execCommand("copy");
 			} case "editPaste": {
-				return document.execCommand("paste");
+				return execCommand("paste");
 			} case "editUndo": {
-				return document.execCommand("undo");
+				return execCommand("undo");
 			} case "editRedo": {
-				return document.execCommand("redo");
+				return execCommand("redo");
 			} case "editSelectAll": {
-				return document.execCommand("selectAll");
+				// Select all doesn't work reliably on inputs yet
+				if (isFocusable) {
+					window.focus();
+					focusedElement.focus();
+					return focusedElement.select();
+				}
+
+				// ...so we select everything on the page
+				let selection = window.getSelection();
+				let range = document.createRange();
+				range.selectNodeContents(document.documentElement);
+				selection.removeAllRanges();
+				return selection.addRange(range);
 			} case "editDelete": {
-				return document.execCommand("delete");
+				return execCommand("delete");
 			} case "print": {
 				return window.print();
 			} default: {
