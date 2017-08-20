@@ -30,5 +30,5 @@ img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 
 .secondary .eb-icon[data-icon="system-arrow-expand"],
 .eb-icon[data-icon="system-arrow-expand"].secondary {
-	filter: var(--dark-icon-disabled);
+	filter: var(--dark-icon-disabled) !important;
 }
