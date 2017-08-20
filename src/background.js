@@ -116,7 +116,6 @@ async function handlePopupMessage(message) {
 				],
 				enable: [
 					"new*",
-					"saveAs",
 					"emailLink",
 					"devGetTools",
 					"openAddons",

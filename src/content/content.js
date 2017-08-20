@@ -27,7 +27,8 @@ if (!amLoaded) {
 				let result = {
 					disable: [],
 					enable: [
-						"print"
+						"print",
+						"saveAs"
 					]
 				}
 				if (document.documentElement.requestFullScreen || document.documentElement.mozRequestFullScreen) {
