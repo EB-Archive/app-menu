@@ -126,7 +126,8 @@ async function handlePopupMessage(message) {
 					"devGetTools",
 					"openAddons",
 					"fullscreen",
-					"openHelp*"
+					"openHelp*",
+					"exit"
 				]
 			};
 			if (browser.tabs.printPreview) {
@@ -189,6 +190,9 @@ async function handlePopupMessage(message) {
 			});
 			prevStates.set(window.id, prevState);
 			return result;
+		} case "exit": {
+			let windows = await browser.windows.getAll();
+			windows.forEach(({ id }) => browser.windows.remove(id));
 		} default: {
 			if (method.startsWith("openHelp")) {
 				let browserInfo;
