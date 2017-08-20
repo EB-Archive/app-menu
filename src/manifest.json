@@ -17,6 +17,7 @@
 		"activeTab",
 		"clipboardRead",
 		"clipboardWrite",
+		"downloads",
 		"storage"
 	],
 	"icons": {

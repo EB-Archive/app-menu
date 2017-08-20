@@ -116,6 +116,7 @@ async function handlePopupMessage(message) {
 				],
 				enable: [
 					"new*",
+					"saveAs",
 					"emailLink",
 					"devGetTools",
 					"openAddons",
@@ -137,6 +138,8 @@ async function handlePopupMessage(message) {
 			return browser.windows.create();
 		} case "newPrivateWindow": {
 			return browser.windows.create({incognito: true});
+		} case "saveAs": {
+			return browser.downloads.download({ url: tab.url, filename: tab.title + ".html", saveAs: true });
 		} case "emailLink": {
 			return browser.tabs.create({
 				active: false,
