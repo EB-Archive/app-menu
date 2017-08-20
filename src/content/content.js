@@ -38,21 +38,6 @@ if (!amLoaded) {
 					result.enable.push("edit*");
 				}
 				return result;
-			} case "fullscreen": {
-				if (window.fullScreen) {
-					if (document.exitFullscreen) {
-						return document.exitFullscreen();
-					} else {
-						return document.mozCancelFullScreen();
-					}
-				} else {
-					if (document.documentElement.requestFullScreen) {
-						return document.documentElement.requestFullScreen();
-					} else {
-						return document.documentElement.mozRequestFullScreen();
-					}
-				}
-				return;
 			} case "editCut": {
 				return document.execCommand("cut");
 			} case "editCopy": {

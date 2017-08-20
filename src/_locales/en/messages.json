@@ -78,5 +78,8 @@
 	"popup_helpAbout":	{ "message":	"About Firefox"	},
 
 	"options_header":	{ "message":	"Options"	},
-	"options_theme":	{ "message":	"Theme:"	}
+	"options_theme":	{ "message":	"Theme:"	},
+	"options_preferredWindowState":	{ "message":	"Preferred window state:"	},
+	"options_preferredWindowState_maximized":	{ "message":	"Maximized"	},
+	"options_preferredWindowState_normal":	{ "message":	"Normal window"	}
 }

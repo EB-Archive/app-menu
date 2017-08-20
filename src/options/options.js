@@ -23,10 +23,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function initOptions() {
 	let themes = ["photon", "australis", "classic", "pastel-svg", "aero"];
-	let currentTheme = (await browser.storage.sync.get({
-		theme: await getDefaultTheme()
-	})).theme;
+	let data = (await browser.storage.sync.get({
+		theme: await getDefaultTheme(),
+		preferredWindowState:	"maximized"
+	}));
+	let currentTheme = data.theme;
 	let themeSelector = document.querySelector("#theme");
+
+	let preferredWindowStateSelector = document.querySelector("#fullscreenExitState");
+	for (let i = 0; i < preferredWindowStateSelector.length; i++) {
+		let option = preferredWindowStateSelector.item(i);
+		if (option.value === data.preferredWindowState) {
+			preferredWindowStateSelector.selectedIndex = i;
+			option.setAttribute("selected", true);
+		} else {
+			option.selected = false;
+		}
+	}
 
 	for (let t of themes) {
 		try {
@@ -87,10 +100,10 @@ async function initOptions() {
 		select.addEventListener("change", evt => {
 			if (select.selectedIndex >= 0) {
 				let selectedOption = select.item(select.selectedIndex);
-				let themeDir = select.item(select.selectedIndex).value;
-				browser.storage.sync.set({
-					theme: themeDir
-				});
+				let value = select.item(select.selectedIndex).value;
+				let data = {};
+				data[select.dataset.save] = value;
+				browser.storage.sync.set(data);
 //				if (selectedOption.dataset.icon) {
 //					select.style.cssText = `
 //	background-image:	url("${selectedOption.dataset.icon}"), url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNOCwxMkwzLDcsNCw2bDQsNCw0LTQsMSwxWiIgZmlsbD0iIzZBNkE2QSIgLz4KPC9zdmc+Cg==) !important;
@@ -102,26 +115,28 @@ async function initOptions() {
 //					select.removeAttribute("style");
 //				}
 
-				fetch(`/themes/${themeDir}/theme.json`).then(r => r.json()).then(config => {
-					let extension = config.default_extension || "svg";
-					if (config.browser_action) {
-						let path = {};
-						for (let k in config.browser_action) {
-							path[k] = `/themes/${themeDir}/${config.browser_action[k].includes('.') ?
-							config.browser_action[k] : config.browser_action[k] + '.' + extension}`
+				if (select.dataset.save === "theme") {
+					fetch(`/themes/${value}/theme.json`).then(r => r.json()).then(config => {
+						let extension = config.default_extension || "svg";
+						if (config.browser_action) {
+							let path = {};
+							for (let k in config.browser_action) {
+								path[k] = `/themes/${value}/${config.browser_action[k].includes('.') ?
+								config.browser_action[k] : config.browser_action[k] + '.' + extension}`
+							}
+							browser.browserAction.setIcon({path: path});
+						} else {
+							browser.browserAction.setIcon({path: `/themes/${value}/firefox.${extension}`});
 						}
-						browser.browserAction.setIcon({path: path});
-					} else {
-						browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${extension}`});
-					}
-				});
+					});
+				}
 			}
 		});
 	});
 }
 
 async function i18nInit() {
-	document.querySelectorAll("label[for]").forEach(translatable => {
+	document.querySelectorAll("label[for]:not([data-i18n])").forEach(translatable => {
 		let text = browser.i18n.getMessage(`options_${translatable.getAttribute("for")}`);
 		if (text.length > 0)
 			translatable.textContent = text;

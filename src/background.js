@@ -16,6 +16,8 @@
  */
 /* global browser */
 
+let prevStates = new Map();
+
 (async function() {
 	let themeDir = (await browser.storage.sync.get({
 		theme: await getDefaultTheme()
@@ -92,7 +94,11 @@ var tabHandler = (function() {
  */
 async function handlePopupMessage(message) {
 	let method = String(message.method);
-	let tab = (await browser.tabs.query({ active: true, windowId: browser.windows.WINDOW_ID_CURRENT }))[0];
+	let window, tab;
+	[window, tab] = await Promise.all([
+		browser.windows.getCurrent(),
+		browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+	]);
 	switch (method) {
 		case "init": {
 			let response;
@@ -119,6 +125,7 @@ async function handlePopupMessage(message) {
 					"emailLink",
 					"devGetTools",
 					"openAddons",
+					"fullscreen",
 					"openHelp*"
 				]
 			};
@@ -170,6 +177,18 @@ async function handlePopupMessage(message) {
 			if (browser.tabs.print) {
 				return browser.tabs.print();
 			}
+		} case "fullscreen": {
+			let prevState	= window.state;
+			let newState	= prevStates.get(window.id);
+			newState	= (newState && newState !== "fullscreen" ? newState : browser.storage.sync.get({preferredWindowState: "maximized"}));
+			if (newState instanceof Promise) {
+				newState = (await newState).preferredWindowState;
+			}
+			let result = await browser.windows.update(window.id, {
+				state: window.state === "fullscreen" ? newState : "fullscreen"
+			});
+			prevStates.set(window.id, prevState);
+			return result;
 		} default: {
 			if (method.startsWith("openHelp")) {
 				let browserInfo;

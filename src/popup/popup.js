@@ -29,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	]);
 });
 
+async function loadSpecialIcons() {
+	// TODO: Handle dynamic icons (ex. fullscreen)
+}
+
 async function loadIcons() {
 	let themeDir = (await browser.storage.sync.get({
 		theme: await getDefaultTheme()
