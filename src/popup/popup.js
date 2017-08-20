@@ -16,6 +16,15 @@
  */
 /* global browser */
 
+/**
+ * @typedef ButtonStatus
+ * @property {String[]} enable
+ * @property {String[]} disable
+ */
+
+/**
+ * @type HTMLElement
+ */
 var defaultSubMenu;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -137,16 +146,39 @@ async function i18nInit() {
 
 async function setupIPCEvents() {
 	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
-		sender.addEventListener("click", evt => {
+		sender.addEventListener("click", async evt => {
 			if (evt.currentTarget.dataset.disabled) return;
-			return browser.runtime.sendMessage({
+
+			let remainOpen = Boolean(evt.currentTarget.dataset.remainOpen);
+			let promise = browser.runtime.sendMessage({
 				method: sender.dataset.ipcMessage
 			});
+
+			if (!remainOpen) {
+				window.close();
+				return promise;
+			} else {
+				let response = await promise;
+
+				if (response.updateButtonStatus) {
+					updateButtonStatus(response.updateButtonStatus);
+				}
+
+				return response;
+			}
 		});
 	});
 }
 
 async function initPopup() {
+	return updateButtonStatus(await browser.runtime.sendMessage({method: "init"}));
+}
+
+/**
+ * @param {ButtonStatus} buttonStatus
+ * @returns {undefined}
+ */
+async function updateButtonStatus(buttonStatus) {
 	let parseQuery = query => {
 		if (query === '*') {
 			return "[data-ipc-message]";
@@ -181,22 +213,26 @@ async function initPopup() {
 		}
 	}
 
-	browser.runtime.sendMessage({method: "init"}).then(response => {
-		response.disable.forEach(disabled => {
+	if (buttonStatus.disable) {
+		buttonStatus.disable.forEach(disabled => {
 			if (!disabled.includes('*')) return;
 			let query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(disable);
 		});
+	}
 
-		response.enable.forEach(enabled => {
+	if (buttonStatus.enable) {
+		buttonStatus.enable.forEach(enabled => {
 			let query = parseQuery(enabled);
 			document.querySelectorAll(query).forEach(enable);
 		});
+	}
 
-		response.disable.forEach(disabled => {
+	if (buttonStatus.disable) {
+		buttonStatus.disable.forEach(disabled => {
 			if (disabled.includes('*')) return;
 			let query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(disable);
 		});
-	});
+	}
 }
