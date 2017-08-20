@@ -1,3 +1,9 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 :root {
 	--dark-icon:
 		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(80%);
