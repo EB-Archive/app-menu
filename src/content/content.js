@@ -16,12 +16,38 @@
  */
 /* global browser */
 
+/**
+ * @typedef {Object} PlatformInfo
+ * @property {String} os
+ * @property {String} arch
+ */
+/**
+ * @typedef {Object} BrowserInfo
+ * @property {String} name
+ * @property {String} vendor
+ * @property {String} version
+ * @property {String} buildID
+ */
+
+/**
+ * @type Boolean
+ */
 var amLoaded = amLoaded || false;
 
 if (!amLoaded) {
 	amLoaded = true;
 	browser.runtime.onMessage.addListener(async (message, sender) => {
 		let method = String(message.method);
+		let platformInfo = {
+			os:	String(message.platformInfo.os),
+			arch:	String(message.platformInfo.arch)
+		};
+		let browserInfo = {
+			name:	String(message.browserInfo.name),
+			vendor:	String(message.browserInfo.vendor),
+			version:	String(message.browserInfo.version),
+			buildID:	String(message.browserInfo.buildID)
+		};
 		switch (method) {
 			case "init": {
 				let result = {
@@ -31,29 +57,26 @@ if (!amLoaded) {
 						"saveAs"
 					]
 				}
-				if (document.documentElement.requestFullScreen || document.documentElement.mozRequestFullScreen) {
-					//result.enable.push("fullscreen");
-				}
 				if (document.querySelector(":focus")) {
 					result.enable.push("edit*");
 				}
 				return result;
 			} case "editCut": {
-				return document.execCommand("cut");
+				return {result: document.execCommand("cut")};
 			} case "editCopy": {
-				return document.execCommand("copy");
+				return {result: document.execCommand("copy")};
 			} case "editPaste": {
-				return document.execCommand("paste");
+				return {result: document.execCommand("paste")};
 			} case "editUndo": {
-				return document.execCommand("undo");
+				return {result: document.execCommand("undo")};
 			} case "editRedo": {
-				return document.execCommand("redo");
+				return {result: document.execCommand("redo")};
 			} case "editSelectAll": {
-				return document.execCommand("selectAll");
+				return {result: document.execCommand("selectAll")};
 			} case "editDelete": {
-				return document.execCommand("delete");
+				return {result: document.execCommand("delete")};
 			} case "print": {
-				return window.print();
+				return {result: window.print()};
 			} default: {
 				throw new Error(`Unsupported Function '${method}'`);
 			}

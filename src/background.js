@@ -16,6 +16,23 @@
  */
 /* global browser */
 
+/**
+ * @typedef {Object} PlatformInfo
+ * @property {String} os
+ * @property {String} arch
+ */
+/**
+ * @typedef {Object} BrowserInfo
+ * @property {String} name
+ * @property {String} vendor
+ * @property {String} version
+ * @property {String} buildID
+ */
+
+/**
+ *
+ * @type Map@type Map
+ */
 let prevStates = new Map();
 
 (async function() {
@@ -37,7 +54,7 @@ let prevStates = new Map();
 	}
 })();
 
-browser.runtime.onMessage.addListener((message, sender, resolve) => {
+browser.runtime.onMessage.addListener((message, sender) => {
 	if (/\/popup\/popup\.xhtml$/.test(sender.url)) {
 		return handlePopupMessage(message);
 	}
@@ -94,17 +111,31 @@ var tabHandler = (function() {
  */
 async function handlePopupMessage(message) {
 	let method = String(message.method);
-	let window, tab;
-	[window, tab] = await Promise.all([
+	let window, tab, platformInfo, browserInfo;
+	[window, tab, platformInfo, browserInfo] = await Promise.all([
 		browser.windows.getCurrent(),
-		browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+		browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0]),
+		browser.runtime.getPlatformInfo(),
+		browser.runtime.getBrowserInfo()
 	]);
 	switch (method) {
 		case "init": {
 			let response;
 			try {
 				await browser.tabs.executeScript(tab.id, { file: "/content/content.js", runAt: "document_end" });
-				response = await browser.tabs.sendMessage(tab.id, {method: "init"});
+				response = await browser.tabs.sendMessage(tab.id, {
+					method: "init",
+					platformInfo: {
+						os: platformInfo.os,
+						arch:	platformInfo.arch
+					},
+					browserInfo: {
+						name:	browserInfo.name,
+						vendor:	browserInfo.vendor,
+						version:	browserInfo.version,
+						buildID:	browserInfo.buildID
+					}
+				});
 			} catch (e) {
 				if (e.message !== "Missing host permission for the tab")
 					console.warn(e);
@@ -195,16 +226,6 @@ async function handlePopupMessage(message) {
 			}
 		} default: {
 			if (method.startsWith("openHelp")) {
-				let browserInfo;
-				let platformInfo;
-				{
-					let browserData = await Promise.all([
-						browser.runtime.getBrowserInfo(),
-						browser.runtime.getPlatformInfo()
-					]);
-					browserInfo = browserData[0];
-					platformInfo = browserData[1];
-				}
 				let lang = browser.i18n.getUILanguage().replace(/_/g, "-");
 				let os;
 				switch (platformInfo.os) {
@@ -244,6 +265,17 @@ async function handlePopupMessage(message) {
 					}
 				}
 			}
+
+			message.platformInfo = {
+				os: platformInfo.os,
+				arch:	platformInfo.arch
+			};
+			message.browserInfo = {
+				name:	browserInfo.name,
+				vendor:	browserInfo.vendor,
+				version:	browserInfo.version,
+				buildID:	browserInfo.buildID
+			};
 			return browser.tabs.sendMessage(tab.id, message);
 		}
 	}
