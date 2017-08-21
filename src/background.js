@@ -172,12 +172,6 @@ async function handlePopupMessage(message) {
 			return browser.tabs.create({url: "about:customizing"});
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
-		} case "printPreview": {
-			return browser.tabs.printPreview();
-		} case "print": {
-			if (browser.tabs.print) {
-				return browser.tabs.print();
-			}
 		} case "fullscreen": {
 			let prevState	= window.state;
 			let newState	= prevStates.get(window.id);
@@ -193,6 +187,12 @@ async function handlePopupMessage(message) {
 		} case "exit": {
 			let windows = await browser.windows.getAll();
 			windows.forEach(({ id }) => browser.windows.remove(id));
+		} case "printPreview": {
+			return browser.tabs.printPreview();
+		} case "print": {
+			if (browser.tabs.print) {
+				return browser.tabs.print();
+			}
 		} default: {
 			if (method.startsWith("openHelp")) {
 				let browserInfo;
