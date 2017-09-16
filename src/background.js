@@ -95,6 +95,20 @@ var tabHandler = (function() {
  */
 async function handlePopupMessage(message) {
 	let method = String(message.method);
+	let data;
+	if ("data" in message) {
+		if (message.data instanceof String) {
+			try {
+				data = JSON.parse(message.data);
+			} catch (e) {
+				data = {};
+			}
+		} else if (message.data instanceof Object) {
+			data = message.data;
+		}
+	} else {
+		data = {};
+	}
 	let window, tab;
 	[window, tab] = await Promise.all([
 		browser.windows.getCurrent(),
@@ -141,7 +155,11 @@ async function handlePopupMessage(message) {
 			response.enable.forEach(	str => result.enable.push(	str));
 			return result;
 		} case "newTab": {
-			return browser.tabs.create({url: null});
+			let newTabData = {url: null};
+			if ("cookieStoreId" in data) {
+				newTabData.cookieStoreId = String(data.cookieStoreId);
+			}
+			return browser.tabs.create(newTabData);
 		} case "newWindow": {
 			return browser.windows.create();
 		} case "newPrivateWindow": {

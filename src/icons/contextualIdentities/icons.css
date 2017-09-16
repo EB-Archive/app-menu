@@ -1,0 +1,116 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+:root {
+	--identity-icon-color:	#000;
+	--identity-icon:	url("usercontext.svg");
+}
+
+.usercontext-icon {
+	background-image:	var(--identity-icon);
+	background-position:	center;
+	background-repeat:	no-repeat;
+	background-size:	contain;
+
+	block-size:	100%;
+
+	fill:	var(--identity-icon-color);
+	filter:	url("filters.svg#fill");
+}
+
+/* Color and icon helpers */
+[data-identity-color="blue"] {
+	--identity-tab-color: #37adff;
+	--identity-icon-color: #37adff;
+}
+
+[data-identity-color="turquoise"] {
+	--identity-tab-color: #00c79a;
+	--identity-icon-color: #00c79a;
+}
+
+[data-identity-color="green"] {
+	--identity-tab-color: #51cd00;
+	--identity-icon-color: #51cd00;
+}
+
+[data-identity-color="grey"] {
+	/* Only used for the edit panel */
+	--identity-icon-color: #616161;
+}
+
+[data-identity-color="yellow"] {
+	--identity-tab-color: #ffcb00;
+	--identity-icon-color: #ffcb00;
+}
+
+[data-identity-color="orange"] {
+	--identity-tab-color: #ff9f00;
+	--identity-icon-color: #ff9f00;
+}
+
+[data-identity-color="red"] {
+	--identity-tab-color: #ff613d;
+	--identity-icon-color: #ff613d;
+}
+
+[data-identity-color="pink"] {
+	--identity-tab-color: #ff4bda;
+	--identity-icon-color: #ff4bda;
+}
+
+[data-identity-color="purple"] {
+	--identity-tab-color: #af51f5;
+	--identity-icon-color: #af51f5;
+}
+
+[data-identity-icon="fingerprint"] {
+	--identity-icon: url("usercontext.svg#fingerprint");
+}
+
+[data-identity-icon="briefcase"] {
+	--identity-icon: url("usercontext.svg#briefcase");
+}
+
+[data-identity-icon="dollar"] {
+	--identity-icon: url("usercontext.svg#dollar");
+}
+
+[data-identity-icon="cart"] {
+	--identity-icon: url("usercontext.svg#cart");
+}
+
+[data-identity-icon="circle"] {
+	--identity-icon: url("usercontext.svg#circle");
+}
+
+[data-identity-icon="food"] {
+	--identity-icon: url("usercontext.svg#food");
+}
+
+[data-identity-icon="gift"] {
+	--identity-icon: url("usercontext.svg#gift");
+}
+
+[data-identity-icon="vacation"] {
+	--identity-icon: url("usercontext.svg#vacation");
+}
+
+[data-identity-icon="fruit"] {
+	--identity-icon: url("usercontext.svg#fruit");
+}
+
+[data-identity-icon="pet"] {
+	--identity-icon: url("usercontext.svg#pet");
+}
+
+[data-identity-icon="tree"] {
+	--identity-icon: url("usercontext.svg#tree");
+}
+
+[data-identity-icon="chill"] {
+	--identity-icon: url("usercontext.svg#chill");
+}
