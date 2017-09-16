@@ -128,7 +128,6 @@ async function handlePopupMessage(message) {
 			let result = {
 				disable: [
 					"*",
-					"edit*",
 					"dev*",
 					"workOffline",
 					"openHelpHealthReport",
