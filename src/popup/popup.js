@@ -22,6 +22,16 @@
  * @property {String[]} enable
  * @property {String[]} disable
  */
+/**
+ *
+ * @typedef	ContextualIdentity
+ * @property	{String}	cookieStoreId	The cookie store ID for the identity.
+ *			Since contextual identities don't share cookie stores,
+ *			this serves as a unique identifier.
+ * @property	{String}	color	The color for the identity.
+ * @property	{String}	icon	The name of an icon for the identity.
+ * @property	{String}	name	Name of the identity.
+ */
 
 /**
  * @type HTMLElement
@@ -172,7 +182,61 @@ async function setupIPCEvents() {
 }
 
 async function initPopup() {
-	return updateButtonStatus(await browser.runtime.sendMessage({method: "init"}));
+	return Promise.all([
+		updateButtonStatus(await browser.runtime.sendMessage({method: "init"})),
+		initContextualIdentities()
+	]);
+}
+
+async function initContextualIdentities() {
+	let lastElement	= document.querySelector('#sub-menu > #sm-new-tab > .panel-section-separator + .panel-list-item[data-ipc-message="openFile"]');
+	let smNewTab	= lastElement.parentNode;
+	/* @type ContextualIdentity[] */
+	let contextualIdentities = await browser.contextualIdentities.query({});
+	if (!contextualIdentities || contextualIdentities.length === 0) return;
+	{
+		let separator = document.createElement("div");
+		separator.classList.add("panel-section-separator");
+		smNewTab.insertBefore(separator, lastElement);
+		lastElement = separator;
+
+		let style = document.createElement("link");
+		style.setAttribute("rel",	"stylesheet");
+		style.setAttribute("type",	"text/css");
+		style.setAttribute("href",	"/icons/contextualIdentities/icons.css");
+		document.head.appendChild(style);
+	}
+	contextualIdentities.forEach(/* @param {ContextualIdentity} identity */ identity => {
+		let button = document.createElement("div");
+		button.classList.add("panel-list-item");
+		button.dataset.ipcMessage = "newTab";
+		button.addEventListener("click", async evt => {
+			if (evt.currentTarget.dataset.disabled) return;
+
+			let promise = browser.runtime.sendMessage({
+				method: button.dataset.ipcMessage,
+				data: {
+					cookieStoreId:	identity.cookieStoreId
+				}
+			});
+
+			window.close();
+			return promise;
+		});
+
+		let icon = document.createElement("i");
+		icon.classList.add("icon", "eb-icon", "usercontext-icon");
+		icon.dataset.identityColor	= identity.color;
+		icon.dataset.identityIcon	= identity.icon;
+		button.appendChild(icon);
+
+		let text = document.createElement("div");
+		text.classList.add("text");
+		text.appendChild(document.createTextNode(identity.name));
+		button.appendChild(text);
+
+		smNewTab.insertBefore(button, lastElement);
+	});
 }
 
 /**

@@ -17,6 +17,8 @@
 		"activeTab",
 		"clipboardRead",
 		"clipboardWrite",
+		"contextualIdentities",
+		"cookies",
 		"downloads",
 		"storage"
 	],
