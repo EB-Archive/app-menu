@@ -19,10 +19,18 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
+		fixBackgroundColor(),
 		i18nInit(),
 		initOptions()
 	]);
 });
+
+async function fixBackgroundColor() {
+	let browserInfo = await browser.runtime.getBrowserInfo();
+	if (browserInfo.name === "Firefox" && browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
+		document.documentElement.style.background = "#FBFBFB";
+	}
+}
 
 async function initOptions() {
 	let themes = ["default", "photon", "australis", "classic", "pastel-svg", "aero"];
