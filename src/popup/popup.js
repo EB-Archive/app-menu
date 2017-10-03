@@ -92,13 +92,13 @@ async function loadIcons() {
 
 				let hasSrcOS = false;
 				try {
-					hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work in 57
+					hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work when loaded from file:// URLs
 				} catch (err) {}
 
 				icon.addEventListener("error", err => {
 					let i2 = document.createElement("img");
 					i2.classList.add("icon", "eb-icon");
-					// Fix for Firefox 57:
+					// Fix for file:// URLs:
 					if (hasSrcOS) {
 						i2.setAttribute("src", src);
 						i2.addEventListener("error", err => {

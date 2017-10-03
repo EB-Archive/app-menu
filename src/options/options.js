@@ -18,8 +18,10 @@
 /* global browser */
 
 document.addEventListener("DOMContentLoaded", async () => {
-	i18nInit();
-	initOptions();
+	return Promise.all([
+		i18nInit(),
+		initOptions()
+	]);
 });
 
 async function initOptions() {
