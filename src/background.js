@@ -19,7 +19,7 @@
 
 let prevStates = new Map();
 
-(async function() {
+(async () => {
 	let themeDir = (await browser.storage.sync.get({
 		theme: await getDefaultTheme()
 	})).theme;
@@ -44,7 +44,7 @@ browser.runtime.onMessage.addListener((message, sender, resolve) => {
 	}
 });
 
-var tabHandler = (function() {
+const tabHandler = (() => {
 	/**
 	 * @type Map<Set>
 	 */
@@ -133,7 +133,8 @@ async function handlePopupMessage(message) {
 					"workOffline",
 					"openHelpHealthReport",
 					"openHelpTroubleshooting",
-					"openHelpAboutFirefox"
+					"openHelpAboutFirefox",
+					"printPageSetup"
 				],
 				enable: [
 					"new*",
@@ -142,7 +143,8 @@ async function handlePopupMessage(message) {
 					"openAddons",
 					"fullscreen",
 					"openHelp*",
-					"exit"
+					"exit",
+					"print*"
 				]
 			};
 			if (browser.tabs.printPreview) {
@@ -209,9 +211,7 @@ async function handlePopupMessage(message) {
 		} case "printPreview": {
 			return browser.tabs.printPreview();
 		} case "print": {
-			if (browser.tabs.print) {
-				return browser.tabs.print();
-			}
+			return browser.tabs.print();
 		} default: {
 			if (method.startsWith("openHelp")) {
 				let browserInfo;

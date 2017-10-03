@@ -16,7 +16,7 @@
  */
 /* global browser */
 
-var amLoaded = amLoaded || false;
+let amLoaded = amLoaded || false;
 
 if (!amLoaded) {
 	amLoaded = true;
@@ -30,9 +30,6 @@ if (!amLoaded) {
 						"print",
 						"saveAs"
 					]
-				}
-				if (document.documentElement.requestFullScreen || document.documentElement.mozRequestFullScreen) {
-					//result.enable.push("fullscreen");
 				}
 				if (document.querySelector(":focus")) {
 					result.enable.push("edit*");
@@ -52,8 +49,6 @@ if (!amLoaded) {
 				return document.execCommand("selectAll");
 			} case "editDelete": {
 				return document.execCommand("delete");
-			} case "print": {
-				return window.print();
 			} default: {
 				throw new Error(`Unsupported Function '${method}'`);
 			}

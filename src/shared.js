@@ -15,13 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 "use strict";
+/* global browser */
 
 /**
  * Gets the default theme for the current browser.
  *
  * @returns {String}
  */
-async function getDefaultTheme() {
+const getDefaultTheme = async () => {
 	let browserInfo = await browser.runtime.getBrowserInfo();
 	if (browserInfo.name === "Firefox") {
 		if (browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
