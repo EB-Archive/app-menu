@@ -25,7 +25,9 @@
 const getDefaultTheme = async () => {
 	let browserInfo = await browser.runtime.getBrowserInfo();
 	if (browserInfo.name === "Firefox") {
-		if (browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
+		if (browserInfo.version.localeCompare("29", {numeric:true}) < 0) {
+			return "classic";
+		} else if (browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
 			return "australis";
 		} else {
 			return "photon";

@@ -21,13 +21,17 @@ let prevStates = new Map();
 
 (async () => {
 	let themeDir = (await browser.storage.sync.get({
-		theme: await getDefaultTheme()
+		theme: "default"
 	})).theme;
 
-	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+	if (themeDir === "default") {
+		themeDir = await getDefaultTheme();
+	}
 
+	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
 	if (theme.browser_action) {
 		let path = {};
+		let extension = theme.default_extension || "svg";
 		for (let k in theme.browser_action) {
 			path[k] = `/themes/${themeDir}/${theme.browser_action[k].includes('.') ?
 			theme.browser_action[k] : theme.browser_action[k] + '.' + extension}`
