@@ -20,12 +20,6 @@ html, body {
 	overflow-y: hidden;
 }
 
-#main {
-}
-
-#main-menu {
-}
-
 #sub-menu {
 	background:	rgba(0, 0, 0, 0.06);
 	min-width:	300px;
@@ -63,8 +57,10 @@ html, body {
 	margin-right:	8px;
 }
 
-.disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
-img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
+.disabled img.icon,
+.disabled .eb-icon[data-icon^="system-"],
+img.icon.disabled,
+.eb-icon[data-icon^="system-"].disabled {
 	filter: opacity(0.5) !important;
 }
 

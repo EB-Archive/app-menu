@@ -14,20 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
-/* global browser */
 
 /**
  * Gets the default theme for the current browser.
  *
- * @returns {String}
+ * @returns {String} The default theme for the current browser.
  */
-const getDefaultTheme = async () => {
-	let browserInfo = await browser.runtime.getBrowserInfo();
+export const getDefaultTheme = async () => {
+	const browserInfo = await browser.runtime.getBrowserInfo();
 	if (browserInfo.name === "Firefox") {
-		if (browserInfo.version.localeCompare("29", {numeric:true}) < 0) {
+		if (browserInfo.version.localeCompare("29", [], {numeric: true}) < 0) {
 			return "classic";
-		} else if (browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
+		} else if (browserInfo.version.localeCompare("57", [], {numeric: true}) < 0) {
 			return "australis";
 		} else {
 			return "photon";
@@ -35,4 +33,28 @@ const getDefaultTheme = async () => {
 	} else {
 		return "pastel-svg";
 	}
+};
+
+/**
+ *
+ * @param {String} string The string.
+ * @returns {String}
+ */
+export const processMessage = (string, prefix) => {
+	let [,key] = (/^__MSG_([A-Za-z0-9_@]+)__$/.exec(string) || []);
+	if (isString(key)) {
+		key = isString(prefix) ? `${prefix}_${key}` : key;
+		string = `__MSG_${key}__`;
+	}
+	return isString(key) ? browser.i18n.getMessage(key) || string : string;
+};
+
+/**
+ * Check if the argument is a string.
+ *
+ * @param	{String}	string	The variable to check if it is a String.
+ * @returns	{boolean}	If the string argument is a string.
+ */
+export const isString = string => {
+	return (typeof string === "string" || string instanceof String);
 };

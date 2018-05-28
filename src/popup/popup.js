@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
-/* global browser */
+import {getDefaultTheme} from "/shared.js";
 
 /**
  * @typedef ButtonStatus
@@ -54,12 +53,12 @@ async function loadSpecialIcons() {
 }
 
 async function loadIcons() {
-	let themeDir = (await browser.storage.sync.get({
+	const themeDir = (await browser.storage.sync.get({
 		theme: await getDefaultTheme()
 	})).theme;
 
-	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
-	let themeCSS = `/themes/${themeDir}/theme.css`;
+	const theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+	const themeCSS = `/themes/${themeDir}/theme.css`;
 
 	fetch(themeCSS).then(r => {
 		if (r.ok) {
@@ -75,7 +74,7 @@ async function loadIcons() {
 		}
 	});
 
-	let os = (await browser.runtime.getPlatformInfo()).os;
+	const {os} = (await browser.runtime.getPlatformInfo());
 
 	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
 		let icon = document.createElement("img");
@@ -86,9 +85,9 @@ async function loadIcons() {
 				icon.classList.add("icon", "eb-icon");
 				icon.dataset.icon = i.dataset.icon;
 			} else {
-				let extension = theme.default_extension || "svg";
-				let srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
-				let src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
+				const extension = theme.default_extension || "svg";
+				const srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
+				const src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
 
 				let hasSrcOS = false;
 				try {
@@ -96,13 +95,13 @@ async function loadIcons() {
 				} catch (err) {}
 
 				icon.addEventListener("error", err => {
-					let i2 = document.createElement("img");
+					const i2 = document.createElement("img");
 					i2.classList.add("icon", "eb-icon");
 					// Fix for file:// URLs:
 					if (hasSrcOS) {
 						i2.setAttribute("src", src);
 						i2.addEventListener("error", err => {
-							let i3 = document.createElement("img");
+							const i3 = document.createElement("img");
 							i3.classList.add("icon", "eb-icon");
 							i2.parentNode.replaceChild(i3, i2);
 						});
@@ -124,12 +123,12 @@ async function setupMouseEvents() {
 		});
 	});
 
-	let activateDefaultSubMenuListener = evt => {
+	const activateDefaultSubMenuListener = evt => {
 		document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
 		defaultSubMenu.classList.add("active");
-	}
+	};
 
-	let activateDefaultSubMenu = sm => {
+	const activateDefaultSubMenu = sm => {
 		sm.addEventListener("mouseenter", activateDefaultSubMenuListener);
 	};
 
@@ -141,14 +140,14 @@ async function setupMouseEvents() {
 
 async function i18nInit() {
 	document.querySelectorAll("[data-i18n]").forEach(translatable => {
-		let text = browser.i18n.getMessage(translatable.dataset.i18n);
+		const text = browser.i18n.getMessage(translatable.dataset.i18n);
 		if (text.length > 0) {
 			translatable.textContent = text;
 		}
 	});
 
 	document.querySelectorAll("[data-i18n-label]").forEach(translatable => {
-		let text = browser.i18n.getMessage(translatable.dataset.i18nLabel);
+		const text = browser.i18n.getMessage(translatable.dataset.i18nLabel);
 		if (text.length > 0) {
 			translatable.setAttribute("label", text);
 		}
@@ -160,8 +159,8 @@ async function setupIPCEvents() {
 		sender.addEventListener("click", async evt => {
 			if (evt.currentTarget.dataset.disabled) return;
 
-			let remainOpen = Boolean(evt.currentTarget.dataset.remainOpen);
-			let promise = browser.runtime.sendMessage({
+			const remainOpen = Boolean(evt.currentTarget.dataset.remainOpen);
+			const promise = browser.runtime.sendMessage({
 				method: sender.dataset.ipcMessage
 			});
 
@@ -169,7 +168,7 @@ async function setupIPCEvents() {
 				window.close();
 				return promise;
 			} else {
-				let response = await promise;
+				const response = await promise;
 
 				if (response.updateButtonStatus) {
 					updateButtonStatus(response.updateButtonStatus);
@@ -190,30 +189,30 @@ async function initPopup() {
 
 async function initContextualIdentities() {
 	let lastElement	= document.querySelector('#sub-menu > #sm-new-tab > .panel-section-separator + .panel-list-item[data-ipc-message="openFile"]');
-	let smNewTab	= lastElement.parentNode;
+	const smNewTab	= lastElement.parentNode;
 	/* @type ContextualIdentity[] */
-	let contextualIdentities = await browser.contextualIdentities.query({});
+	const contextualIdentities = await browser.contextualIdentities.query({});
 	if (!contextualIdentities || contextualIdentities.length === 0) return;
 	{
-		let separator = document.createElement("div");
+		const separator = document.createElement("div");
 		separator.classList.add("panel-section-separator");
 		smNewTab.insertBefore(separator, lastElement);
 		lastElement = separator;
 
-		let style = document.createElement("link");
+		const style = document.createElement("link");
 		style.setAttribute("rel",	"stylesheet");
 		style.setAttribute("type",	"text/css");
 		style.setAttribute("href",	"/icons/contextualIdentities/icons.css");
 		document.head.appendChild(style);
 	}
 	contextualIdentities.forEach(/* @param {ContextualIdentity} identity */ identity => {
-		let button = document.createElement("div");
+		const button = document.createElement("div");
 		button.classList.add("panel-list-item");
 		button.dataset.ipcMessage = "newTab";
 		button.addEventListener("click", async evt => {
 			if (evt.currentTarget.dataset.disabled) return;
 
-			let promise = browser.runtime.sendMessage({
+			const promise = browser.runtime.sendMessage({
 				method: button.dataset.ipcMessage,
 				data: {
 					cookieStoreId:	identity.cookieStoreId
@@ -224,13 +223,13 @@ async function initContextualIdentities() {
 			return promise;
 		});
 
-		let icon = document.createElement("i");
+		const icon = document.createElement("i");
 		icon.classList.add("icon", "eb-icon", "usercontext-icon");
 		icon.dataset.identityColor	= identity.color;
 		icon.dataset.identityIcon	= identity.icon;
 		button.appendChild(icon);
 
-		let text = document.createElement("div");
+		const text = document.createElement("div");
 		text.classList.add("text");
 		text.appendChild(document.createTextNode(identity.name));
 		button.appendChild(text);
@@ -244,23 +243,26 @@ async function initContextualIdentities() {
  * @returns {undefined}
  */
 async function updateButtonStatus(buttonStatus) {
-	let parseQuery = query => {
-		if (query === '*') {
+	const parseQuery = query => {
+		if (query === "*") {
 			return "[data-ipc-message]";
-		} if (query.startsWith('*') && query.endsWith('*')) {
+		} if (query.startsWith("*") && query.endsWith("*")) {
 			return `[data-ipc-message*="${query.substring(1, query.length - 1)}"]`;
-		} else if (query.startsWith('*')) {
+		} else if (query.startsWith("*")) {
 			return `[data-ipc-message$="${query.substring(1, query.length)}"]`;
-		} else if (query.endsWith('*')) {
+		} else if (query.endsWith("*")) {
 			return `[data-ipc-message^="${query.substring(0, query.length - 1)}"]`;
 		} else {
 			return `[data-ipc-message="${query}"]`;
 		}
-	}
+	};
 
-	let disable = node => {
+	/**
+	 * @param {HTMLElement} node
+	 */
+	const disable = node => {
 		node.dataset.disabled = true;
-		if (node instanceof HTMLMenuItemElement) {
+		if (node.tagName.toLowerCase() === "menuitem") {
 			node.setAttribute("disabled", true);
 		} else {
 			if (!node.dataset.subMenu) {
@@ -269,34 +271,37 @@ async function updateButtonStatus(buttonStatus) {
 		}
 	};
 
-	let enable = node => {
+	/**
+	 * @param {HTMLElement} node
+	 */
+	const enable = node => {
 		delete node.dataset.disabled;
-		if (node instanceof HTMLMenuItemElement) {
+		if (node.tagName.toLowerCase() === "menuitem") {
 			node.removeAttribute("disabled");
 		} else {
 			node.classList.remove("disabled");
 		}
-	}
+	};
 
 	if (buttonStatus.disable) {
 		buttonStatus.disable.forEach(disabled => {
-			if (!disabled.includes('*')) return;
-			let query = parseQuery(disabled);
+			if (!disabled.includes("*")) return;
+			const query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(disable);
 		});
 	}
 
 	if (buttonStatus.enable) {
 		buttonStatus.enable.forEach(enabled => {
-			let query = parseQuery(enabled);
+			const query = parseQuery(enabled);
 			document.querySelectorAll(query).forEach(enable);
 		});
 	}
 
 	if (buttonStatus.disable) {
 		buttonStatus.disable.forEach(disabled => {
-			if (disabled.includes('*')) return;
-			let query = parseQuery(disabled);
+			if (disabled.includes("*")) return;
+			const query = parseQuery(disabled);
 			document.querySelectorAll(query).forEach(disable);
 		});
 	}

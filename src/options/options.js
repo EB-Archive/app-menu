@@ -14,36 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
-/* global browser */
+import {getDefaultTheme,processMessage} from "/shared.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
-		fixBackgroundColor(),
 		i18nInit(),
 		initOptions()
 	]);
 });
 
-async function fixBackgroundColor() {
-	let browserInfo = await browser.runtime.getBrowserInfo();
-	if (browserInfo.name === "Firefox" && browserInfo.version.localeCompare("57", {numeric:true}) < 0) {
-		document.documentElement.style.background = "#FBFBFB";
-	}
-}
-
 async function initOptions() {
-	let themes = ["default", "photon", "australis", "classic", "pastel-svg", "aero"];
-	let data = (await browser.storage.sync.get({
+	const themes = ["default", "photon", "australis", "classic", "pastel-svg", "aero"];
+	const data = (await browser.storage.sync.get({
 		theme: "default",
 		preferredWindowState:	"maximized"
 	}));
-	let currentTheme = data.theme;
-	let themeSelector = document.querySelector("#theme");
+	const currentTheme = data.theme;
+	const themeSelector = document.querySelector("#theme");
 
-	let preferredWindowStateSelector = document.querySelector("#fullscreenExitState");
+	const preferredWindowStateSelector = document.querySelector("#fullscreenExitState");
 	for (let i = 0; i < preferredWindowStateSelector.length; i++) {
-		let option = preferredWindowStateSelector.item(i);
+		const option = preferredWindowStateSelector.item(i);
 		if (option.value === data.preferredWindowState) {
 			preferredWindowStateSelector.selectedIndex = i;
 			option.setAttribute("selected", true);
@@ -52,61 +43,42 @@ async function initOptions() {
 		}
 	}
 
-	for (let theme of themes) {
+	const getConfig = async theme => {
+		if (theme === "default") {
+			return {};
+		}
+		const response = await fetch(`/themes/${theme}/theme.json`);
+		if (!response.ok) {
+			return null;
+		}
+		return await response.json();
+	};
+
+	for (const theme of themes) {
 		let t = theme;
 		if (theme === "default") {
 			t = await getDefaultTheme();
 		}
-
 		try {
-			let response = await fetch(`/themes/${t}/theme.json`);
-			if (!response.ok) {
-				return;
+			const config = await getConfig(theme);
+			if (!config) {
+				continue;
 			}
-			let config = await response.json();
-			let extension = config.default_extension || "svg";
-			let icon = config.browser_action || null;
-			if (icon !== null && typeof icon === "object") {
-				let obj = icon;
-				let keyNum = 0;
-				for (let k in obj) {
-					let num = Number(k);
-					if (num > keyNum) {
-						keyNum = num;
-					}
-				}
-				icon = obj[keyNum] || null;
-			}
-			if (!icon) {
-				icon = `firefox.${extension}`;
-			}
-			if (!icon.includes('.')) {
-				icon += ('.' + extension);
-			}
-
-			let o = document.createElement("option");
+			const o = document.createElement("option");
 			o.setAttribute("value", theme);
-
-			if (typeof icon === "string") {
-				let img = document.createElement("img");
-				let imgSrc = `/themes/${t}/${icon}`;
-				img.setAttribute("src", imgSrc);
-				img.classList.add("eb-icon");
-
-				o.appendChild(img);
-				o.dataset.icon = imgSrc;
-			}
 			if (theme === "default") {
 				o.appendChild(document.createTextNode(browser.i18n.getMessage("options_theme_default")));
 				o.setAttribute("title", browser.i18n.getMessage("options_theme_default_title"));
 			} else {
-				o.appendChild(document.createTextNode(config.name));
+				o.appendChild(document.createTextNode(processMessage(config.name,"options")));
 			}
 			if (theme === currentTheme) {
 				o.setAttribute("selected", true);
 			}
 			themeSelector.appendChild(o);
-		} catch (err) {}
+		} catch (err) {
+			console.warn(err);
+		}
 	}
 
 	document.querySelectorAll("select[data-save]").forEach(select => {
@@ -128,8 +100,8 @@ async function initOptions() {
 					if (config.browser_action) {
 						let path = {};
 						for (let k in config.browser_action) {
-							path[k] = `/themes/${themeDir}/${config.browser_action[k].includes('.') ?
-							config.browser_action[k] : config.browser_action[k] + '.' + extension}`
+							path[k] = `/themes/${themeDir}/${config.browser_action[k].includes(".") ?
+								config.browser_action[k] : config.browser_action[k] + "." + extension}`;
 						}
 						browser.browserAction.setIcon({path: path});
 					} else {

@@ -1,5 +1,5 @@
 {
-	"name": "Firefox Classic",
+	"name": "__MSG_theme_firefoxClassic__",
 	"default_extension": "png",
 	"browser_action": {
 		"16":	"firefox.png"

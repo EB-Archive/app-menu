@@ -9,28 +9,33 @@ html {
 	padding:	6px;
 }
 
-.browser-style {
+*,.browser-style {
 	font-size:	1.25rem;
 }
 
+button,
 button.browser-style {
 	padding:	2px	22px	4px	21px;
 }
 
+button + button,
+button + button.browser-style,
+button.browser-style + button,
 button.browser-style + button.browser-style {
 	margin-left:	4px;
 }
 
+h1,
 h1.browser-style {
 	font-size:	2rem;
 	font-weight:	normal;
 	margin:	0;
 	padding:	0px	6px 4px;
-	margin:	0px	-6px	4px;
 	border-bottom:	1px solid rgba(0, 0, 0, 0.2);
 }
 
-.browser-style.options-grid {
+.options-grid,
+.options-grid.browser-style {
 	display:	grid;
 	align-items:	center;
 	grid-template-columns:	260px auto;
@@ -39,11 +44,14 @@ h1.browser-style {
 	margin-right: auto;
 }
 
-.browser-style.options-grid > * {
+.options-grid,
+.options-grid.browser-style > * {
 	margin-bottom:	6px;
 }
 
+select,
 select.browser-style,
+button,
 button.browser-style {
 	height:	30px;
 }

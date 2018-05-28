@@ -1,4 +1,24 @@
 {
-	"name": "Firefox Photon",
-	"default_extension":	"svg"
+	"name": "__MSG_theme_firefoxPhoton__",
+	"default_extension":	"svg",
+	"browser_action": [
+		{
+			"default":	true,
+			"icon":	"firefox.svg",
+			"name":	"__MSG_theme_firefoxPhoton_iconDefault__",
+			"id":	"default"
+		}, {
+			"icon":	"firefox-stable.svg",
+			"name":	"__MSG_theme_firefoxPhoton_iconStable__",
+			"id":	"stable"
+		}, {
+			"icon":	"firefox-aurora.svg",
+			"name":	"__MSG_theme_firefoxPhoton_iconAurora__",
+			"id":	"aurora"
+		}, {
+			"icon":	"firefox-nightly.svg",
+			"name":	"__MSG_theme_firefoxPhoton_iconNightly__",
+			"id":	"nightly"
+		}
+	]
 }

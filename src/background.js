@@ -14,8 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-"use strict";
-/* global browser */
+import {getDefaultTheme} from "./shared.js";
 
 let prevStates = new Map();
 
@@ -33,19 +32,20 @@ let prevStates = new Map();
 		let path = {};
 		let extension = theme.default_extension || "svg";
 		for (let k in theme.browser_action) {
-			path[k] = `/themes/${themeDir}/${theme.browser_action[k].includes('.') ?
-			theme.browser_action[k] : theme.browser_action[k] + '.' + extension}`
+			path[k] = `/themes/${themeDir}/${theme.browser_action[k].includes(".")
+				? theme.browser_action[k] : `${theme.browser_action[k]}.${extension}`}`;
 		}
-		browser.browserAction.setIcon({path: path});
+		browser.browserAction.setIcon({path});
 	} else {
 		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${theme.default_extension || "svg"}`});
 	}
 })();
 
-browser.runtime.onMessage.addListener((message, sender, resolve) => {
+browser.runtime.onMessage.addListener((message, sender) => {
 	if (/\/popup\/popup\.xhtml$/.test(sender.url)) {
 		return handlePopupMessage(message);
 	}
+	return null;
 });
 
 const tabHandler = (() => {
@@ -72,29 +72,25 @@ const tabHandler = (() => {
 		},
 
 		removeListener: (tabId, callback) => {
-			if (!listeners.has(tabId)) {
-				return;
-			} else {
+			if (listeners.has(tabId)) {
 				listeners.get(tabId).remove(callback);
 			}
 		},
 
 		hasListener: (tabId, callback) => {
-			if (!listeners.has(tabId)) {
-				return false;
-			} else {
+			if (listeners.has(tabId)) {
 				return listeners.get(tabId).has(callback);
 			}
 		},
 
-		hasListeners: (tabId) => {
+		hasListeners: tabId => {
 			return listeners.has(tabId);
 		}
 	};
 })();
 
 /**
- * @param {String} message
+ * @param {String} message The message
  * @returns {undefined}
  */
 async function handlePopupMessage(message) {
@@ -116,13 +112,13 @@ async function handlePopupMessage(message) {
 	let window, tab;
 	[window, tab] = await Promise.all([
 		browser.windows.getCurrent(),
-		browser.tabs.query({ active: true, currentWindow: true }).then(tabs => tabs[0])
+		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
 	]);
 	switch (method) {
 		case "init": {
 			let response;
 			try {
-				await browser.tabs.executeScript(tab.id, { file: "/content/content.js", runAt: "document_end" });
+				await browser.tabs.executeScript(tab.id, {file: "/content/content.js", runAt: "document_end"});
 				response = await browser.tabs.sendMessage(tab.id, {method: "init"});
 			} catch (e) {
 				if (e.message !== "Missing host permission for the tab")
@@ -171,7 +167,7 @@ async function handlePopupMessage(message) {
 		} case "newPrivateWindow": {
 			return browser.windows.create({incognito: true});
 		} case "saveAs": {
-			return browser.downloads.download({ url: tab.url, filename: tab.title + ".html", saveAs: true });
+			return browser.downloads.download({url: tab.url, filename: `${tab.title}.html`, saveAs: true});
 		} case "emailLink": {
 			return browser.tabs.create({
 				active: false,
@@ -211,7 +207,8 @@ async function handlePopupMessage(message) {
 			return result;
 		} case "exit": {
 			let windows = await browser.windows.getAll();
-			windows.forEach(({ id }) => browser.windows.remove(id));
+			windows.forEach(({id}) => browser.windows.remove(id));
+			return;
 		} case "printPreview": {
 			return browser.tabs.printPreview();
 		} case "print": {

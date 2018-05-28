@@ -83,6 +83,11 @@
 	"options_theme_default":	{ "message":	"Default Theme"	},
 	"options_theme_default_title":	{ "message":	"Sets the theme to match the browser."	},
 
+	"options_theme_firefoxAustralis":	{ "message":	"Firefox Australis"	},
+	"options_theme_firefoxClassic":	{ "message":	"Firefox Classic"	},
+	"options_theme_firefoxPhoton":	{ "message":	"Firefox Photon"	},
+	"options_theme_pastelSVG":	{ "message":	"Pastel SVG"	},
+
 	"options_preferredWindowState":	{ "message":	"Preferred window state:"	},
 	"options_preferredWindowState_maximized":	{ "message":	"Maximized"	},
 	"options_preferredWindowState_normal":	{ "message":	"Normal window"	}

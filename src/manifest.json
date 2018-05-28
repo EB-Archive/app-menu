@@ -2,7 +2,7 @@
 	"applications": {
 		"gecko": {
 			"id": "app-menu@exe-boss",
-			"strict_min_version": "56.0a1"
+			"strict_min_version": "60.0a1"
 		}
 	},
 
@@ -35,7 +35,7 @@
 	},
 
 	"background": {
-		"scripts": [ "shared.js", "background.js" ]
+		"page": "background.xhtml"
 	},
 	"options_ui": {
 		"browser_style":	true,
@@ -46,6 +46,6 @@
 		"default_title":	"__MSG_browserAction__",
 		"default_popup":	"popup/popup.xhtml",
 		"default_area":	"tabstrip",
-		"default_icon":	"themes/australis/firefox.svg"
+		"default_icon":	"themes/photon/firefox.svg"
 	}
 }

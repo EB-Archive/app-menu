@@ -21,7 +21,7 @@ let amLoaded = amLoaded || false;
 if (!amLoaded) {
 	amLoaded = true;
 	browser.runtime.onMessage.addListener(async (message, sender) => {
-		let method = String(message.method);
+		const method = String(message.method);
 		switch (method) {
 			case "init": {
 				let result = {
@@ -30,7 +30,7 @@ if (!amLoaded) {
 						"print",
 						"saveAs"
 					]
-				}
+				};
 				if (document.querySelector(":focus")) {
 					result.enable.push("edit*");
 				}

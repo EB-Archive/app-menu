@@ -1,5 +1,5 @@
 {
-	"name": "PastelSVG",
+	"name": "__MSG_theme_pastelSVG__",
 	"default_extension": "png",
 	"browser_action": {
 		"16":	"firefox@16px.png",
