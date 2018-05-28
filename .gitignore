@@ -1,13 +1,32 @@
 # Ignore Everything
 /*
 
-# Sources
+# Except:
+## Sources
 !/src
 
-# Git
-!.gitattributes
-!.gitignore
-!README*
-!LICENSE*
+## Git
+!/.gitattributes
+!/.gitignore
+!/.gitmodules
+!/README*
+!/LICENSE*
+
+## npm
+!/.*rc.js
+!/.*rc.yml
+!/.*rc.json
+!/gulpfile*
+!/package*
+!/yarn*
+!/.*ignore
 
 # Unwanted crap
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
