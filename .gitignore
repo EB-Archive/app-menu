@@ -21,6 +21,9 @@
 !/yarn*
 !/.*ignore
 
+## Travis CI
+!/.travis.yml
+
 # Unwanted crap
 .DS_Store
 .DS_Store?

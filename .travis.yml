@@ -1,0 +1,25 @@
+# Configuration
+sudo: false
+language: node_js
+
+node_js:
+    - "stable"
+
+# The install script
+install:
+    - yarn install
+
+# The pre-build script
+before_script:
+    - yarn run lint
+
+# The build script
+script:
+    - yarn run build
+
+# Disable email notifications
+notifications:
+    email: false
+
+# WHO IN THE F# (the programming language) DOESN’T SUPPORT TABS IN 2017? '	' <- tab
+# P.S.: F# (the programming language) also doesn’t support tabs, and that's terrible

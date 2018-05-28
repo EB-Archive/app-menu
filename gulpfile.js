@@ -6,6 +6,7 @@ const gulp	= require("gulp");
 const webExt	= require("web-ext").default;
 const mergeStream	= require("merge-stream");
 
+const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
 
@@ -14,6 +15,14 @@ const pkgJson	= require("./package.json");
 const BUILD_DIR 	= "./build/";
 const SOURCE_DIR	= "./src/";
 const ARCHIVES_DIR	= "./dist/";
+
+gulp.task("clean", () => {
+	try {
+		fse.emptyDirSync(BUILD_DIR);
+	} catch (e) {
+		console.error(e);
+	}
+});
 
 {
 	const build = () => {
@@ -31,12 +40,14 @@ const ARCHIVES_DIR	= "./dist/";
 	gulp.task("build-clean", ["clean"], build);
 }
 
-gulp.task("clean", () => {
-	try {
-		fse.emptyDirSync(BUILD_DIR);
-	} catch (e) {
-		console.error(e);
-	}
+gulp.task("lint", ["build-clean"], () => {
+	webExt.cmd.lint({
+		sourceDir:	BUILD_DIR
+	}, {shouldExitProgram: false});
+	return gulp.src(`${BUILD_DIR}**/*.js`)
+		.pipe(eslint())
+		.pipe(eslint.format())
+		.pipe(eslint.failAfterError());
 });
 
 gulp.task("dist", ["build-clean"], () => {
