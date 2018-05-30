@@ -29,5 +29,8 @@
 		"stylelint": "^9.2.1",
 		"stylelint-config-recommended": "^2.1.0",
 		"web-ext": "^2.7.0"
+	},
+	"resolutions": {
+		"addons-linter": "^1.1.0"
 	}
 }
