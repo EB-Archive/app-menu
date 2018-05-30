@@ -10,6 +10,8 @@ const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
 
+const testPrefs	= require("./.extprefrc.js");
+
 /* Building */
 
 const BUILD_DIR 	= "./build/";
@@ -58,6 +60,16 @@ gulp.task("dist", ["build-clean"], () => {
 	}, {shouldExitProgram: false});
 });
 
+const parsePrefs = () => {
+	const webExtPrefs = {};
+	if (testPrefs && testPrefs.firefox_prefs) {
+		for (const pref in testPrefs.firefox_prefs) {
+			webExtPrefs[pref] = testPrefs.firefox_prefs[pref];
+		}
+	}
+	return webExtPrefs;
+};
+
 gulp.task("run", ["build"], () => {
 	let {WEB_EXT_FIREFOX: firefox} = process.env;
 	if (typeof firefox === "undefined" || firefox === "aurora") {
@@ -65,6 +77,7 @@ gulp.task("run", ["build"], () => {
 	}
 	gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build"]);
 	return webExt.cmd.run({
+		pref:	parsePrefs(),
 		firefox: firefox,
 		sourceDir:	path.resolve(BUILD_DIR),
 		browserConsole: true

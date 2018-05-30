@@ -35,6 +35,27 @@ export const getDefaultTheme = async () => {
 	}
 };
 
+export const getCurrentTheme = async (useFetch=true) => {
+	let {theme: themeDir} = await browser.storage.sync.get({
+		theme: "default"
+	});
+
+	if (themeDir === "default") {
+		themeDir = await getDefaultTheme();
+	}
+
+	const result = {
+		themeDir,
+		themeCSS: `/themes/${themeDir}/theme.css`
+	};
+
+	if (useFetch) {
+		result.themeJSON = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+	}
+
+	return result;
+};
+
 /**
  *
  * @param {String} string The string.

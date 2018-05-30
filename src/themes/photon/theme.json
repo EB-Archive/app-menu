@@ -3,7 +3,6 @@
 	"default_extension":	"svg",
 	"browser_action": [
 		{
-			"default":	true,
 			"icon":	"firefox.svg",
 			"name":	"__MSG_theme_firefoxPhoton_iconDefault__",
 			"id":	"default"

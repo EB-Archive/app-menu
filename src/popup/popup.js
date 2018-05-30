@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getDefaultTheme} from "/shared.js";
+import {getCurrentTheme} from "/shared.js";
 
 /**
  * @typedef ButtonStatus
@@ -53,12 +53,11 @@ async function loadSpecialIcons() {
 }
 
 async function loadIcons() {
-	const themeDir = (await browser.storage.sync.get({
-		theme: await getDefaultTheme()
-	})).theme;
-
-	const theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
-	const themeCSS = `/themes/${themeDir}/theme.css`;
+	const {
+		themeDir,
+		themeJSON,
+		themeCSS
+	} = await getCurrentTheme();
 
 	fetch(themeCSS).then(r => {
 		if (r.ok) {
@@ -85,7 +84,7 @@ async function loadIcons() {
 				icon.classList.add("icon", "eb-icon");
 				icon.dataset.icon = i.dataset.icon;
 			} else {
-				const extension = theme.default_extension || "svg";
+				const extension = themeJSON.default_extension || "svg";
 				const srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
 				const src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
 
@@ -94,13 +93,13 @@ async function loadIcons() {
 					hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work when loaded from file:// URLs
 				} catch (err) {}
 
-				icon.addEventListener("error", err => {
+				icon.addEventListener("error", () => {
 					const i2 = document.createElement("img");
 					i2.classList.add("icon", "eb-icon");
 					// Fix for file:// URLs:
 					if (hasSrcOS) {
 						i2.setAttribute("src", src);
-						i2.addEventListener("error", err => {
+						i2.addEventListener("error", () => {
 							const i3 = document.createElement("img");
 							i3.classList.add("icon", "eb-icon");
 							i2.parentNode.replaceChild(i3, i2);
@@ -117,13 +116,13 @@ async function loadIcons() {
 
 async function setupMouseEvents() {
 	document.querySelectorAll("#main-menu [data-sub-menu]").forEach(sm => {
-		sm.addEventListener("mouseenter", evt => {
+		sm.addEventListener("mouseenter", () => {
 			document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
 			document.querySelector(`#sm-${sm.dataset.subMenu}`).classList.add("active");
 		});
 	});
 
-	const activateDefaultSubMenuListener = evt => {
+	const activateDefaultSubMenuListener = () => {
 		document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
 		defaultSubMenu.classList.add("active");
 	};

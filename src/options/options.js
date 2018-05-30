@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getDefaultTheme,processMessage} from "/shared.js";
+import {getDefaultTheme, processMessage} from "/shared.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
@@ -55,13 +55,9 @@ async function initOptions() {
 	};
 
 	for (const theme of themes) {
-		let t = theme;
-		if (theme === "default") {
-			t = await getDefaultTheme();
-		}
 		try {
 			const config = await getConfig(theme);
-			if (!config) {
+			if (!config && theme !== "default") {
 				continue;
 			}
 			const o = document.createElement("option");
@@ -82,11 +78,10 @@ async function initOptions() {
 	}
 
 	document.querySelectorAll("select[data-save]").forEach(select => {
-		select.addEventListener("change", async evt => {
+		select.addEventListener("change", async () => {
 			if (select.selectedIndex >= 0) {
-				let selectedOption = select.item(select.selectedIndex);
-				let value = select.item(select.selectedIndex).value;
-				let data = {};
+				const {value} = select.item(select.selectedIndex);
+				const data = {};
 				data[select.dataset.save] = value;
 				browser.storage.sync.set(data);
 
@@ -95,11 +90,11 @@ async function initOptions() {
 					if (value === "default") {
 						themeDir = await getDefaultTheme();
 					}
-					let config = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
-					let extension = config.default_extension || "svg";
+					const config = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+					const extension = config.default_extension || "svg";
 					if (config.browser_action) {
-						let path = {};
-						for (let k in config.browser_action) {
+						const path = {};
+						for (const k in config.browser_action) {
 							path[k] = `/themes/${themeDir}/${config.browser_action[k].includes(".") ?
 								config.browser_action[k] : config.browser_action[k] + "." + extension}`;
 						}
@@ -115,13 +110,13 @@ async function initOptions() {
 
 async function i18nInit() {
 	document.querySelectorAll("label[for]:not([data-i18n])").forEach(translatable => {
-		let text = browser.i18n.getMessage(`options_${translatable.getAttribute("for")}`);
+		const text = browser.i18n.getMessage(`options_${translatable.getAttribute("for")}`);
 		if (text.length > 0)
 			translatable.textContent = text;
 	});
 
 	document.querySelectorAll("[data-i18n]").forEach(translatable => {
-		let text = browser.i18n.getMessage(translatable.dataset.i18n);
+		const text = browser.i18n.getMessage(translatable.dataset.i18n);
 		if (text.length > 0)
 			translatable.textContent = text;
 	});

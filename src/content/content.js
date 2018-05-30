@@ -14,17 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-/* global browser */
+"use strict";
 
 let amLoaded = amLoaded || false;
-
 if (!amLoaded) {
 	amLoaded = true;
-	browser.runtime.onMessage.addListener(async (message, sender) => {
+	browser.runtime.onMessage.addListener(async (message) => {
 		const method = String(message.method);
 		switch (method) {
 			case "init": {
-				let result = {
+				const result = {
 					disable: [],
 					enable: [
 						"print",

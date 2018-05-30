@@ -14,30 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getDefaultTheme} from "./shared.js";
+import {getCurrentTheme} from "./shared.js";
 
-let prevStates = new Map();
+const prevStates = new Map();
 
 (async () => {
-	let themeDir = (await browser.storage.sync.get({
-		theme: "default"
-	})).theme;
+	const {
+		themeDir,
+		themeJSON
+	} = await getCurrentTheme();
 
-	if (themeDir === "default") {
-		themeDir = await getDefaultTheme();
-	}
-
-	let theme = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
-	if (theme.browser_action) {
-		let path = {};
-		let extension = theme.default_extension || "svg";
-		for (let k in theme.browser_action) {
-			path[k] = `/themes/${themeDir}/${theme.browser_action[k].includes(".")
-				? theme.browser_action[k] : `${theme.browser_action[k]}.${extension}`}`;
+	if (typeof themeJSON.browser_action === "object" &&
+		!(themeJSON.browser_action instanceof Array)) {
+		const path = {};
+		const extension = themeJSON.default_extension || "svg";
+		for (const k in themeJSON.browser_action) {
+			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".")
+				? themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${extension}`}`;
 		}
 		browser.browserAction.setIcon({path});
 	} else {
-		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${theme.default_extension || "svg"}`});
+		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${themeJSON.default_extension || "svg"}`});
 	}
 })();
 
@@ -52,7 +49,7 @@ const tabHandler = (() => {
 	/**
 	 * @type Map<Set>
 	 */
-	let listeners = new Map();
+	const listeners = new Map();
 
 	browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 		if (listeners.has(tabId)) {
@@ -60,20 +57,31 @@ const tabHandler = (() => {
 		}
 	});
 
+	const removeListener = (tabId, callback) => {
+		if (listeners.has(tabId)) {
+			listeners.get(tabId).remove(callback);
+		}
+	};
+
 	return {
-		addListener: (tabId, callback) => {
+		removeListener, addListener: (tabId, callback, options = {}) => {
+			if (options.removeOnComplete) {
+				const origCB = callback;
+				const newCallback = (tabId, changeInfo, tab) => {
+					origCB(tabId, changeInfo, tab);
+					if (changeInfo.status === "complete") {
+						removeListener(tabId, newCallback);
+					}
+				};
+				callback = newCallback;
+			}
+
 			if (listeners.has(tabId)) {
 				listeners.get(tabId).add(callback);
 			} else {
-				let set = new Set();
+				const set = new Set();
 				set.add(callback);
 				listeners.set(tabId, set);
-			}
-		},
-
-		removeListener: (tabId, callback) => {
-			if (listeners.has(tabId)) {
-				listeners.get(tabId).remove(callback);
 			}
 		},
 
@@ -94,7 +102,7 @@ const tabHandler = (() => {
  * @returns {undefined}
  */
 async function handlePopupMessage(message) {
-	let method = String(message.method);
+	const method = String(message.method);
 	let data;
 	if ("data" in message) {
 		if (message.data instanceof String) {
@@ -104,13 +112,12 @@ async function handlePopupMessage(message) {
 				data = {};
 			}
 		} else if (message.data instanceof Object) {
-			data = message.data;
+			({data} = message);
 		}
 	} else {
 		data = {};
 	}
-	let window, tab;
-	[window, tab] = await Promise.all([
+	const [window, tab] = await Promise.all([
 		browser.windows.getCurrent(),
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
 	]);
@@ -125,7 +132,7 @@ async function handlePopupMessage(message) {
 					console.warn(e);
 			}
 			if (!response) response = {disable: [], enable: []};
-			let result = {
+			const result = {
 				disable: [
 					"*",
 					"edit*",
@@ -157,7 +164,7 @@ async function handlePopupMessage(message) {
 			response.enable.forEach(	str => result.enable.push(	str));
 			return result;
 		} case "newTab": {
-			let newTabData = {url: null};
+			const newTabData = {url: null};
 			if ("cookieStoreId" in data) {
 				newTabData.cookieStoreId = String(data.cookieStoreId);
 			}
@@ -176,12 +183,11 @@ async function handlePopupMessage(message) {
 				if (tab.status === "complete") {
 					browser.tabs.remove(tab.id);
 				} else {
-					tabHandler.addListener(tab.id, function(tabId, changeInfo, newTab) {
+					tabHandler.addListener(tab.id, (tabId, changeInfo) => {
 						if (changeInfo.status === "complete") {
-							tabHandler.removeListener(this);
 							browser.tabs.remove(tabId);
 						}
-					});
+					}, {removeOnComplete: true});
 				}
 				return tab;
 			});
@@ -194,19 +200,19 @@ async function handlePopupMessage(message) {
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
 		} case "fullscreen": {
-			let prevState	= window.state;
+			const prevState	= window.state;
 			let newState	= prevStates.get(window.id);
 			newState	= (newState && newState !== "fullscreen" ? newState : browser.storage.sync.get({preferredWindowState: "maximized"}));
 			if (newState instanceof Promise) {
 				newState = (await newState).preferredWindowState;
 			}
-			let result = await browser.windows.update(window.id, {
+			const result = await browser.windows.update(window.id, {
 				state: window.state === "fullscreen" ? newState : "fullscreen"
 			});
 			prevStates.set(window.id, prevState);
 			return result;
 		} case "exit": {
-			let windows = await browser.windows.getAll();
+			const windows = await browser.windows.getAll();
 			windows.forEach(({id}) => browser.windows.remove(id));
 			return;
 		} case "printPreview": {
@@ -215,17 +221,14 @@ async function handlePopupMessage(message) {
 			return browser.tabs.print();
 		} default: {
 			if (method.startsWith("openHelp")) {
-				let browserInfo;
-				let platformInfo;
-				{
-					let browserData = await Promise.all([
-						browser.runtime.getBrowserInfo(),
-						browser.runtime.getPlatformInfo()
-					]);
-					browserInfo = browserData[0];
-					platformInfo = browserData[1];
-				}
-				let lang = browser.i18n.getUILanguage().replace(/_/g, "-");
+				const [
+					browserInfo,
+					platformInfo
+				] = await Promise.all([
+					browser.runtime.getBrowserInfo(),
+					browser.runtime.getPlatformInfo()
+				]);
+				const lang = browser.i18n.getUILanguage().replace(/_/g, "-");
 				let os;
 				switch (platformInfo.os) {
 					case "win": default: {
