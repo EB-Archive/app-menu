@@ -3,7 +3,7 @@
 	"version": "0.1.8a1",
 	"author": "ExE Boss",
 	"scripts": {
-		"build":	"gulp build-clean",
+		"build":	"gulp build",
 		"dist":	"gulp dist",
 		"lint":	"gulp lint",
 		"run":	"gulp run"
