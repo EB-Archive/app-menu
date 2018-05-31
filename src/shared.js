@@ -47,12 +47,14 @@ export const getCurrentTheme = async (useFetch=true) => {
 		theme: "default"
 	});
 
+	const actualTheme = themeDir;
 	if (themeDir === "default") {
 		themeDir = await getDefaultTheme();
 	}
 
 	/** @type {Theme} */
 	const result = {
+		actualTheme,
 		themeDir,
 		themeCSS: `/themes/${themeDir}/theme.css`
 	};

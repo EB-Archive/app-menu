@@ -5,24 +5,13 @@
  */
 
 :root {
-	--dark-icon:	invert(1)	brightness(0.4275);
-	--dark-icon-secondary:	invert(1)	brightness(0.2980);
-	--dark-icon-disabled:	invert(1)	brightness(0.7725);
-}
+	--dark-icon-opacity:	1;
+	--dark-icon-opacity-secondary:	1;
+	--dark-icon-opacity-disabled:	1;
 
-/* Icons */
-img.icon, .eb-icon[data-icon^="system-"] {
-	filter: var(--dark-icon);
-}
-
-.secondary img.icon,	.secondary .eb-icon[data-icon^="system-"],
-img.icon.secondary,	.eb-icon[data-icon^="system-"].secondary {
-	filter: var(--dark-icon-secondary);
-}
-
-.disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
-img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
-	filter: var(--dark-icon-disabled) !important;
+	--dark-icon-filter:	invert(1) brightness(0.4275);
+	--dark-icon-filter-secondary:	invert(1) brightness(0.2980);
+	--dark-icon-filter-disabled:	invert(1) brightness(0.7725);
 }
 
 /* System Icons */
@@ -32,9 +21,4 @@ img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 		3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PS\
 		IxNiI+PHBhdGggZmlsbD0iIzAwMCIgZD0iTTEyIDhsLTUgNS0xLTE\
 		gNC00LTQtNCAxLTF6Ii8+PC9zdmc+");
-}
-
-.secondary .eb-icon[data-icon="system-arrow-expand"],
-.eb-icon[data-icon="system-arrow-expand"].secondary {
-	filter: var(--dark-icon-disabled) !important;
 }

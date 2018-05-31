@@ -15,6 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+:root {
+	--dark-icon-opacity:	1;
+	--dark-icon-opacity-secondary:	1;
+	--dark-icon-opacity-disabled:	.5;
+
+	--dark-icon-filter:	unset;
+	--dark-icon-filter-secondary:	unset;
+	--dark-icon-filter-disabled:	unset;
+}
+
 html, body {
 	overflow-x: hidden;
 	overflow-y: hidden;
@@ -57,19 +67,54 @@ html, body {
 	margin-right:	8px;
 }
 
+/* Icon Colours */
+img.icon,
+.eb-icon[data-icon^="system-"] {
+	filter: var(--dark-icon-filter);
+	opacity: var(--dark-icon-opacity);
+}
+
+.secondary img.icon,
+.secondary .eb-icon[data-icon^="system-"],
+img.icon.secondary,
+.eb-icon[data-icon^="system-"].secondary {
+	filter: var(--dark-icon-filter-secondary);
+	opacity: var(--dark-icon-opacity-secondary);
+}
+
+.secondary img.icon:hover,
+.secondary .eb-icon[data-icon^="system-"]:hover,
+.secondary *:hover > img.icon,
+.secondary *:hover > .eb-icon[data-icon^="system-"],
+.secondary:hover > img.icon,
+.secondary:hover > .eb-icon[data-icon^="system-"],
+img.icon.secondary:hover,
+.eb-icon[data-icon^="system-"].secondary:hover {
+	filter: var(--dark-icon-filter);
+	opacity: var(--dark-icon-opacity);
+}
+
 .disabled img.icon,
 .disabled .eb-icon[data-icon^="system-"],
 img.icon.disabled,
 .eb-icon[data-icon^="system-"].disabled {
-	filter: opacity(0.5) !important;
+	filter: var(--dark-icon-filter-disabled) !important;
+	opacity: var(--dark-icon-opacity-disabled) !important;
 }
 
+/* System Icons */
 .eb-icon[data-icon="system-arrow-expand"] {
 	background: url("data:image/svg+xml;charset=utf-8;base64,\
 		PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyB4bWxucz0iaHR0cDovL\
 		3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PS\
 		IxNiI+PHBhdGggZmlsbD0iIzZhNmE2YSIgZD0iTTEyIDhsLTUgNS0\
 		xLTEgNC00LTQtNCAxLTF6Ii8+PC9zdmc+");
+}
+
+.secondary .eb-icon[data-icon="system-arrow-expand"],
+.eb-icon[data-icon="system-arrow-expand"].secondary {
+	filter: var(--dark-icon-filter-disabled) !important;
+	opacity: var(--dark-icon-opacity-disabled) !important;
 }
 
 .panel-list-item .text {

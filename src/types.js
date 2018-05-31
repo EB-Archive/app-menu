@@ -32,9 +32,10 @@
  * @property	{string}	name	Name of the identity.
  */
 /** @typedef	Theme
- * @property	{string}	themeDir	The theme directory
- * @property	{string}	themeCSS	The path to the theme’s stylesheet, which may not exist
- * @property	{ThemeConf}	[themeJSON]	The theme’s configuration file
+ * @property	{string}	actualTheme	The actual theme selected in the options.
+ * @property	{string}	themeDir	The theme directory.
+ * @property	{string}	themeCSS	The path to the theme’s stylesheet, which may not exist.
+ * @property	{ThemeConf}	[themeJSON]	The theme’s configuration file.
  */
 /** @typedef	ThemeConf
  * @property	{string}	name	The theme’s name

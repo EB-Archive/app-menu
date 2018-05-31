@@ -5,36 +5,11 @@
  */
 
 :root {
-	--dark-icon:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(80%);
-
-	--dark-icon-secondary:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(60%);
-
-	--dark-icon-disabled:
-		invert(100%) brightness(005%) sepia(1) hue-rotate(180deg) brightness(0.96) saturate(0.09) brightness(0.9) opacity(25%);
+	--dark-icon-opacity-disabled: .58;
 }
 
-/* Icons */
-img.icon, .eb-icon[data-icon^="system-"] {
-	filter: var(--dark-icon);
-}
-
-.secondary img.icon,	.secondary .eb-icon[data-icon^="system-"],
-img.icon.secondary,	.eb-icon[data-icon^="system-"].secondary {
-	filter: var(--dark-icon-secondary);
-}
-
-.secondary img.icon:hover,	.secondary .eb-icon[data-icon^="system-"]:hover,
-.secondary *:hover > img.icon,	.secondary *:hover > .eb-icon[data-icon^="system-"],
-.secondary:hover > img.icon,	.secondary:hover > .eb-icon[data-icon^="system-"],
-img.icon.secondary:hover,	.eb-icon[data-icon^="system-"].secondary:hover {
-	filter: var(--dark-icon);
-}
-
-.disabled img.icon,	.disabled .eb-icon[data-icon^="system-"],
-img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
-	filter: var(--dark-icon-disabled) !important;
+#sub-menu {
+	background-color: #EDEDF0;
 }
 
 /* System Icons */
@@ -46,9 +21,4 @@ img.icon.disabled,	.eb-icon[data-icon^="system-"].disabled {
 		4NiA4IDUuMjkzIDMuNzA3YTEgMSAwIDAgMSAxLjQxNC0xLjQxNGw1\
 		IDVhMSAxIDAgMCAxIDAgMS40MTRsLTUgNUExIDEgMCAwIDEgNiAxN\
 		HoiLz48L3N2Zz4=");
-}
-
-.secondary .eb-icon[data-icon="system-arrow-expand"],
-.eb-icon[data-icon="system-arrow-expand"].secondary {
-	filter: var(--dark-icon-disabled) !important;
 }

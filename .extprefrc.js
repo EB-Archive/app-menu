@@ -8,6 +8,7 @@ module.exports = {
 		// and `context-fill-opacity` to have the same colour as Firefox UI.
 		"svg.context-properties.content.enabled": true,
 
+		"browser.link.open_newwindow": 3,
 		"browser.search.defaultenginename": "DuckDuckGo",
 		"browser.search.order.1": "DuckDuckGo",
 		"browser.search.suggest.enabled": false,

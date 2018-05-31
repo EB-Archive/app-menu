@@ -20,7 +20,7 @@ import {getCurrentTheme} from "../shared.js";
 const defaultSubMenu = document.getElementById("sm-default");
 document.addEventListener("DOMContentLoaded", () => {
 	return Promise.all([
-		loadIcons(),
+		setupTheme(),
 		i18nInit(),
 		setupMouseEvents(),
 		setupIPCEvents(),
@@ -28,31 +28,30 @@ document.addEventListener("DOMContentLoaded", () => {
 	]);
 });
 
+async function setupTheme() {
+	const theme = await getCurrentTheme();
+
+	let style = document.getElementById("theme-css");
+	if (!style) {
+		style = document.createElement("link");
+		style.setAttribute("id", "theme-css");
+		style.setAttribute("rel", "stylesheet");
+		style.setAttribute("type", "text/css");
+	}
+	style.setAttribute("href", theme.themeCSS);
+	document.head.appendChild(style);
+
+	return Promise.all([
+		loadIcons(theme),
+		loadSpecialIcons(theme)
+	]);
+}
+
 async function loadSpecialIcons() {
 	// TODO: Handle dynamic icons (ex. fullscreen)
 }
 
-async function loadIcons() {
-	const {
-		themeDir,
-		themeJSON,
-		themeCSS
-	} = await getCurrentTheme();
-
-	fetch(themeCSS).then(r => {
-		if (r.ok) {
-			let style = document.querySelector("#theme-css");
-			if (!style) {
-				style = document.createElement("link");
-				style.setAttribute("id", "#theme-css");
-				style.setAttribute("rel", "stylesheet");
-				style.setAttribute("type", "text/css");
-			}
-			style.setAttribute("href", themeCSS);
-			document.head.appendChild(style);
-		}
-	});
-
+async function loadIcons({themeDir, themeJSON}) {
 	const {os} = (await browser.runtime.getPlatformInfo());
 
 	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
