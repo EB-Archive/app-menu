@@ -14,31 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getCurrentTheme} from "/shared.js";
+import {getCurrentTheme} from "../shared.js";
 
-/**
- * @typedef ButtonStatus
- * @property {String[]} enable
- * @property {String[]} disable
- */
-/**
- *
- * @typedef	ContextualIdentity
- * @property	{String}	cookieStoreId	The cookie store ID for the identity.
- *			Since contextual identities don't share cookie stores,
- *			this serves as a unique identifier.
- * @property	{String}	color	The color for the identity.
- * @property	{String}	icon	The name of an icon for the identity.
- * @property	{String}	name	Name of the identity.
- */
-
-/**
- * @type HTMLElement
- */
-var defaultSubMenu;
-
+/** @type {HTMLElement} */
+const defaultSubMenu = document.getElementById("sm-default");
 document.addEventListener("DOMContentLoaded", () => {
-	defaultSubMenu = document.querySelector("#sub-menu > .active");
 	return Promise.all([
 		loadIcons(),
 		i18nInit(),
@@ -156,7 +136,7 @@ async function i18nInit() {
 async function setupIPCEvents() {
 	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
 		sender.addEventListener("click", async evt => {
-			if (evt.currentTarget.dataset.disabled) return;
+			if (evt.currentTarget.dataset.disabled) return undefined;
 
 			const remainOpen = Boolean(evt.currentTarget.dataset.remainOpen);
 			const promise = browser.runtime.sendMessage({
@@ -209,7 +189,7 @@ async function initContextualIdentities() {
 		button.classList.add("panel-list-item");
 		button.dataset.ipcMessage = "newTab";
 		button.addEventListener("click", async evt => {
-			if (evt.currentTarget.dataset.disabled) return;
+			if (evt.currentTarget.dataset.disabled) return undefined;
 
 			const promise = browser.runtime.sendMessage({
 				method: button.dataset.ipcMessage,
@@ -238,8 +218,8 @@ async function initContextualIdentities() {
 }
 
 /**
- * @param {ButtonStatus} buttonStatus
- * @returns {undefined}
+ * @param	{ButtonStatus}	buttonStatus	The button status
+ * @return	{undefined}
  */
 async function updateButtonStatus(buttonStatus) {
 	const parseQuery = query => {
@@ -257,28 +237,30 @@ async function updateButtonStatus(buttonStatus) {
 	};
 
 	/**
-	 * @param {HTMLElement} node
+	 * @param	{HTMLElement}	element	The element.
+	 * @return	{undefined}
 	 */
-	const disable = node => {
-		node.dataset.disabled = true;
-		if (node.tagName.toLowerCase() === "menuitem") {
-			node.setAttribute("disabled", true);
+	const disable = element => {
+		element.dataset.disabled = true;
+		if (element.tagName.toLowerCase() === "menuitem") {
+			element.setAttribute("disabled", true);
 		} else {
-			if (!node.dataset.subMenu) {
-				node.classList.add("disabled");
+			if (!element.dataset.subMenu) {
+				element.classList.add("disabled");
 			}
 		}
 	};
 
 	/**
-	 * @param {HTMLElement} node
+	 * @param	{HTMLElement}	element	The element.
+	 * @return	{undefined}
 	 */
-	const enable = node => {
-		delete node.dataset.disabled;
-		if (node.tagName.toLowerCase() === "menuitem") {
-			node.removeAttribute("disabled");
+	const enable = element => {
+		delete element.dataset.disabled;
+		if (element.tagName.toLowerCase() === "menuitem") {
+			element.removeAttribute("disabled");
 		} else {
-			node.classList.remove("disabled");
+			element.classList.remove("disabled");
 		}
 	};
 

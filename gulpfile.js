@@ -38,11 +38,11 @@ gulp.task("clean", () => {
 				.pipe(gulp.dest(BUILD_DIR))
 		);
 	};
-	gulp.task("build", build);
-	gulp.task("build-clean", ["clean"], build);
+	gulp.task("build-unclean", build);
+	gulp.task("build", ["clean"], build);
 }
 
-gulp.task("lint", ["build-clean"], () => {
+gulp.task("lint", ["build"], () => {
 	webExt.cmd.lint({
 		sourceDir:	BUILD_DIR
 	}, {shouldExitProgram: false});
@@ -52,7 +52,7 @@ gulp.task("lint", ["build-clean"], () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task("dist", ["build-clean"], () => {
+gulp.task("dist", ["build"], () => {
 	webExt.cmd.build({
 		sourceDir:	BUILD_DIR,
 		artifactsDir:	ARCHIVES_DIR,
@@ -75,7 +75,7 @@ gulp.task("run", ["build"], () => {
 	if (typeof firefox === "undefined" || firefox === "aurora") {
 		firefox = "firefoxdeveloperedition";
 	}
-	gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build"]);
+	gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build-unclean"]);
 	return webExt.cmd.run({
 		pref:	parsePrefs(),
 		firefox: firefox,

@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import "./types.js";
 
 /**
  * Gets the default theme for the current browser.
  *
- * @returns {String} The default theme for the current browser.
+ * @return	{string}	The default theme for the current browser.
  */
 export const getDefaultTheme = async () => {
 	const browserInfo = await browser.runtime.getBrowserInfo();
@@ -35,6 +36,12 @@ export const getDefaultTheme = async () => {
 	}
 };
 
+/**
+ * Gets the currently used theme.
+ *
+ * @param	{boolean}	[useFetch=true]	If the function should also fetch the theme configuration.
+ * @return	{Theme}	The currently used theme.
+ */
 export const getCurrentTheme = async (useFetch=true) => {
 	let {theme: themeDir} = await browser.storage.sync.get({
 		theme: "default"
@@ -44,22 +51,34 @@ export const getCurrentTheme = async (useFetch=true) => {
 		themeDir = await getDefaultTheme();
 	}
 
+	/** @type {Theme} */
 	const result = {
 		themeDir,
 		themeCSS: `/themes/${themeDir}/theme.css`
 	};
 
 	if (useFetch) {
-		result.themeJSON = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
+		result.themeJSON = await fetch(`/themes/${themeDir}/theme.json`)
+			.then(r => r.json())
+			.then(data => {
+				return Object.assign({
+					default_extension: "svg",
+					browser_action: "firefox",
+				}, data);
+			})
+			.catch(e => {
+				console.warn(e);
+				return undefined;
+			});
 	}
 
 	return result;
 };
 
 /**
- *
- * @param {String} string The string.
- * @returns {String}
+ * @param	{string}	string	The string.
+ * @param	{string}	prefix	The translation prefix.
+ * @return	{string}	The translated string.
  */
 export const processMessage = (string, prefix) => {
 	let [,key] = (/^__MSG_([A-Za-z0-9_@]+)__$/.exec(string) || []);
@@ -73,8 +92,8 @@ export const processMessage = (string, prefix) => {
 /**
  * Check if the argument is a string.
  *
- * @param	{String}	string	The variable to check if it is a String.
- * @returns	{boolean}	If the string argument is a string.
+ * @param	{string}	string	The variable to check if it is a String.
+ * @return	{boolean}	If the string argument is a string.
  */
 export const isString = string => {
 	return (typeof string === "string" || string instanceof String);

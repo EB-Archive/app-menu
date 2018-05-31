@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getCurrentTheme} from "./shared.js";
+import {getCurrentTheme, isString} from "./shared.js";
+import TabHandler from "./TabHandler.js";
 
 const prevStates = new Map();
 
@@ -24,17 +25,18 @@ const prevStates = new Map();
 		themeJSON
 	} = await getCurrentTheme();
 
-	if (typeof themeJSON.browser_action === "object" &&
-		!(themeJSON.browser_action instanceof Array)) {
+	if (isString(themeJSON.browser_action)) {
+		browser.browserAction.setIcon({path: `/themes/${themeDir}/${themeJSON.browser_action.includes(".") ?
+			themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`});
+	} else if (!(themeJSON.browser_action instanceof Array)) {
 		const path = {};
-		const extension = themeJSON.default_extension || "svg";
 		for (const k in themeJSON.browser_action) {
-			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".")
-				? themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${extension}`}`;
+			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".") ?
+				themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${themeJSON.default_extension}`}`;
 		}
 		browser.browserAction.setIcon({path});
 	} else {
-		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${themeJSON.default_extension || "svg"}`});
+		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${themeJSON.default_extension}`});
 	}
 })();
 
@@ -45,78 +47,16 @@ browser.runtime.onMessage.addListener((message, sender) => {
 	return null;
 });
 
-const tabHandler = (() => {
-	/**
-	 * @type Map<Set>
-	 */
-	const listeners = new Map();
-
-	browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-		if (listeners.has(tabId)) {
-			listeners.get(tabId).forEach(cb => cb(tabId, changeInfo, tab));
-		}
-	});
-
-	const removeListener = (tabId, callback) => {
-		if (listeners.has(tabId)) {
-			listeners.get(tabId).remove(callback);
-		}
-	};
-
-	return {
-		removeListener, addListener: (tabId, callback, options = {}) => {
-			if (options.removeOnComplete) {
-				const origCB = callback;
-				const newCallback = (tabId, changeInfo, tab) => {
-					origCB(tabId, changeInfo, tab);
-					if (changeInfo.status === "complete") {
-						removeListener(tabId, newCallback);
-					}
-				};
-				callback = newCallback;
-			}
-
-			if (listeners.has(tabId)) {
-				listeners.get(tabId).add(callback);
-			} else {
-				const set = new Set();
-				set.add(callback);
-				listeners.set(tabId, set);
-			}
-		},
-
-		hasListener: (tabId, callback) => {
-			if (listeners.has(tabId)) {
-				return listeners.get(tabId).has(callback);
-			}
-		},
-
-		hasListeners: tabId => {
-			return listeners.has(tabId);
-		}
-	};
-})();
+const tabHandler = new TabHandler();
 
 /**
- * @param {String} message The message
- * @returns {undefined}
+ * @param {Message} message The message
+ * @return {*} The result
  */
 async function handlePopupMessage(message) {
 	const method = String(message.method);
-	let data;
-	if ("data" in message) {
-		if (message.data instanceof String) {
-			try {
-				data = JSON.parse(message.data);
-			} catch (e) {
-				data = {};
-			}
-		} else if (message.data instanceof Object) {
-			({data} = message);
-		}
-	} else {
-		data = {};
-	}
+	const data = message.data || {};
+
 	const [window, tab] = await Promise.all([
 		browser.windows.getCurrent(),
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
@@ -154,12 +94,6 @@ async function handlePopupMessage(message) {
 					"print*"
 				]
 			};
-			if (browser.tabs.printPreview) {
-				result.enable.push("printPreview");
-			}
-			if (browser.tabs.print) {
-				result.enable.push("print");
-			}
 			response.disable.forEach(	str => result.disable.push(	str));
 			response.enable.forEach(	str => result.enable.push(	str));
 			return result;
@@ -212,9 +146,8 @@ async function handlePopupMessage(message) {
 			prevStates.set(window.id, prevState);
 			return result;
 		} case "exit": {
-			const windows = await browser.windows.getAll();
-			windows.forEach(({id}) => browser.windows.remove(id));
-			return;
+			return Promise.all((await browser.windows.getAll())
+				.map(({id}) => browser.windows.remove(id)));
 		} case "printPreview": {
 			return browser.tabs.printPreview();
 		} case "print": {
