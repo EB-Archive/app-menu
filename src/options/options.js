@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import {getDefaultTheme, processMessage} from "../shared.js";
+import hyperHTML from "../vendor/hyperhtml/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
@@ -42,40 +43,52 @@ async function initOptions() {
 			option.selected = false;
 		}
 	}
-
+	/**
+	 * @param	{string}	theme	The theme name.
+	 * @return	{ThemeConf?}	The theme configuration.
+	 * @throws	If the theme can’t be loaded.
+	 */
 	const getConfig = async theme => {
 		if (theme === "default") {
 			return {};
 		}
 		const response = await fetch(`/themes/${theme}/theme.json`);
 		if (!response.ok) {
-			return null;
+			throw `Can’t load theme ${theme}`;
 		}
 		return await response.json();
 	};
 
-	for (const theme of themes) {
-		try {
-			const config = await getConfig(theme);
-			if (!config && theme !== "default") {
-				continue;
+	/** @type {HTMLElement} */
+	const options = [];
+	(await Promise.all(themes.map(async theme => {
+		const config = {};
+		if (theme === "default") {
+			config.name	= "__MSG_theme_default__";
+		} else {
+			try {
+				Object.assign(config, await getConfig(theme));
+			} catch (e) {
+				console.warn(e);
+				return undefined;
 			}
-			const o = document.createElement("option");
-			o.setAttribute("value", theme);
-			if (theme === "default") {
-				o.appendChild(document.createTextNode(browser.i18n.getMessage("options_theme_default")));
-				o.setAttribute("title", browser.i18n.getMessage("options_theme_default_title"));
-			} else {
-				o.appendChild(document.createTextNode(processMessage(config.name,"options")));
-			}
-			if (theme === currentTheme) {
-				o.setAttribute("selected", true);
-			}
-			themeSelector.appendChild(o);
-		} catch (err) {
-			console.warn(err);
 		}
-	}
+		/** @type {HTMLOptionElement} */
+		const o = hyperHTML`
+			<option value="${theme}">
+				${processMessage(config.name, "options")}
+			</option>`;
+		if (theme === "default") o.setAttribute("title", browser.i18n.getMessage("options_theme_default_title"));
+		if (theme === currentTheme) {
+			o.setAttribute("selected", true);
+		}
+		return o;
+	}))).forEach(o => {
+		if (o instanceof HTMLElement) {
+			themeSelector.appendChild(o);
+			options.push(o);
+		}
+	});
 
 	document.querySelectorAll("select[data-save]").forEach(select => {
 		select.addEventListener("change", async () => {

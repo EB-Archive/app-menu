@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import {getCurrentTheme} from "../shared.js";
+import hyperHTML from "../vendor/hyperhtml/index.js";
 
 /** @type {HTMLElement} */
 const defaultSubMenu = document.getElementById("sm-default");
@@ -33,13 +34,10 @@ async function setupTheme() {
 
 	let style = document.getElementById("theme-css");
 	if (!style) {
-		style = document.createElement("link");
-		style.setAttribute("id", "theme-css");
-		style.setAttribute("rel", "stylesheet");
-		style.setAttribute("type", "text/css");
+		style = document.head.appendChild(hyperHTML`
+			<link id="theme-css" rel="stylesheet" type="text/css"/>`);
 	}
 	style.setAttribute("href", theme.themeCSS);
-	document.head.appendChild(style);
 
 	return Promise.all([
 		loadIcons(theme),
@@ -172,22 +170,14 @@ async function initContextualIdentities() {
 	const contextualIdentities = await browser.contextualIdentities.query({});
 	if (!contextualIdentities || contextualIdentities.length === 0) return;
 	{
-		const separator = document.createElement("div");
-		separator.classList.add("panel-section-separator");
-		smNewTab.insertBefore(separator, lastElement);
-		lastElement = separator;
+		lastElement = smNewTab.insertBefore(hyperHTML`
+			<div class="panel-section-separator"/>`, lastElement);
 
-		const style = document.createElement("link");
-		style.setAttribute("rel",	"stylesheet");
-		style.setAttribute("type",	"text/css");
-		style.setAttribute("href",	"/icons/contextualIdentities/icons.css");
-		document.head.appendChild(style);
+		document.head.appendChild(hyperHTML`
+			<link rel="stylesheet" type="text/css" href="/icons/contextualIdentities/icons.css"/>`);
 	}
 	contextualIdentities.forEach(/* @param {ContextualIdentity} identity */ identity => {
-		const button = document.createElement("div");
-		button.classList.add("panel-list-item");
-		button.dataset.ipcMessage = "newTab";
-		button.addEventListener("click", async evt => {
+		const onclick = async evt => {
 			if (evt.currentTarget.dataset.disabled) return undefined;
 
 			const promise = browser.runtime.sendMessage({
@@ -199,18 +189,15 @@ async function initContextualIdentities() {
 
 			window.close();
 			return promise;
-		});
+		};
 
-		const icon = document.createElement("i");
-		icon.classList.add("icon", "eb-icon", "usercontext-icon");
-		icon.dataset.identityColor	= identity.color;
-		icon.dataset.identityIcon	= identity.icon;
-		button.appendChild(icon);
-
-		const text = document.createElement("div");
-		text.classList.add("text");
-		text.appendChild(document.createTextNode(identity.name));
-		button.appendChild(text);
+		const button = hyperHTML`
+			<div class="panel-list-item" data-ipc-message="newTab" onclick=${onclick}>
+				<i class="icon eb-icon usercontext-icon"
+					data-identity-color="${identity.color}"
+					data-identity-icon="${identity.icon}"/>
+				<div class="text">${identity.name}</div>
+			</div>`;
 
 		smNewTab.insertBefore(button, lastElement);
 	});

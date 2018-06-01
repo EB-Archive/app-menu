@@ -11,12 +11,25 @@ const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
 
 const testPrefs	= require("./.extprefrc.js");
+const args = require("yargs")
+	.option("firefox", {
+		alias: "f",
+		description: "The path to the Firefox executable",
+		requiresArg: true,
+		type: "string"
+	})
+	.alias("help", ["h", "?"])
+	.alias("version", "v")
+	.argv;
 
 /* Building */
 
 const BUILD_DIR 	= "./build/";
 const SOURCE_DIR	= "./src/";
 const ARCHIVES_DIR	= "./dist/";
+
+const VENDOR_BUILD_DIR 	= `${BUILD_DIR}vendor/`;
+const VENDOR_SOURCE_DIR	= "./node_modules/";
 
 gulp.task("clean", () => {
 	try {
@@ -27,6 +40,27 @@ gulp.task("clean", () => {
 });
 
 {
+	const vendorData = {
+		hyperhtml: {
+			src: "esm",
+		},
+	};
+	/**
+	 * @param {string} vendors The vendors
+	 * @returns {IMergedStream} The stream
+	 */
+	const copyVendors = (...vendors) => {
+		return mergeStream(vendors.map(vendor => {
+			let src = `${VENDOR_SOURCE_DIR}${vendor}/`;
+			if (vendor in vendorData) {
+				if ("src" in vendorData[vendor]) {
+					src += `${vendorData[vendor].src}/`;
+				}
+			}
+			return gulp.src(`${src}**`)
+				.pipe(gulp.dest(`${VENDOR_BUILD_DIR}${vendor}/`));
+		}));
+	};
 	const build = () => {
 		return mergeStream(
 			gulp.src([`${SOURCE_DIR}**`,`!${SOURCE_DIR}manifest.json`], {dot: true})
@@ -35,7 +69,8 @@ gulp.task("clean", () => {
 				.pipe(jsonEdit({
 					version: pkgJson.version
 				}))
-				.pipe(gulp.dest(BUILD_DIR))
+				.pipe(gulp.dest(BUILD_DIR)),
+			copyVendors("hyperhtml"),
 		);
 	};
 	gulp.task("build-unclean", build);
@@ -71,14 +106,14 @@ const parsePrefs = () => {
 };
 
 gulp.task("run", ["build"], () => {
-	let {WEB_EXT_FIREFOX: firefox} = process.env;
+	let firefox = args.firefox || process.env.WEB_EXT_FIREFOX;
 	if (typeof firefox === "undefined" || firefox === "aurora") {
 		firefox = "firefoxdeveloperedition";
 	}
 	gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build-unclean"]);
 	return webExt.cmd.run({
 		pref:	parsePrefs(),
-		firefox: firefox,
+		firefox:	firefox,
 		sourceDir:	path.resolve(BUILD_DIR),
 		browserConsole: true
 	}, {shouldExitProgram: true});

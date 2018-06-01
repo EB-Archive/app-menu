@@ -2668,6 +2668,12 @@ https-proxy-agent@^2.2.1:
     agent-base "^4.1.0"
     debug "^3.1.0"
 
+hyperhtml@^2.10.2:
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/hyperhtml/-/hyperhtml-2.10.2.tgz#d066920375b9ae999d72ccdfeedb1723f4104e66"
+  dependencies:
+    lightercollective "^0.0.3"
+
 iconv-lite@0.4.23, iconv-lite@^0.4.17, iconv-lite@^0.4.4, iconv-lite@~0.4.13:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.23.tgz#297871f63be507adcfbfca715d0cd0eed84e9a63"
@@ -3348,6 +3354,10 @@ liftoff@^2.1.0, liftoff@^2.5.0:
     object.map "^1.0.0"
     rechoir "^0.6.2"
     resolve "^1.1.7"
+
+lightercollective@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/lightercollective/-/lightercollective-0.0.3.tgz#c58f01fde36f4d9432eda354c635a192fc291b2b"
 
 load-json-file@^1.0.0:
   version "1.1.0"
@@ -6567,6 +6577,23 @@ yargs@6.6.0:
     which-module "^1.0.0"
     y18n "^3.2.1"
     yargs-parser "^4.2.0"
+
+yargs@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-11.1.0.tgz#90b869934ed6e871115ea2ff58b03f4724ed2d77"
+  dependencies:
+    cliui "^4.0.0"
+    decamelize "^1.1.1"
+    find-up "^2.1.0"
+    get-caller-file "^1.0.1"
+    os-locale "^2.0.0"
+    require-directory "^2.1.1"
+    require-main-filename "^1.0.1"
+    set-blocking "^2.0.0"
+    string-width "^2.0.0"
+    which-module "^2.0.0"
+    y18n "^3.2.1"
+    yargs-parser "^9.0.2"
 
 yargs@^3.19.0:
   version "3.32.0"

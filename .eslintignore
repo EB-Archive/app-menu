@@ -1,2 +1,5 @@
 # Lint the configuration file
 !/.eslintrc.js
+
+# Ignore vendor files
+/build/vendor/**
