@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getDefaultTheme, processMessage} from "../shared.js";
+import {getDefaultTheme, processMessage, processThemeBrowserAction} from "../shared.js";
 import hyperHTML from "../vendor/hyperhtml/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -103,18 +103,13 @@ async function initOptions() {
 					if (value === "default") {
 						themeDir = await getDefaultTheme();
 					}
-					const config = await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json());
-					const extension = config.default_extension || "svg";
-					if (config.browser_action) {
-						const path = {};
-						for (const k in config.browser_action) {
-							path[k] = `/themes/${themeDir}/${config.browser_action[k].includes(".") ?
-								config.browser_action[k] : config.browser_action[k] + "." + extension}`;
-						}
-						browser.browserAction.setIcon({path: path});
-					} else {
-						browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${extension}`});
-					}
+					const themeJSON = Object.assign({
+						default_extension: "svg",
+						browser_action: "firefox",
+					}, await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json()));
+					browser.browserAction.setIcon({
+						path: processThemeBrowserAction({themeDir, themeJSON})
+					});
 				}
 			}
 		});

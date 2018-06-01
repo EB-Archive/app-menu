@@ -20,24 +20,9 @@ import TabHandler from "./TabHandler.js";
 const prevStates = new Map();
 
 (async () => {
-	const {
-		themeDir,
-		themeJSON
-	} = await getCurrentTheme();
-
-	if (isString(themeJSON.browser_action)) {
-		browser.browserAction.setIcon({path: `/themes/${themeDir}/${themeJSON.browser_action.includes(".") ?
-			themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`});
-	} else if (!(themeJSON.browser_action instanceof Array)) {
-		const path = {};
-		for (const k in themeJSON.browser_action) {
-			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".") ?
-				themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${themeJSON.default_extension}`}`;
-		}
-		browser.browserAction.setIcon({path});
-	} else {
-		browser.browserAction.setIcon({path: `/themes/${themeDir}/firefox.${themeJSON.default_extension}`});
-	}
+	browser.browserAction.setIcon({
+		path: (await getCurrentTheme()).browser_action
+	});
 })();
 
 browser.runtime.onMessage.addListener((message, sender) => {

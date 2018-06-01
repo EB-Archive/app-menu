@@ -72,9 +72,34 @@ export const getCurrentTheme = async (useFetch=true) => {
 				console.warn(e);
 				return undefined;
 			});
+		if (result.themeJSON) {
+			result.browser_action = processThemeBrowserAction(result);
+		}
 	}
 
 	return result;
+};
+
+/**
+ * @param	{string}	themeDir The theme directory.
+ * @param	{ThemeConf}	themeJSON	The theme configuration.
+ * @return	{string|SizedThemeIcon}	The parsed browser_action icon.
+ */
+export const processThemeBrowserAction = ({themeDir, themeJSON}) => {
+	if (isString(themeJSON.browser_action)) {
+		return `/themes/${themeDir}/${themeJSON.browser_action.includes(".") ?
+			themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`;
+	} else if (!(themeJSON.browser_action instanceof Array)) {
+		/** @type {SizedThemeIcon} */
+		const path = {};
+		for (const k in themeJSON.browser_action) {
+			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".") ?
+				themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${themeJSON.default_extension}`}`;
+		}
+		return path;
+	} else {
+		return `/themes/${themeDir}/firefox.${themeJSON.default_extension}`;
+	}
 };
 
 /**
