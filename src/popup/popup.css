@@ -67,6 +67,10 @@ html, body {
 	margin-right:	8px;
 }
 
+.context-properties-fill {
+	-moz-context-properties: fill;
+}
+
 /* Icon Colours */
 img.icon,
 .eb-icon[data-icon^="system-"] {

@@ -34,6 +34,7 @@ module.exports = {
 			"tab",
 			{
 				"SwitchCase": 1,
+				"ignoreComments": true,
 			},
 		],
 		"linebreak-style": [
@@ -59,10 +60,31 @@ module.exports = {
 				"avoidEscape": true,
 			},
 		],
+		"require-jsdoc": "off",
 		"semi": [
 			"error",
 			"always",
 		],
-		"valid-jsdoc": "warn",
+		"valid-jsdoc": [
+			"warn",
+			{
+				"prefer": {
+					"arg":	"param",
+					"argument":	"param",
+					"returns":	"return",
+				},
+				"preferType": {
+					"Boolean":	"boolean",
+					"Number":	"number",
+					"Object":	"object",
+					"String":	"string",
+					"function":	"Function",
+				},
+				"requireParamDescription": false,
+				"requireReturn": false,
+				"requireReturnDescription": false,
+				"requireReturnType": true,
+			},
+		],
 	},
 };

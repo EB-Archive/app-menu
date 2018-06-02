@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {getCurrentTheme, isString} from "./shared.js";
+import {Message} from "./types"; // eslint-disable-line no-unused-vars
+import {getCurrentTheme} from "./shared.js";
 import TabHandler from "./TabHandler.js";
 
 const prevStates = new Map();

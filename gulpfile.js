@@ -6,6 +6,7 @@ const gulp	= require("gulp");
 const webExt	= require("web-ext").default;
 const mergeStream	= require("merge-stream");
 
+const deleteLines	= require("gulp-delete-lines");
 const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
@@ -46,8 +47,8 @@ gulp.task("clean", () => {
 		},
 	};
 	/**
-	 * @param {string} vendors The vendors
-	 * @returns {IMergedStream} The stream
+	 * @param	{string[]}	vendors	The vendors
+	 * @return	{IMergedStream}	The stream
 	 */
 	const copyVendors = (...vendors) => {
 		return mergeStream(vendors.map(vendor => {
@@ -63,7 +64,19 @@ gulp.task("clean", () => {
 	};
 	const build = () => {
 		return mergeStream(
-			gulp.src([`${SOURCE_DIR}**`,`!${SOURCE_DIR}manifest.json`], {dot: true})
+			gulp.src([
+				`${SOURCE_DIR}**`,
+				`!${SOURCE_DIR}**/*.js`,
+				`!${SOURCE_DIR}**/*.d.ts`,
+				`!${SOURCE_DIR}manifest.json`
+			], {dot: true})
+				.pipe(gulp.dest(BUILD_DIR)),
+			gulp.src([`${SOURCE_DIR}**/*.js`])
+				.pipe(deleteLines({
+					filters: [
+						/^import (?:(?:\{[^}]+\} |.* )?from )?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?: *\/\/.*)?$/,
+					]
+				}))
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src(`${SOURCE_DIR}manifest.json`)
 				.pipe(jsonEdit({
@@ -79,9 +92,15 @@ gulp.task("clean", () => {
 
 gulp.task("lint", ["build"], () => {
 	webExt.cmd.lint({
-		sourceDir:	BUILD_DIR
+		sourceDir:	BUILD_DIR,
+		ignoreFiles: [
+			"vendor/*",
+		],
 	}, {shouldExitProgram: false});
-	return gulp.src(`${BUILD_DIR}**/*.js`)
+	return gulp.src([
+		`${BUILD_DIR}**/*.js`,
+		`!${BUILD_DIR}vendor/*`
+	])
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.failAfterError());
@@ -115,6 +134,6 @@ gulp.task("run", ["build"], () => {
 		pref:	parsePrefs(),
 		firefox:	firefox,
 		sourceDir:	path.resolve(BUILD_DIR),
-		browserConsole: true
+		browserConsole: true,
 	}, {shouldExitProgram: true});
 });

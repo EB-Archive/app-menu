@@ -4,7 +4,8 @@
 # Except For:
 ## Sources
 !/src
-*.html
+**/*.html
+**/*.js
 
 # Unwanted crap
 .DS_Store

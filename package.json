@@ -3,10 +3,10 @@
 	"version": "0.1.8a1",
 	"author": "ExE Boss",
 	"scripts": {
-		"build":	"gulp build",
-		"dist":	"gulp dist",
-		"lint":	"gulp lint",
-		"run":	"gulp run"
+		"build": "gulp build",
+		"dist": "gulp dist",
+		"lint": "gulp lint",
+		"run": "gulp run"
 	},
 	"repository": {
 		"type": "git",
@@ -23,6 +23,7 @@
 		"fs-extra": "^6.0.1",
 		"gulp": "^3.9.1",
 		"gulp-cli": "^2.0.1",
+		"gulp-delete-lines": "^0.0.7",
 		"gulp-eslint": "^4.0.2",
 		"gulp-json-editor": "^2.4.1",
 		"hyperhtml": "^2.10.2",

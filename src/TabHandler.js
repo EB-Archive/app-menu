@@ -14,18 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import {TabHandlerCallback, ChangeInfo, Tab} from "./types"; // eslint-disable-line no-unused-vars
 
 export default class TabHandler {
 	constructor() {
-		/** @type Map<number, Set<Function>> */
+		/** @type {Map<number, Set<TabHandlerCallback>>} */
 		this.listeners = new Map();
 		this.isRegistered = false;
 
 		/**
-		 * @param {number} tabId The tab ID
-		 * @param {*} changeInfo The change
-		 * @param {*} tab The tab data
-		 * @returns {undefined}
+		 * @param	{number}	tabId	The tab ID
+		 * @param	{ChangeInfo}	changeInfo	The change
+		 * @param	{Tab}	tab	The tab data
 		 */
 		this.tabListener = (tabId, changeInfo, tab) => {
 			if (this.listeners.has(tabId)) {
@@ -34,6 +34,10 @@ export default class TabHandler {
 		};
 	}
 
+	/**
+	 * @param	{number}	tabId
+	 * @param	{TabHandlerCallback}	callback
+	 */
 	removeListener(tabId, callback) {
 		if (this.listeners.has(tabId)) {
 			/** @type Set<Function> */
@@ -49,6 +53,11 @@ export default class TabHandler {
 		}
 	}
 
+	/**
+	 * @param	{number}	tabId
+	 * @param	{TabHandlerCallback}	callback
+	 * @param	{object}	options
+	 */
 	addListener(tabId, callback, options = {}) {
 		if (!this.isRegistered) {
 			browser.tabs.onUpdated.addListener(this.tabListener);
@@ -75,11 +84,20 @@ export default class TabHandler {
 		}
 	}
 
+	/**
+	 * @param	{number}	tabId
+	 * @param	{TabHandlerCallback}	callback
+	 * @return	{boolean}
+	 */
 	hasListener(tabId, callback) {
 		return this.listeners.has(tabId) &&
 			this.listeners.get(tabId).has(callback);
 	}
 
+	/**
+	 * @param	{number}	tabId
+	 * @return	{boolean}
+	 */
 	hasListeners(tabId) {
 		return this.listeners.has(tabId);
 	}

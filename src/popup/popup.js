@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import {ButtonStatus, ContextualIdentity} from "../types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "../shared.js";
-import hyperHTML from "../vendor/hyperhtml/index.js";
+import hyperHTML from "/vendor/hyperhtml/index.js";
 
 /** @type {HTMLElement} */
 const defaultSubMenu = document.getElementById("sm-default");
@@ -165,18 +166,15 @@ async function initPopup() {
 
 async function initContextualIdentities() {
 	let lastElement	= document.querySelector('#sub-menu > #sm-new-tab > .panel-section-separator + .panel-list-item[data-ipc-message="openFile"]');
-	const smNewTab	= lastElement.parentNode;
-	/* @type ContextualIdentity[] */
+	const smNewTab	= lastElement.parentElement;
+	/** @type {ContextualIdentity[]} */
 	const contextualIdentities = await browser.contextualIdentities.query({});
 	if (!contextualIdentities || contextualIdentities.length === 0) return;
 	{
 		lastElement = smNewTab.insertBefore(hyperHTML`
 			<div class="panel-section-separator"/>`, lastElement);
-
-		document.head.appendChild(hyperHTML`
-			<link rel="stylesheet" type="text/css" href="/icons/contextualIdentities/icons.css"/>`);
 	}
-	contextualIdentities.forEach(/* @param {ContextualIdentity} identity */ identity => {
+	contextualIdentities.forEach(identity => {
 		const onclick = async evt => {
 			if (evt.currentTarget.dataset.disabled) return undefined;
 
@@ -193,9 +191,9 @@ async function initContextualIdentities() {
 
 		const button = hyperHTML`
 			<div class="panel-list-item" data-ipc-message="newTab" onclick=${onclick}>
-				<i class="icon eb-icon usercontext-icon"
-					data-identity-color="${identity.color}"
-					data-identity-icon="${identity.icon}"/>
+				<img class="icon eb-icon context-properties-fill"
+					style="${{fill: identity.colorCode}}"
+					src="${identity.iconUrl}"/>
 				<div class="text">${identity.name}</div>
 			</div>`;
 
@@ -205,7 +203,6 @@ async function initContextualIdentities() {
 
 /**
  * @param	{ButtonStatus}	buttonStatus	The button status
- * @return	{undefined}
  */
 async function updateButtonStatus(buttonStatus) {
 	const parseQuery = query => {
@@ -224,7 +221,6 @@ async function updateButtonStatus(buttonStatus) {
 
 	/**
 	 * @param	{HTMLElement}	element	The element.
-	 * @return	{undefined}
 	 */
 	const disable = element => {
 		element.dataset.disabled = true;
@@ -239,7 +235,6 @@ async function updateButtonStatus(buttonStatus) {
 
 	/**
 	 * @param	{HTMLElement}	element	The element.
-	 * @return	{undefined}
 	 */
 	const enable = element => {
 		delete element.dataset.disabled;

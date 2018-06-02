@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import "./types.js";
+import {Theme, SizedThemeIcon} from "./types"; // eslint-disable-line no-unused-vars
 
 /**
  * Gets the default theme for the current browser.
@@ -81,11 +81,11 @@ export const getCurrentTheme = async (useFetch=true) => {
 };
 
 /**
- * @param	{string}	themeDir The theme directory.
- * @param	{ThemeConf}	themeJSON	The theme configuration.
+ * @param	{Theme}	theme The theme.
  * @return	{string|SizedThemeIcon}	The parsed browser_action icon.
  */
-export const processThemeBrowserAction = ({themeDir, themeJSON}) => {
+export const processThemeBrowserAction = (theme) => {
+	const {themeDir, themeJSON} = theme;
 	if (isString(themeJSON.browser_action)) {
 		return `/themes/${themeDir}/${themeJSON.browser_action.includes(".") ?
 			themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`;
