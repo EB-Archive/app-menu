@@ -16,7 +16,6 @@
  */
 import {Message} from "./types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "./shared.js";
-import TabHandler from "./TabHandler.js";
 
 const prevStates = new Map();
 
@@ -32,8 +31,6 @@ browser.runtime.onMessage.addListener((message, sender) => {
 	}
 	return null;
 });
-
-const tabHandler = new TabHandler();
 
 /**
  * @param {Message} message The message
@@ -99,18 +96,7 @@ async function handlePopupMessage(message) {
 			return browser.tabs.create({
 				active: false,
 				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`
-			}).then(tab => {
-				if (tab.status === "complete") {
-					browser.tabs.remove(tab.id);
-				} else {
-					tabHandler.addListener(tab.id, (tabId, changeInfo) => {
-						if (changeInfo.status === "complete") {
-							browser.tabs.remove(tabId);
-						}
-					}, {removeOnComplete: true});
-				}
-				return tab;
-			});
+			}).then(tab => browser.tabs.remove(tab.id));
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
 		} case "openOptions": {

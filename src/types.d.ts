@@ -55,62 +55,7 @@ export type ThemeIcon = {
 }
 export type SizedThemeIcon = {[x:number]:string;};
 
-/**
- * @param	{number}	tabId	The tab ID
- * @param	{ChangeInfo}	changeInfo	The change
- * @param	{Tab}	tab	The tab data
- */
-export function TabHandlerCallback(tabId: number, changeInfo: ChangeInfo, tab: Tab): void;
-
 /* WebExtension built-in types */
-
-export type Tab = {
-	active:	boolean;
-	audible?:	boolean;
-	autoDiscardable?:	boolean;
-	cookieStoreId?:	string;
-	discarded?:	boolean;
-	favIconUrl?:	string;
-	height?:	number;
-	hidden:	boolean;
-	highlighted:	boolean;
-	id?:	number;
-	incognito:	boolean;
-	index:	number;
-	isArticle:	boolean;
-	isInReaderMode:	boolean;
-	lastAccessed:	number;
-	mutedInfo?:	MutedInfo;
-	openerTabId?:	number;
-	pinned:	boolean;
-	sessionId?:	string;
-	status?:	string;
-	title?:	string;
-	url?:	string;
-	width?:	number;
-	windowId:	number;
-}
-
-export type ChangeInfo = {
-	audible?:	boolean;
-	discarded?:	boolean;
-	favIconUrl?:	string;
-	hidden?:	boolean;
-	isArticle?:	boolean;
-	mutedInfo?:	MutedInfo;
-}
-
-declare type MutedInfo = {
-	extensionId?:	string;
-	muted:	boolean;
-	reason?:	MutedInfoReason;
-}
-
-declare enum MutedInfoReason {
-	capture	= "capture",
-	extension	= "extension",
-	user	= "user"
-}
 
 export type ContextualIdentity = {
 	/**
