@@ -17,7 +17,7 @@ const args = require("yargs")
 		alias: "f",
 		description: "The path to the Firefox executable",
 		requiresArg: true,
-		type: "string"
+		type: "string",
 	})
 	.alias("help", ["h", "?"])
 	.alias("version", "v")
@@ -68,19 +68,19 @@ gulp.task("clean", () => {
 				`${SOURCE_DIR}**`,
 				`!${SOURCE_DIR}**/*.js`,
 				`!${SOURCE_DIR}**/*.d.ts`,
-				`!${SOURCE_DIR}manifest.json`
+				`!${SOURCE_DIR}manifest.json`,
 			], {dot: true})
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src([`${SOURCE_DIR}**/*.js`])
 				.pipe(deleteLines({
 					filters: [
 						/^import (?:(?:\{[^}]+\} |.* )?from )?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?: *\/\/.*)?$/,
-					]
+					],
 				}))
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src(`${SOURCE_DIR}manifest.json`)
 				.pipe(jsonEdit({
-					version: pkgJson.version
+					version: pkgJson.version,
 				}))
 				.pipe(gulp.dest(BUILD_DIR)),
 			copyVendors("hyperhtml"),
@@ -98,8 +98,10 @@ gulp.task("lint", ["build"], () => {
 		],
 	}, {shouldExitProgram: false});
 	return gulp.src([
+		"*.js",
+		".*.js",
 		`${BUILD_DIR}**/*.js`,
-		`!${BUILD_DIR}vendor/*`
+		`!${BUILD_DIR}vendor/*`,
 	])
 		.pipe(eslint())
 		.pipe(eslint.format())
@@ -110,7 +112,7 @@ gulp.task("dist", ["build"], () => {
 	webExt.cmd.build({
 		sourceDir:	BUILD_DIR,
 		artifactsDir:	ARCHIVES_DIR,
-		overwriteDest:	true
+		overwriteDest:	true,
 	}, {shouldExitProgram: false});
 });
 

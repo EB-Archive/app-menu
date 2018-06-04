@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		i18nInit(),
 		setupMouseEvents(),
 		setupIPCEvents(),
-		initPopup()
+		initPopup(),
 	]);
 });
 
@@ -42,7 +42,7 @@ async function setupTheme() {
 
 	return Promise.all([
 		loadIcons(theme),
-		loadSpecialIcons(theme)
+		loadSpecialIcons(theme),
 	]);
 }
 
@@ -50,7 +50,7 @@ async function loadSpecialIcons() {
 	// TODO: Handle dynamic icons (ex. fullscreen)
 }
 
-async function loadIcons({themeDir, themeJSON}) {
+const loadIcons = async ({themeDir, themeJSON}) => {
 	const {os} = (await browser.runtime.getPlatformInfo());
 
 	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
@@ -90,7 +90,7 @@ async function loadIcons({themeDir, themeJSON}) {
 		}
 		i.parentNode.replaceChild(icon, i);
 	});
-}
+};
 
 async function setupMouseEvents() {
 	document.querySelectorAll("#main-menu [data-sub-menu]").forEach(sm => {
@@ -138,7 +138,7 @@ async function setupIPCEvents() {
 
 			const remainOpen = Boolean(evt.currentTarget.dataset.remainOpen);
 			const promise = browser.runtime.sendMessage({
-				method: sender.dataset.ipcMessage
+				method: sender.dataset.ipcMessage,
 			});
 
 			if (!remainOpen) {
@@ -160,7 +160,7 @@ async function setupIPCEvents() {
 async function initPopup() {
 	return Promise.all([
 		updateButtonStatus(await browser.runtime.sendMessage({method: "init"})),
-		initContextualIdentities()
+		initContextualIdentities(),
 	]);
 }
 
@@ -181,8 +181,8 @@ async function initContextualIdentities() {
 			const promise = browser.runtime.sendMessage({
 				method: button.dataset.ipcMessage,
 				data: {
-					cookieStoreId:	identity.cookieStoreId
-				}
+					cookieStoreId:	identity.cookieStoreId,
+				},
 			});
 
 			window.close();
@@ -204,7 +204,7 @@ async function initContextualIdentities() {
 /**
  * @param	{ButtonStatus}	buttonStatus	The button status
  */
-async function updateButtonStatus(buttonStatus) {
+const updateButtonStatus = async (buttonStatus) => {
 	const parseQuery = query => {
 		if (query === "*") {
 			return "[data-ipc-message]";
@@ -267,4 +267,4 @@ async function updateButtonStatus(buttonStatus) {
 			document.querySelectorAll(query).forEach(disable);
 		});
 	}
-}
+};

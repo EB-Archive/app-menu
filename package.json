@@ -8,6 +8,7 @@
 		"lint": "gulp lint",
 		"run": "gulp run"
 	},
+	"types": "types.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+ssh://git@github.com/ExE-Boss/app-menu.git"

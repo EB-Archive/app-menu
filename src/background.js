@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Message} from "./types"; // eslint-disable-line no-unused-vars
+import {Message} from "../types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "./shared.js";
 
 const prevStates = new Map();
 
 (async () => {
 	browser.browserAction.setIcon({
-		path: (await getCurrentTheme()).browser_action
+		path: (await getCurrentTheme()).browser_action,
 	});
 })();
 
@@ -36,13 +36,13 @@ browser.runtime.onMessage.addListener((message, sender) => {
  * @param {Message} message The message
  * @return {*} The result
  */
-async function handlePopupMessage(message) {
+const handlePopupMessage = async (message) => {
 	const method = String(message.method);
 	const data = message.data || {};
 
 	const [window, tab] = await Promise.all([
 		browser.windows.getCurrent(),
-		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0])
+		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0]),
 	]);
 	switch (method) {
 		case "init": {
@@ -64,7 +64,7 @@ async function handlePopupMessage(message) {
 					"openHelpHealthReport",
 					"openHelpTroubleshooting",
 					"openHelpAboutFirefox",
-					"printPageSetup"
+					"printPageSetup",
 				],
 				enable: [
 					"new*",
@@ -74,8 +74,8 @@ async function handlePopupMessage(message) {
 					"fullscreen",
 					"openHelp*",
 					"exit",
-					"print*"
-				]
+					"print*",
+				],
 			};
 			response.disable.forEach(	str => result.disable.push(	str));
 			response.enable.forEach(	str => result.enable.push(	str));
@@ -95,7 +95,7 @@ async function handlePopupMessage(message) {
 		} case "emailLink": {
 			return browser.tabs.create({
 				active: false,
-				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`
+				url: `mailto:?subject=${encodeURIComponent(tab.title)}&body=${encodeURIComponent(tab.url)}`,
 			}).then(tab => browser.tabs.remove(tab.id));
 		} case "openAddons": {
 			return browser.runtime.openOptionsPage();
@@ -113,7 +113,7 @@ async function handlePopupMessage(message) {
 				newState = (await newState).preferredWindowState;
 			}
 			const result = await browser.windows.update(window.id, {
-				state: window.state === "fullscreen" ? newState : "fullscreen"
+				state: window.state === "fullscreen" ? newState : "fullscreen",
 			});
 			prevStates.set(window.id, prevState);
 			return result;
@@ -128,10 +128,10 @@ async function handlePopupMessage(message) {
 			if (method.startsWith("openHelp")) {
 				const [
 					browserInfo,
-					platformInfo
+					platformInfo,
 				] = await Promise.all([
 					browser.runtime.getBrowserInfo(),
-					browser.runtime.getPlatformInfo()
+					browser.runtime.getPlatformInfo(),
 				]);
 				const lang = browser.i18n.getUILanguage().replace(/_/g, "-");
 				let os;
@@ -175,4 +175,4 @@ async function handlePopupMessage(message) {
 			return browser.tabs.sendMessage(tab.id, message);
 		}
 	}
-}
+};

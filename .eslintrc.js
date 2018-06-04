@@ -1,6 +1,5 @@
 "use strict";
 /* eslint-env node */
-/* eslint comma-dangle: ["error", "always-multiline"] */
 /* eslint sort-keys: ["error", "asc"] */
 
 module.exports = {
@@ -18,7 +17,7 @@ module.exports = {
 		"block-scoped-var": "error",
 		"comma-dangle": [
 			"error",
-			"only-multiline",
+			"always-multiline",
 		],
 		"consistent-return": "error",
 		"consistent-this": "error",
@@ -50,6 +49,7 @@ module.exports = {
 			"error",
 			"after",
 		],
+		"prefer-arrow-callback": "error",
 		"prefer-const": "warn",
 		"prefer-destructuring": "warn",
 		"quotes": [

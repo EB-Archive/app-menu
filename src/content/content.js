@@ -27,8 +27,8 @@ if (!amLoaded) {
 					disable: [],
 					enable: [
 						"print",
-						"saveAs"
-					]
+						"saveAs",
+					],
 				};
 				if (document.querySelector(":focus")) {
 					result.enable.push("edit*");

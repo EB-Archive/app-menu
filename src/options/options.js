@@ -14,22 +14,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {ThemeConf} from "../types"; // eslint-disable-line no-unused-vars
+import {ThemeConf} from "../../types"; // eslint-disable-line no-unused-vars
 import {getDefaultTheme, processMessage, processThemeBrowserAction} from "../shared.js";
 import hyperHTML from "/vendor/hyperhtml/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
 		i18nInit(),
-		initOptions()
+		initOptions(),
 	]);
 });
 
-async function initOptions() {
+const initOptions = async () => {
 	const themes = ["default", "photon", "australis", "classic", "pastel-svg", "aero"];
 	const data = (await browser.storage.sync.get({
 		theme: "default",
-		preferredWindowState:	"maximized"
+		preferredWindowState:	"maximized",
 	}));
 	const currentTheme = data.theme;
 	const themeSelector = document.querySelector("#theme");
@@ -109,15 +109,15 @@ async function initOptions() {
 						browser_action: "firefox",
 					}, await fetch(`/themes/${themeDir}/theme.json`).then(r => r.json()));
 					browser.browserAction.setIcon({
-						path: processThemeBrowserAction({themeDir, themeJSON})
+						path: processThemeBrowserAction({themeDir, themeJSON}),
 					});
 				}
 			}
 		});
 	});
-}
+};
 
-async function i18nInit() {
+const i18nInit = async () => {
 	document.querySelectorAll("label[for]:not([data-i18n])").forEach(translatable => {
 		const text = browser.i18n.getMessage(`options_${translatable.getAttribute("for")}`);
 		if (text.length > 0)
@@ -129,4 +129,4 @@ async function i18nInit() {
 		if (text.length > 0)
 			translatable.textContent = text;
 	});
-}
+};

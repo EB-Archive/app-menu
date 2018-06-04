@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Theme, SizedThemeIcon} from "./types"; // eslint-disable-line no-unused-vars
+import {Theme, SizedThemeIcon} from "../types"; // eslint-disable-line no-unused-vars
 
 /**
  * Gets the default theme for the current browser.
@@ -44,7 +44,7 @@ export const getDefaultTheme = async () => {
  */
 export const getCurrentTheme = async (useFetch=true) => {
 	let {theme: themeDir} = await browser.storage.sync.get({
-		theme: "default"
+		theme: "default",
 	});
 
 	const actualTheme = themeDir;
@@ -56,7 +56,7 @@ export const getCurrentTheme = async (useFetch=true) => {
 	const result = {
 		actualTheme,
 		themeDir,
-		themeCSS: `/themes/${themeDir}/theme.css`
+		themeCSS: `/themes/${themeDir}/theme.css`,
 	};
 
 	if (useFetch) {
