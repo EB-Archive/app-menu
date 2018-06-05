@@ -67,7 +67,6 @@ gulp.task("clean", () => {
 			gulp.src([
 				`${SOURCE_DIR}**`,
 				`!${SOURCE_DIR}**/*.js`,
-				`!${SOURCE_DIR}**/*.d.ts`,
 				`!${SOURCE_DIR}manifest.json`,
 			], {dot: true})
 				.pipe(gulp.dest(BUILD_DIR)),

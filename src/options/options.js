@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import {getDefaultTheme, processMessage, processThemeBrowserAction} from "../shared.js";
-import {ThemeConf} from "../../types"; // eslint-disable-line no-unused-vars
+import {ThemeConf} from "../types"; // eslint-disable-line no-unused-vars
 import hyperHTML from "/vendor/hyperhtml/index.js";
 
 document.addEventListener("DOMContentLoaded", async () => {

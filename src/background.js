@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Message} from "../types"; // eslint-disable-line no-unused-vars
+import {Message} from "./types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "./shared.js";
 
 const prevStates = new Map();

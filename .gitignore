@@ -4,7 +4,6 @@
 # Except:
 ## Sources
 !/src
-!/*.d.ts
 
 ## Git
 !/.gitattributes
