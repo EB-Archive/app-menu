@@ -20,6 +20,9 @@
 	},
 	"homepage": "https://github.com/ExE-Boss/app-menu#readme",
 	"devDependencies": {
+		"@types/firefox-webext-browser": "*",
+		"@types/gulp": "*",
+		"@types/node": "*",
 		"eslint": "^4.19.1",
 		"fs-extra": "^6.0.1",
 		"gulp": "^3.9.1",

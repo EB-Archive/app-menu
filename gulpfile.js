@@ -3,15 +3,14 @@ const fse	= require("fs-extra");
 const path	= require("path");
 
 const gulp	= require("gulp");
-const webExt	= require("web-ext").default;
 const mergeStream	= require("merge-stream");
+const webExt	= require("web-ext").default;
 
 const deleteLines	= require("gulp-delete-lines");
 const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
 
-const testPrefs	= require("./.extprefrc.js");
 const args = require("yargs")
 	.option("firefox", {
 		alias: "f",
@@ -22,12 +21,13 @@ const args = require("yargs")
 	.alias("help", ["h", "?"])
 	.alias("version", "v")
 	.argv;
+const testPrefs	= require("./.extprefrc.js");
 
 /* Building */
 
+const ARCHIVES_DIR	= "./dist/";
 const BUILD_DIR 	= "./build/";
 const SOURCE_DIR	= "./src/";
-const ARCHIVES_DIR	= "./dist/";
 
 const VENDOR_BUILD_DIR 	= `${BUILD_DIR}vendor/`;
 const VENDOR_SOURCE_DIR	= "./node_modules/";
@@ -74,7 +74,7 @@ gulp.task("clean", () => {
 			gulp.src([`${SOURCE_DIR}**/*.js`])
 				.pipe(deleteLines({
 					filters: [
-						/^import (?:(?:\{[^}]+\} |.* )?from )?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?: *\/\/.*)?$/,
+						/^import (?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?:[ \t]*\/\/.*)?$/,
 					],
 				}))
 				.pipe(gulp.dest(BUILD_DIR)),

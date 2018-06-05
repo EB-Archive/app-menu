@@ -65,6 +65,7 @@ module.exports = {
 			"error",
 			"always",
 		],
+		"sort-imports": "error",
 		"valid-jsdoc": [
 			"warn",
 			{

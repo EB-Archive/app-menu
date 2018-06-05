@@ -14,15 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+import {ButtonStatus, Message} from "../../types"; // eslint-disable-line no-unused-vars
 "use strict";
 
 let amLoaded = amLoaded || false;
 if (!amLoaded) {
 	amLoaded = true;
-	browser.runtime.onMessage.addListener(async (message) => {
+	browser.runtime.onMessage.addListener(async (/** @type {Message} */ message) => {
 		const method = String(message.method);
 		switch (method) {
 			case "init": {
+				/** @type {ButtonStatus} */
 				const result = {
 					disable: [],
 					enable: [

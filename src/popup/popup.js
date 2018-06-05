@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {ButtonStatus, ContextualIdentity} from "../types"; // eslint-disable-line no-unused-vars
+import {ButtonStatus} from "../../types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "../shared.js";
 import hyperHTML from "/vendor/hyperhtml/index.js";
 
@@ -167,7 +167,6 @@ async function initPopup() {
 async function initContextualIdentities() {
 	let lastElement	= document.querySelector('#sub-menu > #sm-new-tab > .panel-section-separator + .panel-list-item[data-ipc-message="openFile"]');
 	const smNewTab	= lastElement.parentElement;
-	/** @type {ContextualIdentity[]} */
 	const contextualIdentities = await browser.contextualIdentities.query({});
 	if (!contextualIdentities || contextualIdentities.length === 0) return;
 	{
@@ -189,6 +188,7 @@ async function initContextualIdentities() {
 			return promise;
 		};
 
+		/** @type {HTMLElement} */
 		const button = hyperHTML`
 			<div class="panel-list-item" data-ipc-message="newTab" onclick=${onclick}>
 				<img class="icon eb-icon context-properties-fill"
@@ -205,17 +205,21 @@ async function initContextualIdentities() {
  * @param	{ButtonStatus}	buttonStatus	The button status
  */
 const updateButtonStatus = async (buttonStatus) => {
+	/**
+	 * @param	{string}	query	The IPC message query
+	 * @return	{string}	The query converted to a CSS selector
+	 */
 	const parseQuery = query => {
 		if (query === "*") {
 			return "[data-ipc-message]";
 		} if (query.startsWith("*") && query.endsWith("*")) {
-			return `[data-ipc-message*="${query.substring(1, query.length - 1)}"]`;
+			return `[data-ipc-message*="${CSS.escape(query.substring(1, query.length - 1))}"]`;
 		} else if (query.startsWith("*")) {
-			return `[data-ipc-message$="${query.substring(1, query.length)}"]`;
+			return `[data-ipc-message$="${CSS.escape(query.substring(1, query.length))}"]`;
 		} else if (query.endsWith("*")) {
-			return `[data-ipc-message^="${query.substring(0, query.length - 1)}"]`;
+			return `[data-ipc-message^="${CSS.escape(query.substring(0, query.length - 1))}"]`;
 		} else {
-			return `[data-ipc-message="${query}"]`;
+			return `[data-ipc-message="${CSS.escape(query)}"]`;
 		}
 	};
 

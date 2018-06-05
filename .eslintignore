@@ -3,3 +3,4 @@
 
 # Ignore vendor files
 /build/vendor/**
+/node_modules/**
