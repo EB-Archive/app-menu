@@ -10,6 +10,7 @@ const deleteLines	= require("gulp-delete-lines");
 const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
+const replace	= require("gulp-replace");
 
 const args = require("yargs")
 	.option("firefox", {
@@ -41,25 +42,78 @@ gulp.task("clean", () => {
 });
 
 {
+	/** @typedef	{object}	Vendor
+	 * @property	{string}	[src]
+	 * @property	{string}	[file]
+	 */
+	/** @type {{[name: string]: Vendor}} */
 	const vendorData = {
 		hyperhtml: {
 			src: "esm",
 		},
+		sequency: {
+			src:	"lib-esm",
+			file:	"sequency.js",
+		},
 	};
+
+	const transformPackageInternal = (name) => {
+		const	path	= name.split("/");
+		const	isFile	= path[path.length-1].indexOf(".") >= 0;
+		const	vendor	= path[0].toLowerCase();
+
+		let src 	= `${VENDOR_SOURCE_DIR}${vendor}/`;
+		let dest	= name;
+		let file	= "index.js";
+		if (typeof vendorData[vendor] === "object") {
+			if ("src" in vendorData[vendor]) {
+				[dest] = path;
+				src += `${vendorData[vendor].src}/`;
+			}
+			if ("file" in vendorData[vendor]) {
+				({file} = vendorData[vendor]);
+			}
+		}
+		return {
+			dest:	`${VENDOR_BUILD_DIR}${path[0]}/`,
+			file:	isFile ? dest : `/vendor/${dest}/${file}`,
+			src:	`${src}**`,
+		};
+	};
+
+	/**
+	 * @param	{string}	name	The package name.
+	 * @return	{string}	The transformed path as a JS file.
+	 */
+	const transformPackage = (name) => {
+		name = name.replace(/\\/g,"/");
+		// Test if the path is a relative or absolute URI module specifier
+		if (name.startsWith(".") || name.startsWith("/") ||
+			/^[a-zA-Z0-9.+-]:/.test(name)) {
+			return name;
+		}
+		const {file} = transformPackageInternal(name);
+		return file;
+	};
+
+	const transformPackageRegexp = /^(import[ \t]+(?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?")((?:[^./"][^"]*)?)(";?(?:[ \t]*\/\/.*)?)$/mg;
+	const transformPackageCallback = (substr, prefix, name, suffix) =>
+		`${prefix}${transformPackage(name)}${suffix}`;
+	module.exports.transformPackage = Object.assign((name) => transformPackage(name), {
+		internal: transformPackageInternal,
+		regexp: transformPackageRegexp,
+		callback: transformPackageCallback,
+	});
+
 	/**
 	 * @param	{string[]}	vendors	The vendors
 	 * @return	{IMergedStream}	The stream
 	 */
 	const copyVendors = (...vendors) => {
 		return mergeStream(vendors.map(vendor => {
-			let src = `${VENDOR_SOURCE_DIR}${vendor}/`;
-			if (vendor in vendorData) {
-				if ("src" in vendorData[vendor]) {
-					src += `${vendorData[vendor].src}/`;
-				}
-			}
-			return gulp.src(`${src}**`)
-				.pipe(gulp.dest(`${VENDOR_BUILD_DIR}${vendor}/`));
+			const {dest, src} = transformPackageInternal(vendor);
+			return gulp.src(src)
+				.pipe(gulp.dest(dest));
 		}));
 	};
 	const build = () => {
@@ -73,16 +127,23 @@ gulp.task("clean", () => {
 			gulp.src([`${SOURCE_DIR}**/*.js`])
 				.pipe(deleteLines({
 					filters: [
-						/^import (?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?:[ \t]*\/\/.*)?$/,
+						/^import[ \t]+(?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?:[ \t]*\/\/.*)?$/,
 					],
 				}))
+				.pipe(replace(
+					transformPackageRegexp,
+					transformPackageCallback,
+				))
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src(`${SOURCE_DIR}manifest.json`)
 				.pipe(jsonEdit({
 					version: pkgJson.version,
 				}))
 				.pipe(gulp.dest(BUILD_DIR)),
-			copyVendors("hyperhtml"),
+			copyVendors(
+				"hyperhtml",
+				"sequency",
+			),
 		);
 	};
 	gulp.task("build-unclean", build);

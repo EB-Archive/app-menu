@@ -16,7 +16,7 @@
  */
 import {getDefaultTheme, processMessage, processThemeBrowserAction} from "../shared.js";
 import {ThemeConf} from "../types"; // eslint-disable-line no-unused-vars
-import hyperHTML from "/vendor/hyperhtml/index.js";
+import hyperHTML from "hyperhtml/esm";
 
 document.addEventListener("DOMContentLoaded", async () => {
 	return Promise.all([
@@ -60,7 +60,7 @@ const initOptions = async () => {
 		return await response.json();
 	};
 
-	/** @type {HTMLElement} */
+	/** @type {HTMLOptionElement} */
 	const options = [];
 	(await Promise.all(themes.map(async theme => {
 		const config = {};
@@ -71,7 +71,7 @@ const initOptions = async () => {
 				Object.assign(config, await getConfig(theme));
 			} catch (e) {
 				console.warn(e);
-				return undefined;
+				return null;
 			}
 		}
 		/** @type {HTMLOptionElement} */
@@ -84,10 +84,10 @@ const initOptions = async () => {
 			o.setAttribute("selected", true);
 		}
 		return o;
-	}))).forEach(o => {
-		if (o instanceof HTMLElement) {
-			themeSelector.appendChild(o);
-			options.push(o);
+	}))).forEach(option => {
+		if (option) {
+			themeSelector.appendChild(option);
+			options.push(option);
 		}
 	});
 

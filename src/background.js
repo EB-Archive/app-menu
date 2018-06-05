@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {Message} from "./types"; // eslint-disable-line no-unused-vars
+import {ButtonStatus, Message} from "./types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "./shared.js";
 
 const prevStates = new Map();
@@ -46,6 +46,7 @@ const handlePopupMessage = async (message) => {
 	]);
 	switch (method) {
 		case "init": {
+			/** @type {ButtonStatus} */
 			let response;
 			try {
 				await browser.tabs.executeScript(tab.id, {file: "/content/content.js", runAt: "document_end"});
@@ -55,6 +56,7 @@ const handlePopupMessage = async (message) => {
 					console.warn(e);
 			}
 			if (!response) response = {disable: [], enable: []};
+			/** @type {ButtonStatus} */
 			const result = {
 				disable: [
 					"*",
@@ -134,6 +136,7 @@ const handlePopupMessage = async (message) => {
 					browser.runtime.getPlatformInfo(),
 				]);
 				const lang = browser.i18n.getUILanguage().replace(/_/g, "-");
+				/** @type {string} */
 				let os;
 				switch (platformInfo.os) {
 					case "win": default: {

@@ -16,7 +16,7 @@
  */
 import {ButtonStatus} from "../types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "../shared.js";
-import hyperHTML from "/vendor/hyperhtml/index.js";
+import hyperHTML from "hyperhtml/esm";
 
 /** @type {HTMLElement} */
 const defaultSubMenu = document.getElementById("sm-default");

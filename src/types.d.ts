@@ -53,4 +53,4 @@ export type ThemeIcon = {
 	/** The icon definition */
 	icon:	string|SizedThemeIcon;
 }
-export type SizedThemeIcon = {[x:number]:string;};
+export type SizedThemeIcon = {[size:number]:string;};
