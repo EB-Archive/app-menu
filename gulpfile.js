@@ -4,7 +4,7 @@ const path	= require("path");
 
 const gulp	= require("gulp");
 const mergeStream	= require("merge-stream");
-const webExt	= require("web-ext").default;
+const {default: webExt}	= require("web-ext");
 
 const deleteLines	= require("gulp-delete-lines");
 const eslint	= require("gulp-eslint");
@@ -191,11 +191,13 @@ gulp.task("run", ["build"], () => {
 	if (typeof firefox === "undefined" || firefox === "aurora") {
 		firefox = "firefoxdeveloperedition";
 	}
-	gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build-unclean"]);
+	const watcher = gulp.watch([SOURCE_DIR, `${SOURCE_DIR}**`], ["build-unclean"]);
 	return webExt.cmd.run({
 		pref:	parsePrefs(),
 		firefox:	firefox,
 		sourceDir:	path.resolve(BUILD_DIR),
 		browserConsole: true,
-	}, {shouldExitProgram: true});
+	}, {shouldExitProgram: true}).then(({extensionRunners: [extRunner]}) => {
+		extRunner.registerCleanup(() => watcher.end());
+	});
 });
