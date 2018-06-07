@@ -1,4 +1,4 @@
-"use strict";
+"use strict"; // eslint-disable-line
 /* eslint-env node */
 /* eslint sort-keys: ["error", "asc"] */
 
@@ -13,6 +13,7 @@ module.exports = {
 		"ecmaVersion": 9,
 		"sourceType": "module",
 	},
+	"root": true,
 	"rules": {
 		"block-scoped-var": "error",
 		"comma-dangle": [
@@ -42,13 +43,15 @@ module.exports = {
 		],
 		"no-await-in-loop": "warn",
 		"no-console": "off",
+		"no-constant-condition": "warn",
 		"no-empty": "off",
+		"no-fallthrough": "warn",
+		"no-new-wrappers": "error",
 		"no-octal": "warn",
+		"no-regex-spaces": "warn",
+		"no-return-await": "error",
 		"no-unused-vars": "warn",
-		"operator-linebreak": [
-			"error",
-			"after",
-		],
+		"operator-linebreak": "error",
 		"prefer-arrow-callback": "error",
 		"prefer-const": "warn",
 		"prefer-destructuring": "warn",
@@ -66,6 +69,10 @@ module.exports = {
 			"always",
 		],
 		"sort-imports": "error",
+		"strict": [
+			"error",
+			"global",
+		],
 		"valid-jsdoc": [
 			"warn",
 			{

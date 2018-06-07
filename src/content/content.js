@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import {ButtonStatus, Message} from "../../types"; // eslint-disable-line no-unused-vars
-"use strict";
+"use strict"; // eslint-disable-line
 
 let amLoaded = amLoaded || false;
 if (!amLoaded) {

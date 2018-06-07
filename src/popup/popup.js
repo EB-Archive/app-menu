@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {ButtonStatus} from "../types"; // eslint-disable-line no-unused-vars
+import {ButtonStatus, Theme} from "../types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "../shared.js";
 import hyperHTML from "hyperhtml/esm";
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	]);
 });
 
-async function setupTheme() {
+const setupTheme = async () => {
 	const theme = await getCurrentTheme();
 
 	let style = document.getElementById("theme-css");
@@ -44,55 +44,58 @@ async function setupTheme() {
 		loadIcons(theme),
 		loadSpecialIcons(theme),
 	]);
-}
+};
 
-async function loadSpecialIcons() {
+const loadSpecialIcons = async () => {
 	// TODO: Handle dynamic icons (ex. fullscreen)
-}
+};
 
+/**
+ * @param	{Theme} 	theme The current theme
+ * @param	{string}	theme.themeDir	The theme directory.
+ * @param	{ThemeConf}	theme.themeJSON	The theme configuration.
+ * @return	{Promise<void>}
+ */
 const loadIcons = async ({themeDir, themeJSON}) => {
 	const {os} = (await browser.runtime.getPlatformInfo());
 
-	document.querySelectorAll(".eb-icon-placeholder").forEach(async i => {
-		let icon = document.createElement("img");
-		icon.classList.add("icon", "eb-icon");
-		if (i.dataset.icon) {
+	return Promise.all(Array.from(document.querySelectorAll(".eb-icon-placeholder[data-icon]"),
+		/** @param {HTMLElement} i The element */
+		async i => {
 			if (/^system-/.test(i.dataset.icon)) {
-				icon = document.createElement("i");
-				icon.classList.add("icon", "eb-icon");
-				icon.dataset.icon = i.dataset.icon;
-			} else {
-				const extension = themeJSON.default_extension || "svg";
-				const srcOS = `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
-				const src = `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
-
-				let hasSrcOS = false;
-				try {
-					hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work when loaded from file:// URLs
-				} catch (err) {}
-
-				icon.addEventListener("error", () => {
-					const i2 = document.createElement("img");
-					i2.classList.add("icon", "eb-icon");
-					// Fix for file:// URLs:
-					if (hasSrcOS) {
-						i2.setAttribute("src", src);
-						i2.addEventListener("error", () => {
-							const i3 = document.createElement("img");
-							i3.classList.add("icon", "eb-icon");
-							i2.parentNode.replaceChild(i3, i2);
-						});
-					}
-					icon.parentNode.replaceChild(i2, icon);
-				});
-				icon.setAttribute("src", hasSrcOS ? srcOS : src);
+				i.setAttribute("class", "icon eb-icon");
+				return;
 			}
-		}
-		i.parentNode.replaceChild(icon, i);
-	});
+			/** @type {HTMLImageElement} */
+			const icon = hyperHTML`<img class="icon eb-icon"/>`;
+
+			const {
+				default_extension: extension,
+			} = themeJSON;
+
+			const srcOS	= `/themes/${themeDir}/${i.dataset.icon}$${os}.${extension}`;
+			const src	= `/themes/${themeDir}/${i.dataset.icon}.${extension}`;
+
+			let hasSrcOS = false;
+			try {
+				hasSrcOS = (await fetch(srcOS)).ok; // Doesn’t work when loaded from file:// URLs
+			} catch (err) {}
+
+			icon.addEventListener("error", () => {
+				// Fix for file:// URIs
+				if (hasSrcOS) {
+					hasSrcOS = false;
+					icon.setAttribute("src", src);
+				} else {
+					icon.parentElement.replaceChild(hyperHTML`<img class="icon eb-icon"/>`, icon);
+				}
+			});
+			icon.setAttribute("src", hasSrcOS ? srcOS : src);
+			i.parentElement.replaceChild(icon, i);
+		}));
 };
 
-async function setupMouseEvents() {
+const setupMouseEvents = async () => {
 	document.querySelectorAll("#main-menu [data-sub-menu]").forEach(sm => {
 		sm.addEventListener("mouseenter", () => {
 			document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
@@ -113,9 +116,9 @@ async function setupMouseEvents() {
 	document.querySelectorAll("#main-menu .panel-section-separator:not([data-sub-menu])").forEach(activateDefaultSubMenu);
 	activateDefaultSubMenu(document.querySelector("#main-menu"));
 	document.querySelector("#sub-menu > div").addEventListener("mouseleave", activateDefaultSubMenuListener);
-}
+};
 
-async function i18nInit() {
+const i18nInit = async () => {
 	document.querySelectorAll("[data-i18n]").forEach(translatable => {
 		const text = browser.i18n.getMessage(translatable.dataset.i18n);
 		if (text.length > 0) {
@@ -129,9 +132,9 @@ async function i18nInit() {
 			translatable.setAttribute("label", text);
 		}
 	});
-}
+};
 
-async function setupIPCEvents() {
+const setupIPCEvents = async () => {
 	document.querySelectorAll("[data-ipc-message]").forEach(sender => {
 		sender.addEventListener("click", async evt => {
 			if (evt.currentTarget.dataset.disabled) return undefined;
@@ -155,16 +158,16 @@ async function setupIPCEvents() {
 			}
 		});
 	});
-}
+};
 
-async function initPopup() {
+const initPopup = async () => {
 	return Promise.all([
 		updateButtonStatus(await browser.runtime.sendMessage({method: "init"})),
 		initContextualIdentities(),
 	]);
-}
+};
 
-async function initContextualIdentities() {
+const initContextualIdentities = async () => {
 	let lastElement	= document.querySelector('#sub-menu > #sm-new-tab > .panel-section-separator + .panel-list-item[data-ipc-message="openFile"]');
 	const smNewTab	= lastElement.parentElement;
 	const contextualIdentities = await browser.contextualIdentities.query({});
@@ -199,7 +202,7 @@ async function initContextualIdentities() {
 
 		smNewTab.insertBefore(button, lastElement);
 	});
-}
+};
 
 /**
  * @param	{ButtonStatus}	buttonStatus	The button status

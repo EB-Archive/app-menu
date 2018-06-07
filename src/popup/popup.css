@@ -46,6 +46,10 @@ html, body {
 	display:	flex;
 }
 
+menu[type="context"] {
+	display:	none;
+}
+
 /* Icons */
 .eb-icon-placeholder,
 .eb-icon {
@@ -125,57 +129,57 @@ img.icon.disabled,
 	white-space:	nowrap;
 }
 
-.panel-list-item.text {
-	background-color:	transparent !important;
-	border-bottom:	none !important;
-	border-top:	none !important;
+.panel-section > .text {
+	align-items: center;
+	display:	flex;
+	padding:	0 16px;
 	flex-grow:	10;
 }
 
-.panel-list-item.icon {
+.panel-section > .text:first-child {
+	margin-left:	24px;
+}
+
+.panel-section:not(.panel-section-list) > .panel-list-item.icon {
 	flex-grow:	0;
 	flex-shrink:	0;
-	text-align:	center;
+	padding:	0;
 }
 
-.panel-list-item.icon:not(:first-child) {
-	padding-left:	0;
-}
-
-.panel-list-item.icon:not(:first-child):not(.disabled):hover {
-	border-left:	1px solid rgba(0, 0, 0, 0.1);
-}
-
-.panel-list-item.icon:not(:last-child) {
-	padding-right:	0;
-}
-
-.panel-list-item.icon:not(:last-child):not(.disabled):hover {
-	border-right:	1px solid rgba(0, 0, 0, 0.1);
-}
-
-.panel-list-item.icon:not(:first-child):not(:last-child) {
+.panel-section:not(.panel-section-list) > .panel-list-item.icon {
 	width:	24px;
 }
 
-.panel-list-item.icon:not(:first-child) > .eb-icon-placeholder,
-.panel-list-item.icon:not(:first-child) > .eb-icon {
-	margin-left:	4px;
+.panel-section:not(.panel-section-list) > .panel-list-item.icon:not(:first-child):first-of-type {
+	margin-left: auto;
 }
 
-.panel-list-item.icon:not(:first-child):not(.disabled):hover > .eb-icon-placeholder,
-.panel-list-item.icon:not(:first-child):not(.disabled):hover > .eb-icon {
-	margin-left:	3px;
+.panel-section:not(.panel-section-list) > .panel-list-item.icon:first-child {
+	padding-left:	16px;
+	width:	36px;
+}
+
+.panel-section:not(.panel-section-list) > .panel-list-item.icon:not(:first-child):not(.disabled):hover {
+	border-left:	1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-section:not(.panel-section-list) > .panel-list-item.icon:last-child {
+	padding-right:	16px;
+	width:	36px;
+}
+
+.panel-section:not(.panel-section-list) > .panel-list-item.icon:not(:last-child):not(.disabled):hover {
+	border-right:	1px solid rgba(0, 0, 0, 0.1);
 }
 
 .panel-list-item.icon:not(:last-child) > .eb-icon-placeholder,
-.panel-list-item.icon:not(:last-child) > .eb-icon {
-	margin-right:	4px;
+.panel-list-item.icon:not(:last-child) > .icon {
+	margin-right:	auto;
 }
 
-.panel-list-item.icon:not(:last-child):not(.disabled):hover > .eb-icon-placeholder,
-.panel-list-item.icon:not(:last-child):not(.disabled):hover > .eb-icon {
-	margin-right:	3px;
+.panel-list-item.icon:not(:first-child) > .eb-icon-placeholder,
+.panel-list-item.icon:not(:first-child) > .icon {
+	margin-left:	auto;
 }
 
 .text-shortcut:not(:first-child) {

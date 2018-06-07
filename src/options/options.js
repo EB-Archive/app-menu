@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 const initOptions = async () => {
 	const themes = ["default", "photon", "australis", "classic", "pastel-svg", "aero"];
+	/** @type {{theme:string,preferredWindowState:string}} */
 	const data = (await browser.storage.sync.get({
 		theme: "default",
 		preferredWindowState:	"maximized",
@@ -34,8 +35,10 @@ const initOptions = async () => {
 	const currentTheme = data.theme;
 	const themeSelector = document.querySelector("#theme");
 
-	const preferredWindowStateSelector = document.querySelector("#fullscreenExitState");
+	/** @type {HTMLSelectElement} */
+	const preferredWindowStateSelector = document.getElementById("fullscreenExitState");
 	for (let i = 0; i < preferredWindowStateSelector.length; i++) {
+		/** @type {HTMLOptionElement} */
 		const option = preferredWindowStateSelector.item(i);
 		if (option.value === data.preferredWindowState) {
 			preferredWindowStateSelector.selectedIndex = i;
@@ -46,7 +49,7 @@ const initOptions = async () => {
 	}
 	/**
 	 * @param	{string}	theme	The theme name.
-	 * @return	{ThemeConf?}	The theme configuration.
+	 * @return	{ThemeConf}	The theme configuration.
 	 * @throws	If the theme can’t be loaded.
 	 */
 	const getConfig = async theme => {
@@ -57,11 +60,9 @@ const initOptions = async () => {
 		if (!response.ok) {
 			throw `Can’t load theme ${theme}`;
 		}
-		return await response.json();
+		return response.json();
 	};
 
-	/** @type {HTMLOptionElement} */
-	const options = [];
 	(await Promise.all(themes.map(async theme => {
 		const config = {};
 		if (theme === "default") {
@@ -75,25 +76,23 @@ const initOptions = async () => {
 			}
 		}
 		/** @type {HTMLOptionElement} */
-		const o = hyperHTML`
+		const option = hyperHTML`
 			<option value="${theme}">
 				${processMessage(config.name, "options")}
 			</option>`;
-		if (theme === "default") o.setAttribute("title", browser.i18n.getMessage("options_theme_default_title"));
+		if (theme === "default") option.setAttribute("title", browser.i18n.getMessage("options_theme_default_title"));
 		if (theme === currentTheme) {
-			o.setAttribute("selected", true);
+			option.setAttribute("selected", true);
 		}
-		return o;
+		return option;
 	}))).forEach(option => {
-		if (option) {
-			themeSelector.appendChild(option);
-			options.push(option);
-		}
+		if (option) themeSelector.appendChild(option);
 	});
 
-	document.querySelectorAll("select[data-save]").forEach(select => {
+	document.querySelectorAll("select[data-save]").forEach((/** @type {HTMLSelectElement} */ select) => {
 		select.addEventListener("change", async () => {
 			if (select.selectedIndex >= 0) {
+				/** @type {HTMLOptionElement} */
 				const {value} = select.item(select.selectedIndex);
 				const data = {};
 				data[select.dataset.save] = value;

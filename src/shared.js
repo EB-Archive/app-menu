@@ -43,7 +43,10 @@ export const getDefaultTheme = async () => {
  * @return	{Theme}	The currently used theme.
  */
 export const getCurrentTheme = async (useFetch=true) => {
-	let {theme: themeDir} = await browser.storage.sync.get({
+	/** @type {{theme:string}} */
+	let {
+		theme: themeDir,
+	} = await browser.storage.sync.get({
 		theme: "default",
 	});
 
@@ -86,16 +89,16 @@ export const getCurrentTheme = async (useFetch=true) => {
  * @param	{ThemeConf}	theme.themeJSON	The theme configuration.
  * @return	{string|SizedThemeIcon}	The parsed browser_action icon.
  */
-export const processThemeBrowserAction = (/** @type {Theme} */ {themeDir, themeJSON}) => {
-	if (isString(themeJSON.browser_action)) {
-		return `/themes/${themeDir}/${themeJSON.browser_action.includes(".") ?
-			themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`;
+export const processThemeBrowserAction = ({themeDir, themeJSON}) => {
+	if (typeof themeJSON.browser_action === "string") {
+		return `/themes/${themeDir}/${themeJSON.browser_action.includes(".")
+			? themeJSON.browser_action : `${themeJSON.browser_action}.${themeJSON.default_extension}`}`;
 	} else if (!(themeJSON.browser_action instanceof Array)) {
 		/** @type {SizedThemeIcon} */
 		const path = {};
 		for (const k in themeJSON.browser_action) {
-			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".") ?
-				themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${themeJSON.default_extension}`}`;
+			path[k] = `/themes/${themeDir}/${themeJSON.browser_action[k].includes(".")
+				? themeJSON.browser_action[k] : `${themeJSON.browser_action[k]}.${themeJSON.default_extension}`}`;
 		}
 		return path;
 	} else {
@@ -104,25 +107,16 @@ export const processThemeBrowserAction = (/** @type {Theme} */ {themeDir, themeJ
 };
 
 /**
- * @param	{string}	string	The string.
- * @param	{string}	prefix	The translation prefix.
+ * @param	{string}	messageName	The string.
+ * @param	{string}	[prefix]	The translation prefix.
  * @return	{string}	The translated string.
  */
-export const processMessage = (string, prefix) => {
-	let [,key] = (/^__MSG_([A-Za-z0-9_@]+)__$/.exec(string) || []);
-	if (isString(key)) {
-		key = isString(prefix) ? `${prefix}_${key}` : key;
-		string = `__MSG_${key}__`;
+export const processMessage = (messageName, prefix) => {
+	let msgName = /^__MSG_([A-Za-z0-9_@]+)__$/.test(messageName)
+		? messageName.slice(6,-2) : null;
+	if (msgName) {
+		msgName = prefix ? `${prefix}_${msgName}` : msgName;
+		messageName = `__MSG_${msgName}__`;
 	}
-	return isString(key) ? browser.i18n.getMessage(key) || string : string;
-};
-
-/**
- * Check if the argument is a string.
- *
- * @param	{string}	string	The variable to check if it is a String.
- * @return	{boolean}	If the string argument is a string.
- */
-export const isString = string => {
-	return (typeof string === "string" || string instanceof String);
+	return msgName ? browser.i18n.getMessage(msgName) || messageName : messageName;
 };

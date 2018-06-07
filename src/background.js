@@ -17,6 +17,7 @@
 import {ButtonStatus, Message} from "./types"; // eslint-disable-line no-unused-vars
 import {getCurrentTheme} from "./shared.js";
 
+/** @type {Map<number,browser.windows.WindowState>} */
 const prevStates = new Map();
 
 (async () => {
@@ -25,7 +26,7 @@ const prevStates = new Map();
 	});
 })();
 
-browser.runtime.onMessage.addListener((message, sender) => {
+browser.runtime.onMessage.addListener(async (message, sender) => {
 	if (/\/popup\/popup\.xhtml$/.test(sender.url)) {
 		return handlePopupMessage(message);
 	}
@@ -34,13 +35,16 @@ browser.runtime.onMessage.addListener((message, sender) => {
 
 /**
  * @param {Message} message The message
- * @return {*} The result
+ * @return {Promise<*>} The result
  */
 const handlePopupMessage = async (message) => {
 	const method = String(message.method);
 	const data = message.data || {};
 
-	const [window, tab] = await Promise.all([
+	const [
+		window,
+		tab,
+	] = await Promise.all([
 		browser.windows.getCurrent(),
 		browser.tabs.query({active: true, currentWindow: true}).then(tabs => tabs[0]),
 	]);
@@ -55,7 +59,6 @@ const handlePopupMessage = async (message) => {
 				if (e.message !== "Missing host permission for the tab")
 					console.warn(e);
 			}
-			if (!response) response = {disable: [], enable: []};
 			/** @type {ButtonStatus} */
 			const result = {
 				disable: [
@@ -79,8 +82,14 @@ const handlePopupMessage = async (message) => {
 					"print*",
 				],
 			};
-			response.disable.forEach(	str => result.disable.push(	str));
-			response.enable.forEach(	str => result.enable.push(	str));
+			if (response) {
+				if (response.disable instanceof Array)
+					for (const str of response.disable)
+						result.disable.push(str);
+				if (response.enable instanceof Array)
+					for (const str of response.enable)
+						result.enable.push(str);
+			}
 			return result;
 		} case "newTab": {
 			const newTabData = {url: null};
@@ -108,16 +117,19 @@ const handlePopupMessage = async (message) => {
 		} case "devGetTools": {
 			return browser.tabs.create({url: "https://addons.mozilla.org/firefox/collections/mozilla/webdeveloper/"});
 		} case "fullscreen": {
-			const prevState	= window.state;
-			let newState	= prevStates.get(window.id);
-			newState	= (newState && newState !== "fullscreen" ? newState : browser.storage.sync.get({preferredWindowState: "maximized"}));
-			if (newState instanceof Promise) {
-				newState = (await newState).preferredWindowState;
+			const {
+				state: currentState,
+			} = window;
+			let newState = prevStates.get(window.id);
+			if (!newState || newState === "fullscreen") {
+				newState = (await browser.storage.sync.get({
+					preferredWindowState: "maximized",
+				})).preferredWindowState;
 			}
 			const result = await browser.windows.update(window.id, {
 				state: window.state === "fullscreen" ? newState : "fullscreen",
 			});
-			prevStates.set(window.id, prevState);
+			prevStates.set(window.id, currentState);
 			return result;
 		} case "exit": {
 			return Promise.all((await browser.windows.getAll())

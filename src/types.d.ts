@@ -22,7 +22,9 @@ export type Message = {
 	data?:	any;
 }
 export type ButtonStatus = {
+	/** Enabled buttons */
 	enable: 	string[];
+	/** Disabled buttons */
 	disable:	string[];
 }
 export type Theme = {
