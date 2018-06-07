@@ -108,7 +108,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</div>
 			</div>
 		</main>
-		<aside id="sub-menu" class="secondary">
+		<aside id="sub-menu" class="sub-menu">
 			<div id="sm-default" class="panel-section panel-section-list active">
 				<div class="panel-list-item" data-ipc-message="openBookmarks">
 					<i class="eb-icon-placeholder" data-icon="bookmarks"/>
@@ -139,38 +139,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 						Ctrl+Shift+A
 					</div>
 				</div>
-				<div class="panel-list-item" data-ipc-message="openOptions" contextmenu="openOptions_menu">
+				<div class="panel-list-item" data-ipc-message="openOptions" data-sub-menu="options">
 					<i class="eb-icon-placeholder" data-icon="options"/>
 					<div class="text" data-i18n="popup_options"/>
 					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"/>
 				</div>
-				<menu type="context" id="openOptions_menu">
-					<menuitem data-i18n-label="popup_options" data-ipc-message="openOptions"/>
-					<hr/>
-					<menuitem type="checkbox" data-i18n-label="popup_optionsToolbar_menu" disabled="true"/>
-					<menuitem type="checkbox" data-i18n-label="popup_optionsToolbar_navigation" disabled="true" selected="true"/>
-					<menuitem type="checkbox" data-i18n-label="popup_optionsToolbar_bookmarks" disabled="true"/>
-					<hr/>
-					<menuitem data-i18n-label="popup_optionsCustomize" data-ipc-message="openOptionsCustomizing"/>
-				</menu>
-				<div class="panel-list-item" data-ipc-message="openHelp" contextmenu="openHelp_menu">
+				<div class="panel-list-item" data-ipc-message="openHelp" data-sub-menu="help">
 					<i class="eb-icon-placeholder" data-icon="help"/>
 					<div class="text" data-i18n="popup_help"/>
 					<i class="eb-icon-placeholder" data-icon="system-arrow-expand"/>
 				</div>
-				<menu type="context" id="openHelp_menu">
-					<menuitem data-i18n-label="popup_helpFirefox"  data-ipc-message="openHelp"/>
-					<menuitem data-i18n-label="popup_helpGettingStarted" data-ipc-message="openHelpGettingStarted"/>
-					<menuitem data-i18n-label="popup_helpTour" data-ipc-message="openHelpTour"/>
-					<menuitem data-i18n-label="popup_helpShortcuts" data-ipc-message="openHelpShortcuts"/>
-					<menuitem data-i18n-label="popup_helpHealthReport" data-ipc-message="openHelpHealthReport"/>
-					<menuitem data-i18n-label="popup_helpTroubleshootingInformation" data-ipc-message="openHelpTroubleshooting"/>
-					<menuitem data-i18n-label="popup_helpSubmitFeedback" data-ipc-message="openHelpFeedback"/>
-					<hr/>
-					<menuitem data-i18n-label="popup_restartInSafeMode" data-ipc-message="restartInSafeMode"/>
-					<hr/>
-					<menuitem data-i18n-label="popup_helpAbout" data-ipc-message="openHelpAboutFirefox"/>
-				</menu>
+				<div class="panel-section-padding"/>
 			</div>
 			<div id="sm-new-tab" class="panel-section panel-section-list">
 				<div class="panel-list-item" data-ipc-message="newTab">
@@ -406,6 +385,72 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				<div class="panel-list-item" data-ipc-message="workOffline">
 					<i class="eb-icon-placeholder" data-icon="forget"/>
 					<div class="text" data-i18n="popup_workOffline"/>
+				</div>
+			</div>
+		</aside>
+		<aside id="sub-sub-menu" class="sub-menu">
+			<div id="ssm-options" class="panel-section panel-section-list">
+				<div class="panel-list-item" data-ipc-message="openOptions">
+					<i class="eb-icon-placeholder" data-icon="options"/>
+					<div class="text" data-i18n="popup_options"/>
+				</div>
+				<div class="panel-section-separator"/>
+				<div class="panel-list-item browser-style disabled">
+					<input type="checkbox" id="options-toolbar-menu" disabled="true"/>
+					<label class="text" for="options-toolbar-menu" data-i18n="popup_optionsToolbar_menu"/>
+				</div>
+				<div class="panel-list-item browser-style disabled">
+					<input type="checkbox" id="options-toolbar-navigation" disabled="true" checked="true"/>
+					<label class="text" for="options-toolbar-navigation" data-i18n="popup_optionsToolbar_navigation"/>
+				</div>
+				<div class="panel-list-item browser-style disabled">
+					<input type="checkbox" id="options-toolbar-bookmarks" disabled="true"/>
+					<label class="text" for="options-toolbar-bookmarks" data-i18n="popup_optionsToolbar_bookmarks"/>
+				</div>
+				<div class="panel-section-separator"/>
+				<div class="panel-list-item" data-ipc-message="openOptionsCustomizing">
+					<i class="eb-icon-placeholder" data-icon="options-customize"/>
+					<div class="text" data-i18n="popup_optionsCustomize"/>
+				</div>
+			</div>
+			<div id="ssm-help" class="panel-section panel-section-list">
+				<div class="panel-list-item" data-ipc-message="openHelp">
+					<i class="eb-icon-placeholder" data-icon="help"/>
+					<div class="text" data-i18n="popup_helpFirefox"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpGettingStarted">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpGettingStarted"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpTour">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpTour"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpShortcuts">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpShortcuts"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpHealthReport">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpHealthReport"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpTroubleshooting">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpTroubleshootingInformation"/>
+				</div>
+				<div class="panel-list-item" data-ipc-message="openHelpFeedback">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpSubmitFeedback"/>
+				</div>
+				<div class="panel-section-separator"/>
+				<div class="panel-list-item" data-ipc-message="restartInSafeMode">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_restartInSafeMode"/>
+				</div>
+				<div class="panel-section-separator"/>
+				<div class="panel-list-item" data-ipc-message="openHelpAboutFirefox">
+					<i class="eb-icon-placeholder"/>
+					<div class="text" data-i18n="popup_helpAbout"/>
 				</div>
 			</div>
 		</aside>

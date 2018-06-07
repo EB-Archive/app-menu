@@ -96,6 +96,7 @@ const loadIcons = async ({themeDir, themeJSON}) => {
 };
 
 const setupMouseEvents = async () => {
+	// sub-menu
 	document.querySelectorAll("#main-menu [data-sub-menu]").forEach(sm => {
 		sm.addEventListener("mouseenter", () => {
 			document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
@@ -103,19 +104,52 @@ const setupMouseEvents = async () => {
 		});
 	});
 
-	const activateDefaultSubMenuListener = () => {
-		document.querySelectorAll("#sub-menu > .active").forEach(s => s.classList.remove("active"));
+	const activateDefaultSubMenuListener = includeSubSubMenus => {
+		document.querySelectorAll(includeSubSubMenus
+			? "#sub-menu > .active, #sub-sub-menu > .active"
+			: "#sub-menu > .active")
+			.forEach(s => s.classList.remove("active"));
 		defaultSubMenu.classList.add("active");
 	};
 
+	/** @param {Element} sm */
 	const activateDefaultSubMenu = sm => {
-		sm.addEventListener("mouseenter", activateDefaultSubMenuListener);
+		sm.addEventListener("mouseenter", () => activateDefaultSubMenuListener(true));
 	};
 
-	document.querySelectorAll("#main-menu .panel-list-item:not([data-sub-menu])").forEach(activateDefaultSubMenu);
-	document.querySelectorAll("#main-menu .panel-section-separator:not([data-sub-menu])").forEach(activateDefaultSubMenu);
+	document.querySelectorAll("#main-menu .panel-list-item:not([data-sub-menu]),\
+		#main-menu .panel-section-separator:not([data-sub-menu])")
+		.forEach(activateDefaultSubMenu);
 	activateDefaultSubMenu(document.querySelector("#main-menu"));
-	document.querySelector("#sub-menu > div").addEventListener("mouseleave", activateDefaultSubMenuListener);
+	document.querySelectorAll("#sub-menu > *").forEach(sm => {
+		sm.addEventListener("mouseleave", () => activateDefaultSubMenuListener(false));
+	});
+
+	// sub-sub-menu
+	document.querySelectorAll("#sub-menu [data-sub-menu]").forEach(sm => {
+		sm.addEventListener("mouseenter", () => {
+			document.querySelectorAll("#sub-sub-menu > .active").forEach(s => s.classList.remove("active"));
+			document.querySelector(`#ssm-${sm.dataset.subMenu}`).classList.add("active");
+		});
+	});
+
+	const activateDefaultSubSubMenuListener = () => {
+		document.querySelectorAll("#sub-sub-menu > .active").forEach(s => s.classList.remove("active"));
+	};
+
+	/** @param {Element} ssm */
+	const activateDefaultSubSubMenu = ssm => {
+		ssm.addEventListener("mouseenter", activateDefaultSubSubMenuListener);
+	};
+
+	document.querySelectorAll("#sub-menu .panel-list-item:not([data-sub-menu]),\
+		#sub-menu .panel-section-separator:not([data-sub-menu]),\
+		#sub-menu .panel-section-padding")
+		.forEach(activateDefaultSubSubMenu);
+	activateDefaultSubSubMenu(document.querySelector("#sub-menu"));
+	document.querySelectorAll("#sub-sub-menu > *").forEach(sm => {
+		sm.addEventListener("mouseleave", activateDefaultSubSubMenuListener);
+	});
 };
 
 const i18nInit = async () => {

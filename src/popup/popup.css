@@ -30,20 +30,29 @@ html, body {
 	overflow-y: hidden;
 }
 
-#sub-menu {
-	background:	rgba(0, 0, 0, 0.06);
-	min-width:	300px;
+.sub-menu {
+	display:	contents;
 	flex-grow:	1;
+}
+
+#sub-menu > *,
+#sub-sub-menu > * {
 	background-clip: padding-box;
 	border-left:	1px solid rgba(24,26,27,.2);
 }
 
-#sub-menu > div {
-	display:	none;
+#sub-menu > * {
+	background:	rgba(0, 0, 0, 0.06);
+	min-width:	300px;
 }
 
-#sub-menu > .active {
-	display:	flex;
+#sub-sub-menu > * {
+	background:	rgba(0, 0, 0, 0.12);
+	min-width:	240px;
+}
+
+.sub-menu > *:not(.active):not(.panel-section-padding) {
+	display:	none;
 }
 
 menu[type="context"] {
@@ -82,22 +91,22 @@ img.icon,
 	opacity: var(--dark-icon-opacity);
 }
 
-.secondary img.icon,
-.secondary .eb-icon[data-icon^="system-"],
-img.icon.secondary,
-.eb-icon[data-icon^="system-"].secondary {
+.sub-menu img.icon,
+.sub-menu .eb-icon[data-icon^="system-"],
+img.icon.sub-menu,
+.eb-icon[data-icon^="system-"].sub-menu {
 	filter: var(--dark-icon-filter-secondary);
 	opacity: var(--dark-icon-opacity-secondary);
 }
 
-.secondary img.icon:hover,
-.secondary .eb-icon[data-icon^="system-"]:hover,
-.secondary *:hover > img.icon,
-.secondary *:hover > .eb-icon[data-icon^="system-"],
-.secondary:hover > img.icon,
-.secondary:hover > .eb-icon[data-icon^="system-"],
-img.icon.secondary:hover,
-.eb-icon[data-icon^="system-"].secondary:hover {
+.sub-menu img.icon:hover,
+.sub-menu .eb-icon[data-icon^="system-"]:hover,
+.sub-menu *:hover > img.icon,
+.sub-menu *:hover > .eb-icon[data-icon^="system-"],
+.sub-menu:hover > img.icon,
+.sub-menu:hover > .eb-icon[data-icon^="system-"],
+img.icon.sub-menu:hover,
+.eb-icon[data-icon^="system-"].sub-menu:hover {
 	filter: var(--dark-icon-filter);
 	opacity: var(--dark-icon-opacity);
 }
@@ -119,10 +128,17 @@ img.icon.disabled,
 		xLTEgNC00LTQtNCAxLTF6Ii8+PC9zdmc+");
 }
 
-.secondary .eb-icon[data-icon="system-arrow-expand"],
-.eb-icon[data-icon="system-arrow-expand"].secondary {
-	filter: var(--dark-icon-filter-disabled) !important;
-	opacity: var(--dark-icon-opacity-disabled) !important;
+/* Custom Panel Extensions */
+.panel-section-padding {
+	flex-grow:	10;
+}
+
+.panel-section-list > .panel-section-padding:first-child {
+	margin-top:	-16px;
+}
+
+.panel-section-list > .panel-section-padding:last-child {
+	margin-bottom:	-16px;
 }
 
 .panel-list-item .text {
