@@ -24,7 +24,7 @@
 		"@types/gulp": "*",
 		"@types/gulp-replace": "*",
 		"@types/node": "*",
-		"eslint": "^4.19.1",
+		"eslint": "^5.0.0",
 		"fs-extra": "^6.0.1",
 		"gulp": "^3.9.1",
 		"gulp-cli": "^2.0.1",
