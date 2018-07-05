@@ -1770,7 +1770,7 @@ eslint-visitor-keys@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#3f3180fb2e291017716acb4c9d6d5b5c34a6a81d"
 
-eslint@4.19.1, eslint@^4.0.0:
+eslint@4.19.1:
   version "4.19.1"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-4.19.1.tgz#32d1d653e1d90408854bfb296f076ec7e186a300"
   dependencies:
@@ -2682,13 +2682,13 @@ gulp-delete-lines@^0.0.7:
     event-stream "~3.1.0"
     gulp-util ">=2.2.0"
 
-gulp-eslint@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/gulp-eslint/-/gulp-eslint-4.0.2.tgz#18a2a6768e4404cbf3e203239cb57474168fa606"
+gulp-eslint@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/gulp-eslint/-/gulp-eslint-5.0.0.tgz#2a2684095f774b2cf79310262078c56cc7a12b52"
   dependencies:
-    eslint "^4.0.0"
+    eslint "^5.0.1"
     fancy-log "^1.3.2"
-    plugin-error "^1.0.0"
+    plugin-error "^1.0.1"
 
 gulp-json-editor@^2.4.1:
   version "2.4.1"
@@ -4756,7 +4756,7 @@ pino@~4.16.1:
     quick-format-unescaped "^1.1.2"
     split2 "^2.2.0"
 
-plugin-error@^1.0.0, plugin-error@^1.0.1:
+plugin-error@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/plugin-error/-/plugin-error-1.0.1.tgz#77016bd8919d0ac377fdcdd0322328953ca5781c"
   dependencies:
