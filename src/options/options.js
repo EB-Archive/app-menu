@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/// <reference path="../types.d.ts"/>
+
 import {getDefaultTheme, processMessage, processThemeBrowserAction} from "../shared.js";
-import {ThemeConf} from "../types"; // eslint-disable-line no-unused-vars
 import hyperHTML from "hyperhtml/esm";
 
 document.addEventListener("DOMContentLoaded", async () => {

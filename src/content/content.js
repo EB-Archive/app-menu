@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {ButtonStatus, Message} from "../../types"; // eslint-disable-line no-unused-vars
 "use strict"; // eslint-disable-line
+/// <reference path="../types.d.ts"/>
 
+/** @type {boolean} */
 let amLoaded = amLoaded || false;
 if (!amLoaded) {
 	amLoaded = true;

@@ -20,6 +20,7 @@
 	},
 	"homepage": "https://github.com/ExE-Boss/app-menu#readme",
 	"devDependencies": {
+		"@exe-boss/eslint-config": "0.1.x",
 		"@types/firefox-webext-browser": "*",
 		"@types/gulp": "*",
 		"@types/gulp-replace": "*",
@@ -28,7 +29,6 @@
 		"fs-extra": "^6.0.1",
 		"gulp": "^3.9.1",
 		"gulp-cli": "^2.0.1",
-		"gulp-delete-lines": "^0.0.7",
 		"gulp-eslint": "^5.0.0",
 		"gulp-json-editor": "^2.4.1",
 		"gulp-replace": "^1.0.0",

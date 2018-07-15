@@ -14,20 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/// <reference types="@types/firefox-webext-browser"/>
 
-export type Message = {
+declare interface Message {
 	/** The method */
 	method:	string;
 	/** The payload */
 	data?:	any;
 }
-export type ButtonStatus = {
+
+declare interface ButtonStatus {
 	/** Enabled buttons */
 	enable: 	string[];
 	/** Disabled buttons */
 	disable:	string[];
 }
-export type Theme = {
+
+declare interface Theme {
 	/** The actual theme selected in the options. */
 	actualTheme:	string;
 	/** The theme directory. */
@@ -39,7 +42,8 @@ export type Theme = {
 	/** The parsed browser action icon definition. */
 	browser_action?:	string|SizedThemeIcon;
 }
-export type ThemeConf = {
+
+declare interface ThemeConf {
 	/** The theme’s name */
 	name:	string;
 	/** The default file extension for images. */
@@ -47,7 +51,8 @@ export type ThemeConf = {
 	/** The browser action icon definition. */
 	browser_action:	string|SizedThemeIcon|ThemeIcon[]
 }
-export type ThemeIcon = {
+
+declare interface ThemeIcon {
 	/** The icon’s ID as part of this theme */
 	id:	string;
 	/** The icon’s display name */
@@ -55,4 +60,5 @@ export type ThemeIcon = {
 	/** The icon definition */
 	icon:	string|SizedThemeIcon;
 }
-export type SizedThemeIcon = {[size:number]:string;};
+
+declare interface SizedThemeIcon extends Record<number, string> {}

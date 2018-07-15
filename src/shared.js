@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import {SizedThemeIcon, Theme, ThemeConf} from "./types"; // eslint-disable-line no-unused-vars
+/// <reference path="./types.d.ts"/>
 
 /**
  * Gets the default theme for the current browser.
@@ -42,7 +42,7 @@ export const getDefaultTheme = async () => {
  * @param	{boolean}	[useFetch=true]	If the function should also fetch the theme configuration.
  * @return	{Theme}	The currently used theme.
  */
-export const getCurrentTheme = async (useFetch=true) => {
+export const getCurrentTheme = async (useFetch = true) => {
 	/** @type {{theme:string}} */
 	let {
 		theme: themeDir,

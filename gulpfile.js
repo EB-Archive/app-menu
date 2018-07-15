@@ -23,7 +23,6 @@ const gulp	= require("gulp");
 const mergeStream	= require("merge-stream");
 const {default: webExt}	= require("web-ext");
 
-const deleteLines	= require("gulp-delete-lines");
 const eslint	= require("gulp-eslint");
 const jsonEdit	= require("gulp-json-editor");
 const pkgJson	= require("./package.json");
@@ -74,6 +73,10 @@ gulp.task("clean", () => {
 		},
 	};
 
+	/**
+	 * @param {string} name
+	 * @return {{dest:string,file:string,src:string}}
+	 */
 	const transformPackageInternal = (name) => {
 		const	path	= name.split("/");
 		const	isFile	= path[path.length-1].indexOf(".") >= 0;
@@ -114,7 +117,14 @@ gulp.task("clean", () => {
 	};
 
 	const transformPackageRegexp = /^(import[ \t]+(?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?")((?:[^./"][^"]*)?)(";?(?:[ \t]*\/\/.*)?)$/mg;
-	const transformPackageCallback = (substr, prefix, name, suffix) =>
+	/**
+	 * @param	{string}	match	The matched substring
+	 * @param	{string}	prefix	The import statement (eg. `import {…} from "`)
+	 * @param	{string}	name	The name of the package
+	 * @param	{string}	suffix	The end of the import statement (eg. `";` and optionally a comment)
+	 * @return	{string}
+	 */
+	const transformPackageCallback = (match, prefix, name, suffix) =>
 		`${prefix}${transformPackage(name)}${suffix}`;
 	module.exports.transformPackage = Object.assign((name) => transformPackage(name), {
 		internal: transformPackageInternal,
@@ -142,11 +152,6 @@ gulp.task("clean", () => {
 			], {dot: true})
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src([`${SOURCE_DIR}**/*.js`])
-				.pipe(deleteLines({
-					filters: [
-						/^import[ \t]+(?:(?:\{[^}]+\} |.*[ \t]+)?from[ \t]+)?"(?:\.\/)?(?:\.\.\/)*types(?:\.d\.ts)?";?(?:[ \t]*\/\/.*)?$/,
-					],
-				}))
 				.pipe(replace(
 					transformPackageRegexp,
 					transformPackageCallback,
@@ -159,7 +164,6 @@ gulp.task("clean", () => {
 				.pipe(gulp.dest(BUILD_DIR)),
 			copyVendors(
 				"hyperhtml",
-				"sequency",
 			),
 		);
 	};
