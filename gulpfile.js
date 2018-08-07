@@ -132,16 +132,39 @@ gulp.task("clean", () => {
 		callback: transformPackageCallback,
 	});
 
+	const VENDOR_HEADER = "| Folder\t| Version\t| License\t| NPM ID\t|\n| ------\t| -------\t| -------\t| ------\t|";
+
+	const vendorToLine = (vendor) => {
+		try {
+			const pkg = require(`${vendor}/package.json`);
+			return `\n| ${vendor}\t| ${pkg.version}\t| ${pkg.license}\t| [\`${pkg.name}\`](https://https://www.npmjs.com/package/${pkg.name})\t|`;
+		} catch (_) {
+			return "";
+		}
+	};
+
 	/**
 	 * @param	{string[]}	vendors	The vendors
 	 * @return	{IMergedStream}	The stream
 	 */
 	const copyVendors = (...vendors) => {
-		return mergeStream(vendors.map(vendor => {
-			const {dest, src} = transformPackageInternal(vendor);
-			return gulp.src(src)
-				.pipe(gulp.dest(dest));
-		}));
+		return mergeStream([
+			...(vendors.map(vendor => {
+				const {dest, src} = transformPackageInternal(vendor);
+				return gulp.src(src)
+					.pipe(gulp.dest(dest));
+			})),
+			gulp.src([
+				`${SOURCE_DIR}vendor/README.md`,
+			], {dot: true})
+				.pipe(replace(
+					/^{#vendorfiles}$/mg,
+					() => {
+						return VENDOR_HEADER + vendors.map(vendorToLine).join("");
+					}
+				))
+				.pipe(gulp.dest(`${BUILD_DIR}vendor`)),
+		]);
 	};
 	const build = () => {
 		return mergeStream(
@@ -149,6 +172,7 @@ gulp.task("clean", () => {
 				`${SOURCE_DIR}**`,
 				`!${SOURCE_DIR}**/*.js`,
 				`!${SOURCE_DIR}manifest.json`,
+				`!${SOURCE_DIR}vendor/README.md`,
 			], {dot: true})
 				.pipe(gulp.dest(BUILD_DIR)),
 			gulp.src([`${SOURCE_DIR}**/*.js`])
