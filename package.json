@@ -1,6 +1,6 @@
 {
 	"name": "@exe-boss/x.app-menu",
-	"version": "0.1.8a1",
+	"version": "0.1.8",
 	"author": "ExE Boss",
 	"scripts": {
 		"build": "gulp build",

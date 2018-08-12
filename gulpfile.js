@@ -65,11 +65,11 @@ gulp.task("clean", () => {
 	/** @type {{[name: string]: Vendor}} */
 	const vendorData = {
 		hyperhtml: {
-			src: "esm",
-		},
-		sequency: {
-			src:	"lib-esm",
-			file:	"sequency.js",
+			file: "esm.js",
+			srcFiles:	[
+				"esm.js",
+				"index.d.ts",
+			],
 		},
 	};
 
@@ -86,18 +86,25 @@ gulp.task("clean", () => {
 		let dest	= name;
 		let file	= "index.js";
 		if (typeof vendorData[vendor] === "object") {
-			if ("src" in vendorData[vendor]) {
+			const data = vendorData[vendor];
+			if ("src" in data) {
 				[dest] = path;
-				src += `${vendorData[vendor].src}/`;
+				src += `${data.src}/`;
 			}
-			if ("file" in vendorData[vendor]) {
-				({file} = vendorData[vendor]);
+			if ("srcFiles" in data) {
+				[dest] = path;
+				src = data.srcFiles.map(v =>`${src}${v}`);
+			} else {
+				src += "**";
+			}
+			if ("file" in data) {
+				({file} = data);
 			}
 		}
 		return {
 			dest:	`${VENDOR_BUILD_DIR}${path[0]}/`,
 			file:	isFile ? dest : `/vendor/${dest}/${file}`,
-			src:	`${src}**`,
+			src:	src,
 		};
 	};
 
