@@ -1,3 +1,5 @@
+<table><td>⚠️ <strong>Notice:</strong> This extension has been moved to my <a href="https://github.com/ExE-Boss/WebExtensions">WebExtensions monorepo</a>.</td></table>
+
 [![Build](https://travis-ci.com/ExE-Boss/app-menu.svg?branch=master)](https://travis-ci.com/ExE-Boss/app-menu)
 [![Mozilla Add-on](https://img.shields.io/amo/v/application-menu.svg)](https://addons.mozilla.org/firefox/addon/application-menu/)
 [![devDependencies](https://img.shields.io/david/dev/ExE-Boss/app-menu.svg)](https://david-dm.org/ExE-Boss/app-menu?type=dev)
